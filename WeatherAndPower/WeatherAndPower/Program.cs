@@ -28,8 +28,11 @@ namespace WeatherAndPower
 			var placeholderModel = new PlaceholderModel();
 			var placeholderViewModel = new PlaceholderViewModel(placeholderModel);
 			var placeholderView = ((FrameworkElement)MainWindow.FindName("PlaceholderModule"));
-			if (placeholderView != null) placeholderView.DataContext = placeholderViewModel;
-			else throw new NullReferenceException("Error");
+			placeholderView.DataContext = placeholderViewModel;
+
+			var dataPlotView = ((FrameworkElement)MainWindow.FindName("DataPlot"));
+			var dataPlotViewModel = new DataPlotViewModel(dataPlotView);
+			dataPlotView.DataContext = dataPlotViewModel;
 
 			MainWindow.ShowDialog();
 		}
