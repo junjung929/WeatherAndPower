@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" targetNamespace="http://www.opengis.net/wfs/2.0" xmlns:mstns="http://www.opengis.net/wfs/2.0" xmlns="http://www.opengis.net/wfs/2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:app1="http://www.opengis.net/gml/3.2" xmlns:app2="http://xml.fmi.fi/schema/wfs/2.0">
+  <xs:import namespace="http://xml.fmi.fi/schema/wfs/2.0" schemaLocation="fmi_query_simple_app2.xsd" />
+  <xs:import namespace="http://www.opengis.net/gml/3.2" schemaLocation="fmi_query_simple_app1.xsd" />
+  <xs:element name="FeatureCollection" msdata:Prefix="wfs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="member" msdata:Prefix="wfs" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="app2:BsWfsElement" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="timeStamp" form="unqualified" type="xs:string" />
+      <xs:attribute name="numberReturned" form="unqualified" type="xs:string" />
+      <xs:attribute name="numberMatched" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msdata:Prefix="wfs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="FeatureCollection" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

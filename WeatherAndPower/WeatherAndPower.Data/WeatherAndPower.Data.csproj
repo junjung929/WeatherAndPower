@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D2D01BED-69D3-4234-B086-B796A60DF033}</ProjectGuid>
+    <ProjectGuid>{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WeatherAndPower.Core</RootNamespace>
-    <AssemblyName>WeatherAndPower.Core</AssemblyName>
+    <RootNamespace>WeatherAndPower.Data</RootNamespace>
+    <AssemblyName>WeatherAndPower.Data</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -42,18 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseHttpClient.cs" />
-    <Compile Include="PlaceholderModel.cs" />
+    <Compile Include="FMI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WeatherAndPower.Contracts\WeatherAndPower.Contracts.csproj">
-      <Project>{e790455c-1855-44f6-9c5e-c817ae6ee58d}</Project>
-      <Name>WeatherAndPower.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WeatherAndPower.Data\WeatherAndPower.Data.csproj">
-      <Project>{ea7c3ccc-f33a-43d1-bc4d-d1d16b83dd07}</Project>
-      <Name>WeatherAndPower.Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

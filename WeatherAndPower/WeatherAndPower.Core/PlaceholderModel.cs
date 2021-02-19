@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
+using WeatherAndPower.Data;
 
 namespace WeatherAndPower.Core
 {
@@ -25,6 +26,7 @@ namespace WeatherAndPower.Core
 		public void PlaceholderAction()
 		{
 			PlaceholderProperty++;
+			FMI.GetTemperature();
 		}
 	}
 }

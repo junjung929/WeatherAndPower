@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WeatherAndPower.Core;
+using WeatherAndPower.Data;
 using WeatherAndPower.UI;
 
 namespace WeatherAndPower

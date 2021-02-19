@@ -86,6 +86,10 @@
       <Project>{d2d01bed-69d3-4234-b086-b796a60df033}</Project>
       <Name>WeatherAndPower.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WeatherAndPower.Data\WeatherAndPower.Data.csproj">
+      <Project>{ea7c3ccc-f33a-43d1-bc4d-d1d16b83dd07}</Project>
+      <Name>WeatherAndPower.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WeatherAndPower.UI\WeatherAndPower.UI.csproj">
       <Project>{9d186b38-921e-4824-9a40-24c33db27be6}</Project>
       <Name>WeatherAndPower.UI</Name>

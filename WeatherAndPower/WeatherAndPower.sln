@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAndPower.Core", "Wea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAndPower.Contracts", "WeatherAndPower.Contracts\WeatherAndPower.Contracts.csproj", "{E790455C-1855-44F6-9C5E-C817AE6EE58D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherAndPower.Data", "WeatherAndPower.Data\WeatherAndPower.Data.csproj", "{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E790455C-1855-44F6-9C5E-C817AE6EE58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E790455C-1855-44F6-9C5E-C817AE6EE58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E790455C-1855-44F6-9C5E-C817AE6EE58D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7C3CCC-F33A-43D1-BC4D-D1D16B83DD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
