@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
+using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI
 {
@@ -13,11 +15,27 @@ namespace WeatherAndPower.UI
 	public class DataPlotViewModel : ViewModelBase
 	{
 
-		private Chart _chart { get; set; }
+		private IDataPlotModel _Model;
+		public IDataPlotModel Model
+		{
+			get { return _Model; }
+			private set {
+				if (_Model != value) {
+					_Model = value;
+				}
+			}
+
+		}
+
+		public ObservableCollection<DataSeries> Data 
+		{
+			get { return Model.Data; }
+		}
+		private Chart _Chart { get; set; }
 
 		//public ObservableCollection<DataPointSeries> Data { get; set; } = new ObservableCollection<DataPointSeries>();
-		public ObservableCollection<List<Point>> Data { get; set; } = new ObservableCollection<List<Point>>();
-		public List<Point> Line { get; set; } = new List<Point>();
+		//public ObservableCollection<List<Point>> Data { get; set; } = new ObservableCollection<List<Point>>();
+		//public List<Point> Line { get; set; } = new List<Point>();
 
 		///<summary>
 		///Allowed types inherit from DataPointSeries
@@ -31,18 +49,32 @@ namespace WeatherAndPower.UI
 		///<item><term>ScatterSeries</term><description> Plots separate points</description></item>
 		///</list>
 		///</summary>
-		public void Plot<T>(List<Point> data, string legendName = null) where T : DataPointSeries, new()
+		public void Plot<T>(DataSeries data) where T : DataPointSeries, new()
 		{
 			T series = new T();
-			series.ItemsSource = data;
-			series.DependentValuePath = "Y";
-			series.IndependentValuePath = "X";
-			series.Title = legendName;
-			_chart.Series.Add(series);
-			//Data.Add(series);
+			series.ItemsSource = data.Series;
+			series.DependentValuePath = "Item2.Value";
+			series.IndependentValuePath = "Item1.Ticks";
+			series.Title = data.Name;
+			data.Id = series.GetHashCode();
+
+
+			_Chart.Series.Add(series);
 		}
 
-		private int? _XMin = 0;
+		private void Clear()
+		{
+			_Chart.Series.Clear();
+		}
+
+		private void Remove(int id)
+		{
+			var item = _Chart.Series.First(i => i.GetHashCode() == id);
+			_Chart.Series.Remove(item);
+		}
+
+		#region Min Max Properties
+		private int? _XMin = null;
 		public int? XMin
 		{
 			get { return _XMin; }
@@ -66,24 +98,60 @@ namespace WeatherAndPower.UI
 			}
 		}
 
-		public DataPlotViewModel(FrameworkElement view)
+		private int? _YMin = null;
+		public int? YMin
 		{
-			var chart = view.FindName("theChart");
-			if (chart != null) {
-				_chart = chart as Chart;
+			get { return _YMin; }
+			set {
+				if (_YMin != value) {
+					_YMin = value;
+					NotifyPropertyChanged("YMin");
+				}
 			}
+		}
 
+		private int? _YMax = null;
+		public int? YMax
+		{
+			get { return _YMax; }
+			set {
+				if (_YMax != value) {
+					_YMax = value;
+					NotifyPropertyChanged("YMax");
+				}
+			}
+		}
+		#endregion
 
-			Plot<LineSeries>(Line, "Test Line");
-			//Plot<PieSeries>(Line);
+		public DataPlotViewModel(IDataPlotModel model, FrameworkElement view)
+		{
+			Model = model;
+			_Chart = (Chart)view.FindName("theChart");
+			Data.CollectionChanged += DataChanged;
+			//XMax = 48;
+			//YMax = 50;
+		}
 
-			Line.Add(new Point(0, 10));
-			Line.Add(new Point(1, 15));
-			Line.Add(new Point(2, 5));
-			Line.Add(new Point(3, 12));
-			Line.Add(new Point(4, 20));
-
-			NotifyPropertyChanged("Line");
+		private void DataChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
+				for (int i = 0; i < e.OldItems.Count; i++) {
+					Remove(((DataSeries)e.OldItems[i]).Id);
+				}
+			}
+			if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace) {
+				for (int i = 0; i < e.NewItems.Count; i++) {
+					Plot<LineSeries>((DataSeries)e.NewItems[i]);
+				}
+			}
+			if (e.Action == NotifyCollectionChangedAction.Reset) {
+				Clear();
+				if (((ObservableCollection<DataSeries>)sender).Count > 0) {
+					foreach (var item in ((ObservableCollection<DataSeries>)sender)) {
+						Plot<LineSeries>(item);
+					}
+				}
+			}
 		}
 	}
 }

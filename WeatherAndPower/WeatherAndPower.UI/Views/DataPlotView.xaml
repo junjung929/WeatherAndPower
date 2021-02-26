@@ -10,7 +10,7 @@
 	<Grid>
 		<dvc:Chart x:Name="theChart">
 			<dvc:Chart.Axes>
-				<dvc:LinearAxis Orientation="X">
+				<dvc:LinearAxis Orientation="X" Minimum="{Binding XMin}" Maximum="{Binding XMax}">
 					<dvc:LinearAxis.AxisLabelStyle>
 						<Style x:Name="labelStyleX1" TargetType="Control">
 							<Setter Property="FontSize" Value="15"/>
@@ -18,7 +18,7 @@
 						</Style>
 					</dvc:LinearAxis.AxisLabelStyle>
 				</dvc:LinearAxis>
-				<dvc:LinearAxis Orientation="Y" Minimum="{Binding XMin}" Maximum="{Binding XMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Orientation="Y" Minimum="{Binding YMin}" Maximum="{Binding YMax}" ShowGridLines="True"/>
 			</dvc:Chart.Axes>
 			<!--<dvc:Chart.Series>
 				<dvc:LineSeries ItemsSource="{Binding Line}" 
@@ -31,7 +31,7 @@
 						<Style TargetType="dvc:LegendItem">
 							<Setter Property="Visibility" Value="Visible"/>
 						</Style>
-					</dvc:LineSeries.LegendItemStyle>
+					</dvc:LineSeries.LegendItemStyle>)
 				</dvc:LineSeries>
 			</dvc:Chart.Series>-->
 		</dvc:Chart>

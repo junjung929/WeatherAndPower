@@ -30,7 +30,6 @@ namespace WeatherAndPower.Data
 			Console.WriteLine($"Sending request: {request}");
 
 			var response = await _client.GetAsync(request);
-			//Console.WriteLine(await response.Content.ReadAsStringAsync());
 			var body = await response.Content.ReadAsStringAsync();
 
 			var doc = new XmlDocument();

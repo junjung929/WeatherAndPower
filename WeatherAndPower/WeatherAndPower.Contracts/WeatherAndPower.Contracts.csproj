@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSeries.cs" />
+    <Compile Include="IData.cs" />
+    <Compile Include="IDataPlotModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

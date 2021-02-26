@@ -9,6 +9,9 @@ namespace WeatherAndPower.Contracts
 	public interface IPlaceholderModel
 	{
 		int PlaceholderProperty { get; }
-		void PlaceholderAction();
+		string DataName { get; set; }
+		void PlaceholderAction1();
+		void PlaceholderAction2();
+		void PlaceholderAction3();
 	}
 }

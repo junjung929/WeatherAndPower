@@ -25,14 +25,16 @@ namespace WeatherAndPower
 			MainWindow = new UI.MainWindow();
 
 			//Initialize all the various modules here
-			var placeholderModel = new PlaceholderModel();
+
+			var dataPlotView = ((FrameworkElement)MainWindow.FindName("DataPlot"));
+			var dataPlotModel = new DataPlotModel();
+			var dataPlotViewModel = new DataPlotViewModel(dataPlotModel, dataPlotView);
+			dataPlotView.DataContext = dataPlotViewModel;
+
+			var placeholderModel = new PlaceholderModel(dataPlotModel);
 			var placeholderViewModel = new PlaceholderViewModel(placeholderModel);
 			var placeholderView = ((FrameworkElement)MainWindow.FindName("PlaceholderModule"));
 			placeholderView.DataContext = placeholderViewModel;
-
-			var dataPlotView = ((FrameworkElement)MainWindow.FindName("DataPlot"));
-			var dataPlotViewModel = new DataPlotViewModel(dataPlotView);
-			dataPlotView.DataContext = dataPlotViewModel;
 
 			MainWindow.ShowDialog();
 		}

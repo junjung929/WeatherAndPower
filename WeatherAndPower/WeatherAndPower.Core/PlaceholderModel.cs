@@ -8,8 +8,19 @@ using WeatherAndPower.Data;
 
 namespace WeatherAndPower.Core
 {
-    public class PlaceholderModel : IPlaceholderModel
+    public class PlaceholderModel : AbstractModel, IPlaceholderModel
     {
+
+		private DataPlotModel _DataPlot;
+		public DataPlotModel DataPlot
+		{
+			get { return _DataPlot; }
+			private set {
+				if (_DataPlot != value) {
+					_DataPlot = value;
+				}
+			}
+		}
 		private int _PlaceholderProperty = 0;
         public int PlaceholderProperty
 		{
@@ -23,10 +34,34 @@ namespace WeatherAndPower.Core
 			}
 		}
 
-		public void PlaceholderAction()
+		private string _DataName;
+		public string DataName {
+			get { return _DataName; }
+			set {
+				if (_DataName != value) {
+					_DataName = value;
+					NotifyPropertyChanged("DataName");
+				}
+			}
+		}
+
+		public void PlaceholderAction1()
 		{
-			PlaceholderProperty++;
-			FMI.GetTemperature();
+			DataPlot.AddRandomPlot(DataName);
+		}
+
+		public void PlaceholderAction2()
+		{
+			DataPlot.Clear();
+		}
+
+		public  void PlaceholderAction3()
+		{
+			DataPlot.Remove(DataName);
+		}
+		public PlaceholderModel(DataPlotModel dataPlot)
+		{
+			DataPlot = dataPlot;
 		}
 	}
 }

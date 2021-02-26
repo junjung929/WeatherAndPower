@@ -6,7 +6,11 @@
              xmlns:local="clr-namespace:WeatherAndPower.UI"
              mc:Ignorable="d" Height="600" Width="800">
     <Grid>
-		<local:PlaceholderView x:Name="PlaceholderModule"/>
-		<local:DataPlotView x:Name="DataPlot"/>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<local:DataPlotView x:Name="DataPlot" Grid.Column="0"/>
+		<local:PlaceholderView x:Name="PlaceholderModule" Grid.Column="1"/>
 	</Grid>
 </Window>
