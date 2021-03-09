@@ -16,9 +16,9 @@ namespace WeatherAndPower.Data
 
         public static Dictionary<string, string> contentTypes = new Dictionary<string, string>()
         {
-            {"csv","text/csv" },
-            {"xml", "application/xml" },
-            {"json", "application/json" }
+            { "csv","text/csv" },
+            { "xml", "application/xml" },
+            { "json", "application/json" }
         };
         public static Dictionary<UInt16, string> powerTypes = new Dictionary<ushort, string>()
         {
