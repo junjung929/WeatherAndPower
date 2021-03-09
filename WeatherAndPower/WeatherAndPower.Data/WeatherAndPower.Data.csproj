@@ -44,7 +44,14 @@
     <Compile Include="BaseHttpClient.cs" />
     <Compile Include="Fingrid.cs" />
     <Compile Include="FMI.cs" />
+    <Compile Include="Power.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WeatherAndPower.Contracts\WeatherAndPower.Contracts.csproj">
+      <Project>{e790455c-1855-44f6-9c5e-c817ae6ee58d}</Project>
+      <Name>WeatherAndPower.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
