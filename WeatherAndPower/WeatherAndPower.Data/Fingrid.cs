@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Xml;
+using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.Data
 {
@@ -47,7 +48,8 @@ namespace WeatherAndPower.Data
         }
 
         // Get request to retrieve power information with default return format "xml"
-        public static void Get(UInt16 variableId, DateTime startTime, DateTime endTime)
+        // TODO: return value to Contracts
+        public static async void Get(UInt16 variableId, DateTime startTime, DateTime endTime)
         {
             Get(variableId, startTime, endTime, DEFAULT_FORMAT);
         }
@@ -59,6 +61,7 @@ namespace WeatherAndPower.Data
         /// <param name="startTime">Beginning of date time range</param>
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
+        /// // TODO: return value to Contracts
         public static async void Get(UInt16 variableId, DateTime startTime, DateTime endTime, string format)
         {
             string query = ParseParamsToQuery(startTime, endTime);
@@ -76,7 +79,12 @@ namespace WeatherAndPower.Data
 
             if (format == "xml")
             {
-                ParseXMLToObject(body);
+                DataSeries dataseries = ParseXMLToObject(variableId, body);
+                Console.WriteLine("Printing result " + dataseries.Name);
+                foreach (var data in dataseries.Series)
+                {
+                    Console.WriteLine(data.Item1.ToString("yyyy-MM-ddThh:mm:ssZ") + ", " + data.Item2.Value);
+                }
             }
             else
             {
@@ -142,9 +150,10 @@ namespace WeatherAndPower.Data
         /// Parse XML string to object
         /// </summary>
         /// <param name="XMLString"></param>
-        /// TODO: return object
-        private static void ParseXMLToObject(string XMLString)
+        /// <returns>DataSeries with power type and series of information</returns>
+        private static DataSeries ParseXMLToObject(UInt16 variableId,string XMLString)
         {
+            List<Tuple<DateTime, IData>> powerSeries = new List<Tuple<DateTime, IData>>();
             var doc = new XmlDocument();
             doc.LoadXml(XMLString);
 
@@ -158,10 +167,12 @@ namespace WeatherAndPower.Data
                     string val = evt.SelectSingleNode("value").InnerText;
                     string start_time = evt.SelectSingleNode("start_time").InnerText;
                     string end_time = evt.SelectSingleNode("end_time").InnerText;
-
+                    IData power = new Power(Double.Parse(val), DateTime.Parse(start_time), DateTime.Parse(end_time));
+                    powerSeries.Add(Tuple.Create(DateTime.Parse(start_time), power));
                     Console.WriteLine($"{start_time} {end_time} {val}");
                 }
             }
+            return new DataSeries(powerTypes[variableId], powerSeries);
         }
     }
 }
