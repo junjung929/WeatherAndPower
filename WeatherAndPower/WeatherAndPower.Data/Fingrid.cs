@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Xml;
 
 namespace WeatherAndPower.Data
 {
@@ -12,6 +13,24 @@ namespace WeatherAndPower.Data
         private static string SERVER_URL = "https://api.fingrid.fi/v1/variable";
         private static string FINGRID_API = GetApiKey();
         private static string DEFAULT_FORMAT = "xml";
+
+        public static Dictionary<string, string> contentTypes = new Dictionary<string, string>()
+        {
+            {"csv","text/csv" },
+            {"xml", "application/xml" },
+            {"json", "application/json" }
+        };
+        public static Dictionary<UInt16, string> powerTypes = new Dictionary<ushort, string>()
+        {
+            { 124, "Electricity consumption in Finland" },
+            { 165, "Electricity consumption forecast for the next 24 hours" },
+            { 242, "A tentative production prediction for the next 24 hours as hourly energy" },
+            { 74, "Electricity production in Finland" },
+            { 75, "Wind power generation - hourly data" },
+            { 181, "Wind power production - real time data" },
+            { 188, "Nuclear power production - real time data" },
+            { 191, "Hydro power production - real time data" },
+        };
 
         /// <summary>
         /// Get Fingrid api key from environment variables
@@ -27,41 +46,54 @@ namespace WeatherAndPower.Data
             return apikey;
         }
 
+        // Get request to retrieve power information with default return format "xml"
         public static void Get(UInt16 variableId, DateTime startTime, DateTime endTime)
         {
             Get(variableId, startTime, endTime, DEFAULT_FORMAT);
         }
 
+        /// <summary>
+        /// Get request to retrieve power information with the given id and parameters
+        /// </summary>
+        /// <param name="variableId">ID of power information type</param>
+        /// <param name="startTime">Beginning of date time range</param>
+        /// <param name="endTime">Ending of date time range</param>
+        /// <param name="format">Return data format csv | json | xml</param>
         public static async void Get(UInt16 variableId, DateTime startTime, DateTime endTime, string format)
         {
             string query = ParseParamsToQuery(startTime, endTime);
             string requestUri = ParseRequestUri(variableId, query, format);
-            string contentType;
 
-            if (format == "csv")
+
+            var httpRequestMessage = new HttpRequestMessage();
+            httpRequestMessage.Method = HttpMethod.Get;
+            httpRequestMessage.RequestUri = new Uri(requestUri);
+            setHeaders(httpRequestMessage, format);
+
+            var response = await _client.SendAsync(httpRequestMessage);
+            var body = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(body);
+
+            if (format == "xml")
             {
-                contentType = $"text/{format}";
+                ParseXMLToObject(body);
             }
             else
             {
-                contentType = $"application/{format}";
+                Console.WriteLine($"Return data type {format} doesn't support yet");
             }
 
-            var httpRequestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(requestUri),
-                Headers =
-                {
-                    { "x-api-key", FINGRID_API },
-                    { "Accept", contentType }
-                }
-            };
+        }
 
-            var response = await _client.SendAsync(httpRequestMessage);
-            Console.WriteLine(response);
-
-
+        /// <summary>
+        /// Set Api key and content type into headers.
+        /// </summary>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="format"></param>
+        private static void setHeaders(HttpRequestMessage httpRequestMessage, string format)
+        {
+            httpRequestMessage.Headers.Add("x-api-key", FINGRID_API);
+            httpRequestMessage.Headers.Add("Accept", contentTypes[format]);
         }
 
         /// <summary>
@@ -73,9 +105,7 @@ namespace WeatherAndPower.Data
         /// <returns>Request URI</returns>
         private static string ParseRequestUri(UInt16 variableId, string query, string format)
         {
-
             string request = $"{SERVER_URL}/{variableId}/events/{format}?{query}";
-
             return request;
         }
 
@@ -108,5 +138,30 @@ namespace WeatherAndPower.Data
             ));
         }
 
+        /// <summary>
+        /// Parse XML string to object
+        /// </summary>
+        /// <param name="XMLString"></param>
+        /// TODO: return object
+        private static void ParseXMLToObject(string XMLString)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(XMLString);
+
+            XmlNodeList evts = doc.SelectNodes("events/event");
+            Console.WriteLine(evts.Count);
+
+            foreach (XmlNode evt in evts)
+            {
+                if (evt != null)
+                {
+                    string val = evt.SelectSingleNode("value").InnerText;
+                    string start_time = evt.SelectSingleNode("start_time").InnerText;
+                    string end_time = evt.SelectSingleNode("end_time").InnerText;
+
+                    Console.WriteLine($"{start_time} {end_time} {val}");
+                }
+            }
+        }
     }
 }
