@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseHttpClient.cs" />
+    <Compile Include="Fingrid.cs" />
     <Compile Include="FMI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
