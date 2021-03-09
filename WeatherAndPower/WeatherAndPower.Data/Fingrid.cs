@@ -71,7 +71,7 @@ namespace WeatherAndPower.Data
             var httpRequestMessage = new HttpRequestMessage();
             httpRequestMessage.Method = HttpMethod.Get;
             httpRequestMessage.RequestUri = new Uri(requestUri);
-            setHeaders(httpRequestMessage, format);
+            SetHeaders(httpRequestMessage, format);
 
             var response = await _client.SendAsync(httpRequestMessage);
             var body = await response.Content.ReadAsStringAsync();
@@ -98,7 +98,7 @@ namespace WeatherAndPower.Data
         /// </summary>
         /// <param name="httpRequestMessage"></param>
         /// <param name="format"></param>
-        private static void setHeaders(HttpRequestMessage httpRequestMessage, string format)
+        private static void SetHeaders(HttpRequestMessage httpRequestMessage, string format)
         {
             httpRequestMessage.Headers.Add("x-api-key", FINGRID_API);
             httpRequestMessage.Headers.Add("Accept", contentTypes[format]);
