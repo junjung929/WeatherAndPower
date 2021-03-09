@@ -36,13 +36,13 @@ namespace WeatherAndPower.Data
             }
             return apikey;
         }
-       
+
         public static async Task<IData> Get(Power.PowerTypes variableId, string format = null)
         {
             if (format == null)
             {
                 format = DEFAULT_FORMAT;
-            }
+        }
             string requestUri = $"{SERVER_URL}/{(int)variableId}/event/{format}";
             Console.WriteLine(requestUri);
 
@@ -79,11 +79,11 @@ namespace WeatherAndPower.Data
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
         public static async Task<DataSeries> Get(Power.PowerTypes variableId, DateTime startTime, DateTime endTime, string format = null)
-        {
-            if (format == null)
             {
+            if (format == null)
+                {
                 format = DEFAULT_FORMAT;
-            }
+                }
             string query = ParseParamsToQuery(startTime, endTime);
             string requestUri = ParseRequestUri(variableId, query, format);
 
