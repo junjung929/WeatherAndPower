@@ -50,6 +50,7 @@ namespace WeatherAndPower.Core
 			DataPlot.AddRandomPlot(DataName);
 
 			// Example code to run fingrid api
+			// TODO: try with continueWith()
 			Fingrid.Get(Fingrid.powerTypes.Keys.ElementAt(1), new DateTime(2020,10,1,2,00,00), new DateTime(2020, 10, 1, 3, 00, 00));
 		}
 
