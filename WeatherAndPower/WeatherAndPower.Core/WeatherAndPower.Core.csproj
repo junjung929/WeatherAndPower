@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseHttpClient.cs" />
+    <Compile Include="AbstractModel.cs" />
+    <Compile Include="DataPlotModel.cs" />
     <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

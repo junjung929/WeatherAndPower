@@ -7,18 +7,61 @@
              xmlns:dvc="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+	<UserControl.Resources>
+		<ResourceDictionary Source="/WeatherAndPower.UI;component/ValueConverters/ValueConverter.xaml"/>
+	</UserControl.Resources>
 	<Grid>
 		<dvc:Chart x:Name="theChart">
+			<dvc:Chart.Resources>
+				<Style x:Key="LineSeriesStyle" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background" Value="Blue"/>
+				</Style>
+				<Style x:Key="PowerLine" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background">
+						<Setter.Value>
+							<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+								<GradientStop Color="#FFFF8B00" Offset="0.0"/>
+								<GradientStop Color="#FFFFCC1D" Offset="1.0"/>
+							</LinearGradientBrush>
+						</Setter.Value>
+					</Setter>
+				</Style>
+				<Style x:Key="TemperatureLine" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background">
+						<Setter.Value>
+							<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+								<GradientStop Color="#FF0046FF" Offset="0.0"/>
+								<GradientStop Color="#FF5A87FF" Offset="1.0"/>
+							</LinearGradientBrush>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</dvc:Chart.Resources>
 			<dvc:Chart.Axes>
-				<dvc:LinearAxis Orientation="X">
+				<dvc:LinearAxis Orientation="X" Interval="{Binding XInterval, Converter={StaticResource EpochToSpanConverter}}" Minimum="{Binding XMin}" Maximum="{Binding XMax}">
 					<dvc:LinearAxis.AxisLabelStyle>
 						<Style x:Name="labelStyleX1" TargetType="Control">
 							<Setter Property="FontSize" Value="15"/>
 							<Setter Property="Foreground" Value="Black"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="dvc:AxisLabel">
+										<TextBlock Text="{Binding Converter={StaticResource EpochToDateConverter}}">
+											<TextBlock.LayoutTransform>
+												<RotateTransform Angle="45" CenterX="100" CenterY="0"/>
+											</TextBlock.LayoutTransform>
+										</TextBlock>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
 						</Style>
 					</dvc:LinearAxis.AxisLabelStyle>
 				</dvc:LinearAxis>
-				<dvc:LinearAxis Orientation="Y" Minimum="{Binding XMin}" Maximum="{Binding XMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Name="TemperatureAxis" Orientation="Y" Interval="{Binding TemperatureInterval}" Minimum="{Binding TemperatureMin}" Maximum="{Binding TemperatureMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Name="PowerAxis" Orientation="Y" Interval="{Binding PowerInterval}" Minimum="{Binding PowerMin}" Maximum="{Binding PowerMax}" ShowGridLines="True"/>
 			</dvc:Chart.Axes>
 			<!--<dvc:Chart.Series>
 				<dvc:LineSeries ItemsSource="{Binding Line}" 
@@ -31,7 +74,7 @@
 						<Style TargetType="dvc:LegendItem">
 							<Setter Property="Visibility" Value="Visible"/>
 						</Style>
-					</dvc:LineSeries.LegendItemStyle>
+					</dvc:LineSeries.LegendItemStyle>)
 				</dvc:LineSeries>
 			</dvc:Chart.Series>-->
 		</dvc:Chart>

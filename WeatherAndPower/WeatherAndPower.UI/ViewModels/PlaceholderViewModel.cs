@@ -20,18 +20,21 @@ namespace WeatherAndPower.UI
 			}
 		}
 
-		public void PlaceholderAction()
+		public string PlaceholderText
 		{
-			Model.PlaceholderAction();
-			NotifyPropertyChanged("PlaceholderProperty");
+			get { return Model.DataName; }
+			set {
+				if (Model.DataName != value) {
+					Model.DataName = value;
+					NotifyPropertyChanged("PlaceholderText");
+				}
+			}
 		}
-		public RelayCommand PlaceholderCommand => new RelayCommand(() => this.PlaceholderAction());
 
-		public int PlaceholderProperty
-		{
-			get { return Model.PlaceholderProperty; }
-		}
-		
+		public RelayCommand PlaceholderCommand1 => new RelayCommand(() => Model.PlaceholderAction1());
+		public RelayCommand PlaceholderCommand2 => new RelayCommand(() => Model.PlaceholderAction2());
+		public RelayCommand PlaceholderCommand3 => new RelayCommand(() => Model.PlaceholderAction3());
+
 		public PlaceholderViewModel(IPlaceholderModel model)
 		{
 			Model = model;
