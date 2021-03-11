@@ -49,9 +49,9 @@ namespace WeatherAndPower.Data
 
         // Get request to retrieve power information with default return format "xml"
         // TODO: return value to Contracts
-        public static async void Get(UInt16 variableId, DateTime startTime, DateTime endTime)
+        public static async Task<DataSeries> Get(UInt16 variableId, DateTime startTime, DateTime endTime)
         {
-            Get(variableId, startTime, endTime, DEFAULT_FORMAT);
+            return await Get(variableId, startTime, endTime, DEFAULT_FORMAT);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace WeatherAndPower.Data
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
-        public static async void Get(UInt16 variableId, DateTime startTime, DateTime endTime, string format)
+        public static async Task<DataSeries> Get(UInt16 variableId, DateTime startTime, DateTime endTime, string format)
         {
             string query = ParseParamsToQuery(startTime, endTime);
             string requestUri = ParseRequestUri(variableId, query, format);
@@ -85,10 +85,12 @@ namespace WeatherAndPower.Data
                 {
                     Console.WriteLine(data.Item1.ToString("yyyy-MM-ddThh:mm:ssZ") + ", " + data.Item2.Value);
                 }
+                return dataseries;
             }
             else
             {
                 Console.WriteLine($"Return data type {format} doesn't support yet");
+                return null;
             }
 
         }
