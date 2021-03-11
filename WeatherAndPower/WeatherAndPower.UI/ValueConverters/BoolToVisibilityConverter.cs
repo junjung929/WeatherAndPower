@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Globalization;
 
 namespace WeatherAndPower.UI.ValueConverters
 {
 	[ValueConversion(typeof(bool), typeof(Visibility))]
 	public class BoolToVisibilityConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value is string) {
 				if (((string)value).ToLower() == "true" || ((string)value).ToLower() == "false") {
@@ -25,7 +26,7 @@ namespace WeatherAndPower.UI.ValueConverters
 			return value.Equals(true) ? Visibility.Visible : Visibility.Collapsed;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return value.Equals(Visibility.Visible);
 		}
