@@ -8,17 +8,19 @@ namespace WeatherAndPower.Contracts
 {
 	public class DataSeries
 	{
-		public int Id { get; set; }
+		public int Id { get; set; } = 0;
 
 		public string Name { get; set; }
 
+		public DataFormat Format { get; set; }
+
 		public List<Tuple<DateTime, IData>> Series { get; set; }
 
-		public DataSeries(string name, List<Tuple<DateTime, IData>> series)
+		public DataSeries(string name, DataFormat format, List<Tuple<DateTime, IData>> series)
 		{
-			Id = 0; //This will be set when the series is added to a plot
 			Name = name;
 			Series = series;
+			Format = format;
 		}
 	}
 }

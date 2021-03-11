@@ -24,7 +24,6 @@ namespace WeatherAndPower.UI
 					_Model = value;
 				}
 			}
-
 		}
 
 		public ObservableCollection<DataSeries> Data 
@@ -69,8 +68,16 @@ namespace WeatherAndPower.UI
 			series.DependentValuePath = "Item2.Value";
 			series.IndependentValuePath = "Item1.Ticks";
 			series.Title = data.Name;
+			
+			if (data.Format == Contracts.DataFormat.Temperature) {
+				series.DataPointStyle = _Chart.Resources["TemperatureLine"] as Style;
+				series.DependentRangeAxis = (IRangeAxis)TemperatureAxis;
+			} else if (data.Format == Contracts.DataFormat.Power) {
+				series.DataPointStyle = _Chart.Resources["PowerLine"] as Style;
+				series.DependentRangeAxis = (IRangeAxis)PowerAxis;
+			}
 			data.Id = series.GetHashCode();
-
+			
 			_Chart.Series.Add(series);
 		}
 
@@ -100,6 +107,7 @@ namespace WeatherAndPower.UI
 				}
 			}
 		}
+		
 		private int? _XMin = null;
 		public int? XMin
 		{
@@ -124,26 +132,80 @@ namespace WeatherAndPower.UI
 			}
 		}
 
-		private int? _YMin = null;
-		public int? YMin
+		public IAxis TemperatureAxis
 		{
-			get { return _YMin; }
+			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "TemperatureAxis"); }
+		}
+
+		private int? _TemperatureInterval = null;
+		public int ? TemperatureInterval
+		{
+			get { return _TemperatureInterval; }
+			set { if (_TemperatureInterval != value) {
+					_TemperatureInterval = value;
+					NotifyPropertyChanged("TemperatureInterval");
+				}
+			}
+		}
+		private int? _TemperatureMin = null;
+		public int? TemperatureMin
+		{
+			get { return _TemperatureMin; }
 			set {
-				if (_YMin != value) {
-					_YMin = value;
-					NotifyPropertyChanged("YMin");
+				if (_TemperatureMin != value) {
+					_TemperatureMin = value;
+					NotifyPropertyChanged("TempetatureMin");
 				}
 			}
 		}
 
-		private int? _YMax = null;
-		public int? YMax
+		private int? _TemperatureMax = null;
+		public int? TemperatureMax
 		{
-			get { return _YMax; }
+			get { return _TemperatureMax; }
 			set {
-				if (_YMax != value) {
-					_YMax = value;
-					NotifyPropertyChanged("YMax");
+				if (_TemperatureMax != value) {
+					_TemperatureMax = value;
+					NotifyPropertyChanged("TemperatureMax");
+				}
+			}
+		}
+
+		public IAxis PowerAxis
+		{
+			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "PowerAxis"); }
+		}
+		private int? _PowerInterval = null;
+		public int ? PowerInterval
+		{
+			get { return _PowerInterval; }
+			set {
+				if (_PowerInterval != value) {
+					_PowerInterval = value;
+					NotifyPropertyChanged("PowerInterval");
+				}
+			}
+		}
+		private int? _PowerMin = null;
+		public int? PowerMin
+		{
+			get { return _PowerMin; }
+			set {
+				if (_PowerMin != value) {
+					_PowerMin = value;
+					NotifyPropertyChanged("PowerMin");
+				}
+			}
+		}
+
+		private int? _PowerMax = null;
+		public int? PowerMax
+		{
+			get { return _PowerMax; }
+			set {
+				if (_PowerMax != value) {
+					_PowerMax = value;
+					NotifyPropertyChanged("PowerMax");
 				}
 			}
 		}
@@ -155,6 +217,10 @@ namespace WeatherAndPower.UI
 			_Chart = (Chart)view.FindName("theChart");
 			Data.CollectionChanged += DataChanged;
 			XInterval = new TimeSpan(0, 1, 0, 0);
+			PowerMin = 0;
+			PowerMax = 1000;
+			TemperatureMin = -40;
+			TemperatureMax = 40;
 			//XMax = 48;
 			//YMax = 50;
 		}
@@ -168,14 +234,14 @@ namespace WeatherAndPower.UI
 			}
 			if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace) {
 				for (int i = 0; i < e.NewItems.Count; i++) {
-					Plot<LineSeries>((DataSeries)e.NewItems[i]);
+					Plot((DataSeries)e.NewItems[i]);
 				}
 			}
 			if (e.Action == NotifyCollectionChangedAction.Reset) {
 				Clear();
 				if (((ObservableCollection<DataSeries>)sender).Count > 0) {
 					foreach (var item in ((ObservableCollection<DataSeries>)sender)) {
-						Plot<LineSeries>(item);
+						Plot(item);
 					}
 				}
 			}

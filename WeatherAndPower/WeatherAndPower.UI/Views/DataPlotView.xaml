@@ -12,6 +12,34 @@
 	</UserControl.Resources>
 	<Grid>
 		<dvc:Chart x:Name="theChart">
+			<dvc:Chart.Resources>
+				<Style x:Key="LineSeriesStyle" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background" Value="Blue"/>
+				</Style>
+				<Style x:Key="PowerLine" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background">
+						<Setter.Value>
+							<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+								<GradientStop Color="#FFFF8B00" Offset="0.0"/>
+								<GradientStop Color="#FFFFCC1D" Offset="1.0"/>
+							</LinearGradientBrush>
+						</Setter.Value>
+					</Setter>
+				</Style>
+				<Style x:Key="TemperatureLine" TargetType="{x:Type dvc:LineDataPoint}">
+					<Setter Property="Opacity" Value="0"/>
+					<Setter Property="Background">
+						<Setter.Value>
+							<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+								<GradientStop Color="#FF0046FF" Offset="0.0"/>
+								<GradientStop Color="#FF5A87FF" Offset="1.0"/>
+							</LinearGradientBrush>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</dvc:Chart.Resources>
 			<dvc:Chart.Axes>
 				<dvc:LinearAxis Orientation="X" Interval="{Binding XInterval, Converter={StaticResource EpochToSpanConverter}}" Minimum="{Binding XMin}" Maximum="{Binding XMax}">
 					<dvc:LinearAxis.AxisLabelStyle>
@@ -30,14 +58,10 @@
 								</Setter.Value>
 							</Setter>
 						</Style>
-
 					</dvc:LinearAxis.AxisLabelStyle>
 				</dvc:LinearAxis>
-				<!--
-				<dvc:LinearAxis Name="TemperatureAxis" Orientation="Y" Interval="10" Minimum="-40" Maximum="40" ShowGridLines="True"/>
-				<dvc:LinearAxis Name="PowerAxis" Orientation="Y" Minimum="{Binding YMin}" Maximum="{Binding YMax}" ShowGridLines="True"/>
-				<dvc:LinearAxis Name="YAxis" Orientation="Y" Minimum="{Binding YMin}" Maximum="{Binding YMax}" ShowGridLines="True"/>
-				-->
+				<dvc:LinearAxis Name="TemperatureAxis" Orientation="Y" Interval="{Binding TemperatureInterval}" Minimum="{Binding TemperatureMin}" Maximum="{Binding TemperatureMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Name="PowerAxis" Orientation="Y" Interval="{Binding PowerInterval}" Minimum="{Binding PowerMin}" Maximum="{Binding PowerMax}" ShowGridLines="True"/>
 			</dvc:Chart.Axes>
 			<!--<dvc:Chart.Series>
 				<dvc:LineSeries ItemsSource="{Binding Line}" 

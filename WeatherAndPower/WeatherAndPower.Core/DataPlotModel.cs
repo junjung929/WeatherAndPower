@@ -39,10 +39,10 @@ namespace WeatherAndPower.Core
 				DateTime.Now.Subtract(new TimeSpan(12,0,0)),
 				DateTime.Now,
 				48);
-			var y = _GenerateRandomPlot(0, 50, 48);
+			var y = _GenerateRandomPlot(0, 400, 48);
 
 			var series = x.Zip(y, (_x, _y) => new Tuple<DateTime, IData>(_x, _y)).ToList();
-			Data.Add(new DataSeries(name, series));
+			Data.Add(new DataSeries(name, DataFormat.Power, series));
 		}
 
 		public void Clear()
