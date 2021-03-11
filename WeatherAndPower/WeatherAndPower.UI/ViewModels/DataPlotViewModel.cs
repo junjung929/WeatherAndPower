@@ -62,6 +62,18 @@ namespace WeatherAndPower.UI
 			_Chart.Series.Add(series);
 		}
 
+		public void Plot(DataSeries data)
+		{
+			LineSeries series = new LineSeries();
+			series.ItemsSource = data.Series;
+			series.DependentValuePath = "Item2.Value";
+			series.IndependentValuePath = "Item1.Ticks";
+			series.Title = data.Name;
+			data.Id = series.GetHashCode();
+
+			_Chart.Series.Add(series);
+		}
+
 		private void Clear()
 		{
 			_Chart.Series.Clear();
@@ -73,7 +85,21 @@ namespace WeatherAndPower.UI
 			_Chart.Series.Remove(item);
 		}
 
-		#region Min Max Properties
+		#region Axis Properties
+
+		private TimeSpan? _XInterval = null;
+		public TimeSpan? XInterval
+		{
+			get {
+				return _XInterval;
+			}
+			set {
+				if (_XInterval != value) {
+					_XInterval = value;
+					NotifyPropertyChanged("XInterval");
+				}
+			}
+		}
 		private int? _XMin = null;
 		public int? XMin
 		{
@@ -128,6 +154,7 @@ namespace WeatherAndPower.UI
 			Model = model;
 			_Chart = (Chart)view.FindName("theChart");
 			Data.CollectionChanged += DataChanged;
+			XInterval = new TimeSpan(0, 1, 0, 0);
 			//XMax = 48;
 			//YMax = 50;
 		}

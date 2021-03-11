@@ -9,19 +9,18 @@ using System.Globalization;
 
 namespace WeatherAndPower.UI.ValueConverters
 {
-	[ValueConversion(typeof(double), typeof(string))]
-	public class EpochToDateConverter : IValueConverter
+	[ValueConversion(typeof(long), typeof(TimeSpan))]
+	public class EpochToSpanConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var date = new DateTime((long)((double)value));
-
-			return date.ToString("t");
+			return ((TimeSpan)value).Ticks;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			var span = new TimeSpan((long)value);
+			return span;
 		}
 	}
 }
