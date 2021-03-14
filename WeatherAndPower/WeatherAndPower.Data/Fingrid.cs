@@ -21,17 +21,7 @@ namespace WeatherAndPower.Data
             { "xml", "application/xml" },
             { "json", "application/json" }
         };
-        public static Dictionary<UInt16, string> powerTypes = new Dictionary<ushort, string>()
-        {
-            { 124, "Electricity consumption in Finland" },
-            { 165, "Electricity consumption forecast for the next 24 hours" },
-            { 242, "A tentative production prediction for the next 24 hours as hourly energy" },
-            { 74, "Electricity production in Finland" },
-            { 75, "Wind power generation - hourly data" },
-            { 181, "Wind power production - real time data" },
-            { 188, "Nuclear power production - real time data" },
-            { 191, "Hydro power production - real time data" },
-        };
+        
 
         /// <summary>
         /// Get Fingrid api key from environment variables
@@ -46,14 +36,40 @@ namespace WeatherAndPower.Data
             }
             return apikey;
         }
-
-        // Get request to retrieve power information with default return format "xml"
-        // TODO: return value to Contracts
-        public static async Task<DataSeries> Get(UInt16 variableId, DateTime startTime, DateTime endTime)
+       
+        public static async Task<IData> Get(Power.PowerTypes variableId, string format = null)
         {
-            return await Get(variableId, startTime, endTime, DEFAULT_FORMAT);
-        }
+            if (format == null)
+            {
+                format = DEFAULT_FORMAT;
+            }
+            string requestUri = $"{SERVER_URL}/{(int)variableId}/event/{format}";
+            Console.WriteLine(requestUri);
 
+            var httpRequestMessage = new HttpRequestMessage();
+            httpRequestMessage.Method = HttpMethod.Get;
+            httpRequestMessage.RequestUri = new Uri(requestUri);
+            SetHeaders(httpRequestMessage, format);
+
+            var response = await _client.SendAsync(httpRequestMessage);
+            var body = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(body);
+
+            if (format == "xml")
+            {
+                IData singleData = ParseXMLToSingleData(variableId, body);
+                
+                Console.WriteLine(singleData.Value);
+                return singleData;
+            }
+            else
+            {
+                Console.WriteLine($"Return data type {format} doesn't support yet");
+                return null;
+            }
+
+        }
+        
         /// <summary>
         /// Get request to retrieve power information with the given id and parameters
         /// </summary>
@@ -62,8 +78,12 @@ namespace WeatherAndPower.Data
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
-        public static async Task<DataSeries> Get(UInt16 variableId, DateTime startTime, DateTime endTime, string format)
+        public static async Task<DataSeries> Get(Power.PowerTypes variableId, DateTime startTime, DateTime endTime, string format = null)
         {
+            if (format == null)
+            {
+                format = DEFAULT_FORMAT;
+            }
             string query = ParseParamsToQuery(startTime, endTime);
             string requestUri = ParseRequestUri(variableId, query, format);
 
@@ -79,7 +99,7 @@ namespace WeatherAndPower.Data
 
             if (format == "xml")
             {
-                DataSeries dataseries = ParseXMLToObject(variableId, body);
+                DataSeries dataseries = ParseXMLToDataSeries(variableId, body);
                 Console.WriteLine("Printing result " + dataseries.Name);
                 foreach (var data in dataseries.Series)
                 {
@@ -113,9 +133,9 @@ namespace WeatherAndPower.Data
         /// <param name="query"></param>
         /// <param name="format">format for return data csv | json | xml</param>
         /// <returns>Request URI</returns>
-        private static string ParseRequestUri(UInt16 variableId, string query, string format)
+        private static string ParseRequestUri(Power.PowerTypes variableId, string query, string format)
         {
-            string request = $"{SERVER_URL}/{variableId}/events/{format}?{query}";
+            string request = $"{SERVER_URL}/{(int)variableId}/events/{format}?{query}";
             return request;
         }
 
@@ -148,12 +168,27 @@ namespace WeatherAndPower.Data
             ));
         }
 
+        private static IData ParseXMLToSingleData(Power.PowerTypes variableId,string XMLString)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(XMLString);
+            
+            var evt = doc.SelectSingleNode("event");
+            Console.WriteLine(evt);
+            string val = evt.SelectSingleNode("value").InnerText;
+            string start_time = evt.SelectSingleNode("start_time").InnerText;
+            string end_time = evt.SelectSingleNode("end_time").InnerText;
+            IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time), DateTime.Parse(end_time));
+            Console.WriteLine($"{start_time} {end_time} {val}");
+            return power;
+        }
+
         /// <summary>
         /// Parse XML string to object
         /// </summary>
         /// <param name="XMLString"></param>
         /// <returns>DataSeries with power type and series of information</returns>
-        private static DataSeries ParseXMLToObject(UInt16 variableId,string XMLString)
+        private static DataSeries ParseXMLToDataSeries(Power.PowerTypes variableId, string XMLString)
         {
             List<Tuple<DateTime, IData>> powerSeries = new List<Tuple<DateTime, IData>>();
             var doc = new XmlDocument();
@@ -166,15 +201,16 @@ namespace WeatherAndPower.Data
             {
                 if (evt != null)
                 {
-                    string val = evt.SelectSingleNode("value").InnerText;
-                    string start_time = evt.SelectSingleNode("start_time").InnerText;
-                    string end_time = evt.SelectSingleNode("end_time").InnerText;
-                    IData power = new Power(Double.Parse(val), DateTime.Parse(start_time), DateTime.Parse(end_time));
-                    powerSeries.Add(Tuple.Create(DateTime.Parse(start_time), power));
-                    Console.WriteLine($"{start_time} {end_time} {val}");
+                    Double val = Convert.ToDouble(evt.SelectSingleNode("value").InnerText);
+                    DateTime startTime = Convert.ToDateTime(evt.SelectSingleNode("start_time").InnerText);
+                    DateTime endTime = Convert.ToDateTime(evt.SelectSingleNode("end_time").InnerText);
+                    Power data = new Power(variableId, val, startTime, endTime);
+                    Tuple<DateTime, IData> plotPoint = new Tuple<DateTime, IData>(startTime, data);
+                    powerSeries.Add(plotPoint);
+                    Console.WriteLine($"{startTime} {endTime} {val}");
                 }
             }
-            return new DataSeries(powerTypes[variableId], powerSeries);
+            return new DataSeries(Power.powerTypes[variableId], DataFormat.Power , powerSeries);
         }
     }
 }
