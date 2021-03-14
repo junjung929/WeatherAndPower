@@ -65,8 +65,8 @@ namespace WeatherAndPower.Core
 		{
 			var seires = Task.Run(() => Fingrid.Get(
 				Power.PowerTypes.WindPowerProdRT,
-				new DateTime(2020, 10, 1, 2, 00, 00),
-				new DateTime(2020, 10, 1, 5, 00, 00)))
+				new DateTime(2021, 3, 14, 2, 00, 00),
+				new DateTime(2021, 3, 14, 5, 00, 00)))
 				.Result;
 			DataPlot.Data.Add(seires);
 		}
