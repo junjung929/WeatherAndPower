@@ -49,9 +49,6 @@ namespace WeatherAndPower.Core
 		{
 			DataPlot.AddRandomPlot(DataName);
 
-			// Example code to run fingrid api
-			// TODO: try with continueWith()
-			Fingrid.Get(Fingrid.powerTypes.Keys.ElementAt(1), new DateTime(2020,10,1,2,00,00), new DateTime(2020, 10, 1, 3, 00, 00));
 		}
 
 		public void PlaceholderAction2()
@@ -63,9 +60,23 @@ namespace WeatherAndPower.Core
 		{
 			DataPlot.Remove(DataName);
 		}
+
+		public void PlaceholderAction5()
+		{
+			var seires = Task.Run(() => Fingrid.Get(
+				Power.PowerTypes.WindPowerProdRT,
+				new DateTime(2020, 10, 1, 2, 00, 00),
+				new DateTime(2020, 10, 1, 5, 00, 00)))
+				.Result;
+			DataPlot.Data.Add(seires);
+		}
+
 		public PlaceholderModel(DataPlotModel dataPlot)
 		{
 			DataPlot = dataPlot;
 		}
+		
+
+		
 	}
 }
