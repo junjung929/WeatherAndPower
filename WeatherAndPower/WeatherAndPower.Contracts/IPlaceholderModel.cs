@@ -13,5 +13,7 @@ namespace WeatherAndPower.Contracts
 		void PlaceholderAction1();
 		void PlaceholderAction2();
 		void PlaceholderAction3();
+
+		void PlaceholderAction5();
 	}
 }

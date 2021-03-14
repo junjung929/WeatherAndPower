@@ -17,11 +17,13 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
 
 		</Grid.RowDefinitions>
 		<TextBox Text="{Binding PlaceholderText, Mode=TwoWay}" Margin="5" Height="23" MinLines="1" MaxLines="1" TextWrapping="NoWrap" AcceptsReturn="False"/>
 		<Button Command="{ Binding PlaceholderCommand1 }" Content="Add Rnd Data" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 		<Button Command="{ Binding PlaceholderCommand3 }" Content="Remove" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 		<Button Command="{ Binding PlaceholderCommand2 }" Content="Clear" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+        <Button Command="{ Binding PlaceholderCommand5 }" Content="Test Power" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 	</Grid>
 </UserControl>

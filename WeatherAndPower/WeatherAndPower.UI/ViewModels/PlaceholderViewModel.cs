@@ -35,6 +35,8 @@ namespace WeatherAndPower.UI
 		public RelayCommand PlaceholderCommand2 => new RelayCommand(() => Model.PlaceholderAction2());
 		public RelayCommand PlaceholderCommand3 => new RelayCommand(() => Model.PlaceholderAction3());
 
+		public RelayCommand PlaceholderCommand5 => new RelayCommand(() => Model.PlaceholderAction5());
+
 		public PlaceholderViewModel(IPlaceholderModel model)
 		{
 			Model = model;
