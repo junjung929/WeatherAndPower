@@ -44,7 +44,6 @@
     <Compile Include="BaseHttpClient.cs" />
     <Compile Include="Fingrid.cs" />
     <Compile Include="FMI.cs" />
-    <Compile Include="Power.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
