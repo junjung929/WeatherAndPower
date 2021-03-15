@@ -10,25 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WeatherAndPower.UI
+namespace WeatherAndPower.UI.Views
 {
-	/// <summary>
-	/// Interaction logic for UserControl1.xaml
-	/// </summary>
-	public partial class PlaceholderView : UserControl
-	{
-		public PlaceholderView()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Interaction logic for AddWindow.xaml
+    /// </summary>
+    public partial class AddWindow : Window
+    {
+        public AddWindow()
+        {
+            InitializeComponent();
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-			var window = new Views.AddWindow();
-			window.Show();
+            this.Close();
         }
     }
 }
