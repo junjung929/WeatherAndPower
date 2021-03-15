@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Xml;
 using WeatherAndPower.Contracts;
+using System.Globalization;
 
 namespace WeatherAndPower.Data
 {
@@ -201,7 +202,7 @@ namespace WeatherAndPower.Data
             {
                 if (evt != null)
                 {
-                    Double val = Convert.ToDouble(evt.SelectSingleNode("value").InnerText);
+                    double val = double.Parse(evt.SelectSingleNode("value").InnerText, CultureInfo.InvariantCulture);
                     DateTime startTime = Convert.ToDateTime(evt.SelectSingleNode("start_time").InnerText);
                     DateTime endTime = Convert.ToDateTime(evt.SelectSingleNode("end_time").InnerText);
                     Power data = new Power(variableId, val, startTime, endTime);
