@@ -21,17 +21,6 @@ namespace WeatherAndPower.Data
             { "xml", "application/xml" },
             { "json", "application/json" }
         };
-        public static Dictionary<UInt16, string> powerTypes = new Dictionary<ushort, string>()
-        {
-            { 124, "Electricity consumption in Finland" },
-            { 165, "Electricity consumption forecast for the next 24 hours" },
-            { 242, "A tentative production prediction for the next 24 hours as hourly energy" },
-            { 74, "Electricity production in Finland" },
-            { 75, "Wind power generation - hourly data" },
-            { 181, "Wind power production - real time data" },
-            { 188, "Nuclear power production - real time data" },
-            { 191, "Hydro power production - real time data" },
-        };
 
 
         /// <summary>
