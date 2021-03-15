@@ -69,7 +69,7 @@ namespace WeatherAndPower.Data
             if (format == "xml")
             {
                 IData singleData = ParseXMLToSingleData(variableId, body);
-                
+
                 Console.WriteLine(singleData.Value);
                 return singleData;
             }
@@ -92,7 +92,7 @@ namespace WeatherAndPower.Data
         public static async Task<DataSeries> Get(Power.PowerTypes variableId, DateTime startTime, DateTime endTime, string format = null)
         {
             if (format == null)
-        {
+            {
                 format = DEFAULT_FORMAT;
             }
             string query = ParseParamsToQuery(startTime, endTime);
@@ -179,11 +179,11 @@ namespace WeatherAndPower.Data
             ));
         }
 
-        private static IData ParseXMLToSingleData(Power.PowerTypes variableId,string XMLString)
+        private static IData ParseXMLToSingleData(Power.PowerTypes variableId, string XMLString)
         {
             var doc = new XmlDocument();
             doc.LoadXml(XMLString);
-            
+
             var evt = doc.SelectSingleNode("event");
             Console.WriteLine(evt);
             string val = evt.SelectSingleNode("value").InnerText;
@@ -221,7 +221,7 @@ namespace WeatherAndPower.Data
                     Console.WriteLine($"{startTime} {endTime} {val}");
                 }
             }
-            return new DataSeries(Power.powerTypes[variableId], DataFormat.Power , powerSeries);
+            return new DataSeries(Power.powerTypes[variableId], DataFormat.Power, powerSeries);
         }
     }
 }
