@@ -10,25 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WeatherAndPower.UI.Views
+namespace WeatherAndPower.UI.Views.AddWindowViews
 {
     /// <summary>
-    /// Interaction logic for AddWindow.xaml
+    /// Interaction logic for PowerInputView.xaml
     /// </summary>
-    public partial class AddWindow : Window
+    public partial class PowerInputView : UserControl
     {
-        public AddWindow()
+        public PowerInputView()
         {
             InitializeComponent();
-
-            DataContext = new ViewModels.AddWindow.MainViewModel();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

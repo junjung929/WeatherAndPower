@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WeatherAndPower.UI.Views"
+        xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
+        xmlns:viewmodels="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
         mc:Ignorable="d"
         Title="AddWindow" Height="450" Width="800">
     <Grid>
@@ -12,15 +13,27 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        
+        
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="Data Type" VerticalAlignment="Center" />
-            <RadioButton Content="Power"  VerticalAlignment="Center" Margin="3,0" />
-            <RadioButton Content="Weather"  VerticalAlignment="Center" Margin="3,0" />
+            <Label Content="Data Type :" VerticalAlignment="Center" />
+            <RadioButton Content="Power" IsChecked="True"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
+            <RadioButton Content="Weather"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Weather" />
         </StackPanel>
-        <local:PowerInputView Grid.Row="1" />
+        <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
+        <!--<local:PowerInputView Grid.Row="1" />-->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Button_Click" />
         </StackPanel>
     </Grid>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
+            <views:PowerInputView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:WeatherInputViewModel}">
+            <views:WeatherInputView/>
+        </DataTemplate>
+    </Window.Resources>
 </Window>
