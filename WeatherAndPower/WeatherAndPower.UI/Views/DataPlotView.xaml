@@ -51,7 +51,7 @@
 									<ControlTemplate TargetType="dvc:AxisLabel">
 										<TextBlock Text="{Binding Converter={StaticResource EpochToDateConverter}}">
 											<TextBlock.LayoutTransform>
-												<RotateTransform Angle="45" CenterX="100" CenterY="0"/>
+												<RotateTransform Angle="90" CenterX="100" CenterY="0"/>
 											</TextBlock.LayoutTransform>
 										</TextBlock>
 									</ControlTemplate>
@@ -62,6 +62,8 @@
 				</dvc:LinearAxis>
 				<dvc:LinearAxis Name="TemperatureAxis" Orientation="Y" Interval="{Binding TemperatureInterval}" Minimum="{Binding TemperatureMin}" Maximum="{Binding TemperatureMax}" ShowGridLines="True"/>
 				<dvc:LinearAxis Name="PowerAxis" Orientation="Y" Interval="{Binding PowerInterval}" Minimum="{Binding PowerMin}" Maximum="{Binding PowerMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Name="WindAxis" Orientation="Y" Interval="{Binding WindInterval}" Minimum="{Binding WindMin}" Maximum="{Binding WindMax}" ShowGridLines="True"/>
+				<dvc:LinearAxis Name="CloudAxis" Orientation="Y" Interval="1" Minimum="1" Maximum="8" ShowGridLines="True" Visibility="Collapsed"/>
 			</dvc:Chart.Axes>
 			<!--<dvc:Chart.Series>
 				<dvc:LineSeries ItemsSource="{Binding Line}" 
