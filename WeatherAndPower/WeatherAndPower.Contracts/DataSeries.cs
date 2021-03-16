@@ -12,6 +12,8 @@ namespace WeatherAndPower.Contracts
 
 		public string Name { get; set; }
 
+		public byte[] Color { get; } = { 0, 0, 0 };
+
 		public DataFormat Format { get; set; }
 
 		//public DateTime Start { get; set; }
@@ -35,11 +37,20 @@ namespace WeatherAndPower.Contracts
 		//{
 		//	Name = name; Data = data; Start = start; End = end; Format = format;
 		//}
+
+		public void RandomizeColor()
+		{
+			var rand = new Random();
+			Color[0] = (byte)rand.Next(0, 255);
+			Color[1] = (byte)rand.Next(0, 255);
+			Color[2] = (byte)rand.Next(0, 255);
+		}
 		public DataSeries(string name, DataFormat format, List<Tuple<DateTime, IData>> series)
 		{
 			Name = name;
 			Format = format;
 			Series = series;
+			RandomizeColor();
 		}
 	}
 }

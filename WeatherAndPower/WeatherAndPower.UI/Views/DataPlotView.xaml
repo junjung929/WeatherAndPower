@@ -15,9 +15,8 @@
 			<dvc:Chart.Resources>
 				<Style x:Key="LineSeriesStyle" TargetType="{x:Type dvc:LineDataPoint}">
 					<Setter Property="Opacity" Value="0"/>
-					<Setter Property="Background" Value="Blue"/>
 				</Style>
-				<Style x:Key="PowerLine" TargetType="{x:Type dvc:LineDataPoint}">
+				<!--<Style x:Key="PowerLine" TargetType="{x:Type dvc:LineDataPoint}">
 					<Setter Property="Opacity" Value="0"/>
 					<Setter Property="Background">
 						<Setter.Value>
@@ -38,7 +37,7 @@
 							</LinearGradientBrush>
 						</Setter.Value>
 					</Setter>
-				</Style>
+				</Style>-->
 			</dvc:Chart.Resources>
 			<dvc:Chart.Axes>
 				<dvc:LinearAxis Orientation="X" Interval="{Binding XInterval, Converter={StaticResource EpochToSpanConverter}}" Minimum="{Binding XMin}" Maximum="{Binding XMax}">
@@ -60,10 +59,33 @@
 						</Style>
 					</dvc:LinearAxis.AxisLabelStyle>
 				</dvc:LinearAxis>
-				<dvc:LinearAxis Name="TemperatureAxis" Orientation="Y" Interval="{Binding TemperatureInterval}" Minimum="{Binding TemperatureMin}" Maximum="{Binding TemperatureMax}" ShowGridLines="True"/>
-				<dvc:LinearAxis Name="PowerAxis" Orientation="Y" Interval="{Binding PowerInterval}" Minimum="{Binding PowerMin}" Maximum="{Binding PowerMax}" ShowGridLines="True"/>
-				<dvc:LinearAxis Name="WindAxis" Orientation="Y" Interval="{Binding WindInterval}" Minimum="{Binding WindMin}" Maximum="{Binding WindMax}" ShowGridLines="True"/>
-				<dvc:LinearAxis Name="CloudAxis" Orientation="Y" Interval="1" Minimum="1" Maximum="8" ShowGridLines="True" Visibility="Collapsed"/>
+				<dvc:LinearAxis Name="TemperatureAxis"
+								Orientation="Y"
+								Interval="{Binding TemperatureInterval}"
+								Minimum="{Binding TemperatureMin}"
+								Maximum="{Binding TemperatureMax}"
+								ShowGridLines="{Binding ShowTemperature}"
+								Visibility="{Binding ShowTemperature, Converter={StaticResource BoolToVisibilityConverter}}"/>
+				<dvc:LinearAxis Name="PowerAxis"
+								Orientation="Y"
+								Interval="{Binding PowerInterval}"
+								Minimum="{Binding PowerMin}"
+								Maximum="{Binding PowerMax}"
+								ShowGridLines="True"
+								Visibility="{Binding ShowPower, Converter={StaticResource BoolToVisibilityConverter}}"/>
+				<dvc:LinearAxis Name="WindAxis" Orientation="Y"
+								Interval="{Binding WindInterval}" 
+								Minimum="{Binding WindMin}"
+								Maximum="{Binding WindMax}"
+								ShowGridLines="True"
+								Visibility="{Binding ShowWind, Converter={StaticResource BoolToVisibilityConverter}}"/>
+				<dvc:LinearAxis Name="CloudinessAxis"
+								Orientation="Y"
+								Interval="{Binding CloudinessInterval}"
+								Minimum="{Binding CloudinessMin}"
+								Maximum="{Binding CloudinessMax}"
+								ShowGridLines="True"
+								Visibility="{Binding ShowCloudiness, Converter={StaticResource BoolToVisibilityConverter}}"/>
 			</dvc:Chart.Axes>
 			<!--<dvc:Chart.Series>
 				<dvc:LineSeries ItemsSource="{Binding Line}" 

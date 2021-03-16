@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using WeatherAndPower.Contracts;
+using System.Windows.Media;
 
 namespace WeatherAndPower.UI
 {
@@ -26,55 +27,63 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+		private Contracts.DataFormat _DataHosted = 0;
+
 		public ObservableCollection<DataSeries> Data 
 		{
 			get { return Model.Data; }
 		}
 		private Chart _Chart { get; set; }
 
-		//public ObservableCollection<DataPointSeries> Data { get; set; } = new ObservableCollection<DataPointSeries>();
-		//public ObservableCollection<List<Point>> Data { get; set; } = new ObservableCollection<List<Point>>();
-		//public List<Point> Line { get; set; } = new List<Point>();
-
-		///<summary>
-		///Allowed types inherit from DataPointSeries
-		///<list type="bullet">
-		///<item><term>LineSeries</term><description> Plots data using a line</description></item>
-		///<item><term>ColumnSeries</term><description> Plots data in vertical columns</description></item>
-		///<item><term>BarSeries</term><description> Plots data in horizontal bars</description></item>
-		///<item><term>AreaSeries</term><description> Plots a line with an area</description></item>
-		///<item><term>BubbleSeries</term><description> Plots bubbles</description></item>
-		///<item><term>PieSeries</term><description> Plots a pie graph</description></item>
-		///<item><term>ScatterSeries</term><description> Plots separate points</description></item>
-		///</list>
-		///</summary>
-		public void Plot<T>(DataSeries data) where T : DataPointSeries, new()
+		private Style GetLineStyle(byte[] color)
 		{
-			T series = new T();
-			series.ItemsSource = data.Series;
-			series.DependentValuePath = "Item2.Value";
-			series.IndependentValuePath = "Item1.Ticks";
-			series.Title = data.Name;
-			data.Id = series.GetHashCode();
+			Color col1 = Color.FromRgb(
+				(byte)Math.Min(color[0]+10,255),
+				(byte)Math.Min(color[1]+10,255),
+				(byte)Math.Min(color[2]+10,255));
+			Color col2 = Color.FromRgb(
+				(byte)Math.Max(color[0]-10,0),
+				(byte)Math.Max(color[1]-10,0),
+				(byte)Math.Max(color[2]-10,0));
+			var gradient = new LinearGradientBrush() { EndPoint = new Point(0, 0), StartPoint = new Point(0, 1) };
+			gradient.GradientStops.Add(new GradientStop(col1, 0));
+			gradient.GradientStops.Add(new GradientStop(col2, 1));
+			Setter colorSetter = new Setter()
+			{
+				Property = LineDataPoint.BackgroundProperty,
+				Value = gradient
+			};
+			Setter opacitySetter = new Setter()
+			{
+				Property = LineDataPoint.OpacityProperty,
+				Value = 0.0
+			};
+			Style style = new Style();
+			style.Setters.Add(colorSetter);
+			style.Setters.Add(opacitySetter);
 
-
-			_Chart.Series.Add(series);
+			return style;
 		}
-
-		public void Plot(DataSeries data)
+		private void Plot(DataSeries data)
 		{
 			LineSeries series = new LineSeries();
 			series.ItemsSource = data.Series;
 			series.DependentValuePath = "Item2.Value";
 			series.IndependentValuePath = "Item1.Ticks";
 			series.Title = data.Name;
-			
+
+
+			series.DataPointStyle = GetLineStyle(data.Color);
+			//series.DataPointStyle.Setters.Add(colorSetter);
+
 			if (data.Format == Contracts.DataFormat.Temperature) {
-				series.DataPointStyle = _Chart.Resources["TemperatureLine"] as Style;
 				series.DependentRangeAxis = (IRangeAxis)TemperatureAxis;
 			} else if (data.Format == Contracts.DataFormat.Power) {
-				series.DataPointStyle = _Chart.Resources["PowerLine"] as Style;
 				series.DependentRangeAxis = (IRangeAxis)PowerAxis;
+			} else if (data.Format == Contracts.DataFormat.Cloudiness) {
+				series.DependentRangeAxis = (IRangeAxis)CloudinessAxis;
+			} else if (data.Format == Contracts.DataFormat.Wind) {
+				series.DependentRangeAxis = (IRangeAxis)WindAxis;
 			}
 			data.Id = series.GetHashCode();
 			
@@ -94,7 +103,10 @@ namespace WeatherAndPower.UI
 
 		#region Axis Properties
 
+		#region X Axis
+
 		private TimeSpan? _XInterval = null;
+
 		public TimeSpan? XInterval
 		{
 			get {
@@ -109,6 +121,7 @@ namespace WeatherAndPower.UI
 		}
 		
 		private int? _XMin = null;
+		
 		public int? XMin
 		{
 			get { return _XMin; }
@@ -121,6 +134,7 @@ namespace WeatherAndPower.UI
 		}
 
 		private int? _XMax = null;
+
 		public int? XMax
 		{
 			get { return _XMax; }
@@ -132,12 +146,22 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+		#endregion
+
+		#region Temperature
+
 		public IAxis TemperatureAxis
 		{
 			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "TemperatureAxis"); }
 		}
 
+		public bool ShowTemperature
+		{
+			get { return (_DataHosted & Contracts.DataFormat.Temperature) != 0; }
+		}
+
 		private int? _TemperatureInterval = null;
+
 		public int ? TemperatureInterval
 		{
 			get { return _TemperatureInterval; }
@@ -147,7 +171,9 @@ namespace WeatherAndPower.UI
 				}
 			}
 		}
+
 		private int? _TemperatureMin = null;
+
 		public int? TemperatureMin
 		{
 			get { return _TemperatureMin; }
@@ -160,6 +186,7 @@ namespace WeatherAndPower.UI
 		}
 
 		private int? _TemperatureMax = null;
+
 		public int? TemperatureMax
 		{
 			get { return _TemperatureMax; }
@@ -171,11 +198,22 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+		#endregion
+
+		#region Power
+
 		public IAxis PowerAxis
 		{
 			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "PowerAxis"); }
 		}
+
+		public bool ShowPower
+		{
+			get { return (_DataHosted & Contracts.DataFormat.Power) != 0; }
+		}
+		
 		private int? _PowerInterval = null;
+
 		public int ? PowerInterval
 		{
 			get { return _PowerInterval; }
@@ -186,7 +224,9 @@ namespace WeatherAndPower.UI
 				}
 			}
 		}
+
 		private int? _PowerMin = null;
+
 		public int? PowerMin
 		{
 			get { return _PowerMin; }
@@ -199,6 +239,7 @@ namespace WeatherAndPower.UI
 		}
 
 		private int? _PowerMax = null;
+
 		public int? PowerMax
 		{
 			get { return _PowerMax; }
@@ -209,6 +250,115 @@ namespace WeatherAndPower.UI
 				}
 			}
 		}
+
+		#endregion
+
+		#region Cloudiness
+
+		public IAxis CloudinessAxis
+		{
+			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "CloudinessAxis"); }
+		}
+
+		public bool ShowCloudiness
+		{
+			get { return (_DataHosted & Contracts.DataFormat.Cloudiness) != 0; }
+		}
+
+		private int? _CloudinessInterval = null;
+
+		public int ? CloudinessInterval
+		{
+			get { return _CloudinessInterval; }
+			set {
+				if (_CloudinessInterval != value) {
+					_CloudinessInterval = value;
+					NotifyPropertyChanged("CloudinessInterval");
+				}
+			}
+		}
+
+		private int? _CloudinessMin = null;
+
+		public int? CloudinessMin
+		{
+			get { return _CloudinessMin; }
+			set {
+				if (_CloudinessMin != value) {
+					_CloudinessMin = value;
+					NotifyPropertyChanged("CloudinessMin");
+				}
+			}
+		}
+
+		private int? _CloudinessMax = null;
+
+		public int? CloudinessMax
+		{
+			get { return _CloudinessMax; }
+			set {
+				if (_CloudinessMax != value) {
+					_CloudinessMax = value;
+					NotifyPropertyChanged("CloudinessMax");
+				}
+			}
+		}
+
+		#endregion
+
+		#region Wind
+
+		public IAxis WindAxis
+		{
+			get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "WindAxis"); }
+		}
+
+		public bool ShowWind
+		{
+			get { return (_DataHosted & Contracts.DataFormat.Wind) != 0; }
+		}
+	
+		private int? _WindInterval = null;
+
+		public int ? WindInterval
+		{
+			get { return _WindInterval; }
+			set {
+				if (_WindInterval != value) {
+					_WindInterval = value;
+					NotifyPropertyChanged("WindInterval");
+				}
+			}
+		}
+
+		private int? _WindMin = null;
+
+		public int? WindMin
+		{
+			get { return _WindMin; }
+			set {
+				if (_WindMin != value) {
+					_WindMin = value;
+					NotifyPropertyChanged("WindMin");
+				}
+			}
+		}
+
+		private int? _WindMax = null;
+
+		public int? WindMax
+		{
+			get { return _WindMax; }
+			set {
+				if (_WindMax != value) {
+					_WindMax = value;
+					NotifyPropertyChanged("WindMax");
+				}
+			}
+		}
+
+		#endregion
+
 		#endregion
 
 		public DataPlotViewModel(IDataPlotModel model, FrameworkElement view)
@@ -231,20 +381,31 @@ namespace WeatherAndPower.UI
 				for (int i = 0; i < e.OldItems.Count; i++) {
 					Remove(((DataSeries)e.OldItems[i]).Id);
 				}
+				_DataHosted = 0;
+				foreach (var item in ((ObservableCollection<DataSeries>)sender)) {
+					_DataHosted |= item.Format;
+				}
 			}
 			if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace) {
 				for (int i = 0; i < e.NewItems.Count; i++) {
 					Plot((DataSeries)e.NewItems[i]);
+					_DataHosted |= ((DataSeries)e.NewItems[i]).Format;
 				}
 			}
 			if (e.Action == NotifyCollectionChangedAction.Reset) {
 				Clear();
+				_DataHosted = 0;
 				if (((ObservableCollection<DataSeries>)sender).Count > 0) {
 					foreach (var item in ((ObservableCollection<DataSeries>)sender)) {
 						Plot(item);
+						_DataHosted |= item.Format;
 					}
 				}
 			}
+			NotifyPropertyChanged("ShowTemperature");
+			NotifyPropertyChanged("ShowPower");
+			NotifyPropertyChanged("ShowWind");
+			NotifyPropertyChanged("ShowCloudiness");
 		}
 	}
 }
