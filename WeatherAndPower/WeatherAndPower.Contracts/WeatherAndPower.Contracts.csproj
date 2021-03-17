@@ -44,6 +44,8 @@
     <Compile Include="DataSeries.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="IAddWindow.cs" />
+    <Compile Include="IAddWindowModel.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="IDataPlotModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />

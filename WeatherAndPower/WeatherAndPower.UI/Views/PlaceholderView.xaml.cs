@@ -24,11 +24,5 @@ namespace WeatherAndPower.UI
 		{
 			InitializeComponent();
 		}
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-			var window = new Views.AddWindow();
-			window.Show();
-        }
     }
 }

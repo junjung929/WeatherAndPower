@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
+using WeatherAndPower.UI.Views;
 
 namespace WeatherAndPower.UI
 {
@@ -31,11 +32,19 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+
+		public AddWindow AddWindowView
+        {
+			get { return new AddWindow();  }
+        }
+		
+
 		public RelayCommand PlaceholderCommand1 => new RelayCommand(() => Model.PlaceholderAction1());
 		public RelayCommand PlaceholderCommand2 => new RelayCommand(() => Model.PlaceholderAction2());
 		public RelayCommand PlaceholderCommand3 => new RelayCommand(() => Model.PlaceholderAction3());
 
 		public RelayCommand PlaceholderCommand5 => new RelayCommand(() => Model.PlaceholderAction5());
+		public RelayCommand OpenAddWindowCommand => new RelayCommand(() => Model.OpenAddWindowAction(AddWindowView));
 
 		public PlaceholderViewModel(IPlaceholderModel model)
 		{

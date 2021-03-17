@@ -71,7 +71,14 @@ namespace WeatherAndPower.Core
 			DataPlot.Data.Add(seires);
 		}
 
-		public PlaceholderModel(DataPlotModel dataPlot)
+        public void OpenAddWindowAction(IAddWindow addWindow)
+        {
+			addWindow.Open();
+			
+		}
+
+
+        public PlaceholderModel(DataPlotModel dataPlot)
 		{
 			DataPlot = dataPlot;
 		}

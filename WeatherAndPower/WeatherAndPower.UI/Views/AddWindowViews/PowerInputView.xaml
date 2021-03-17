@@ -31,7 +31,7 @@
                                 Grid.Row="2" Grid.Column="1"/>
 
         <Label Content="Plot Name :" Grid.Row="3" Grid.Column="0" />
-        <TextBox Grid.Row="3" Grid.Column="1" />
+        <TextBox Grid.Row="3" Grid.Column="1" x:Name="PlotName" />
     </Grid>
     <UserControl.Resources>
         <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>

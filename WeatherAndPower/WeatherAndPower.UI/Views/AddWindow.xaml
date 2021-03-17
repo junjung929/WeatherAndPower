@@ -5,29 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
         xmlns:viewmodels="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
+        xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
         mc:Ignorable="d"
         Title="AddWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        
-        
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="Data Type :" VerticalAlignment="Center" />
-            <RadioButton Content="Power" IsChecked="True"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
-            <RadioButton Content="Weather"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Weather" />
-        </StackPanel>
-        <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
-        <!--<local:PowerInputView Grid.Row="1" />-->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" />
-            <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Button_Click" />
-        </StackPanel>
-    </Grid>
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
             <views:PowerInputView />
@@ -35,5 +15,28 @@
         <DataTemplate DataType="{x:Type viewmodels:WeatherInputViewModel}">
             <views:WeatherInputView/>
         </DataTemplate>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
     </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="Data Type :" VerticalAlignment="Center" />
+            <RadioButton Content="Power" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Power}"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
+            <RadioButton Content="Weather" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Temperature}" VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Weather" />
+        </StackPanel>
+        <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
+        <!--<local:PowerInputView Grid.Row="1" />-->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Add_Click" />
+            <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+
 </Window>
