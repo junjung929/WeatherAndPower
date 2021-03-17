@@ -32,7 +32,6 @@
             <RadioButton Content="Weather" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Temperature}" VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Weather" />
         </StackPanel>
         <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
-        <!--<local:PowerInputView Grid.Row="1" />-->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Add_Click" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />

@@ -73,6 +73,8 @@ namespace WeatherAndPower.Core
 
         public void OpenAddWindowAction(IAddWindow addWindow)
         {
+			var addWindowModel = new AddWindowModel();
+			addWindow.SetModel(addWindowModel);
 			addWindow.Open();
 			
 		}

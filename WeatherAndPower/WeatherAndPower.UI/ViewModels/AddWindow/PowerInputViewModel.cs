@@ -8,7 +8,7 @@ using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    public class PowerInputViewModel : BaseViewModel
+    public class PowerInputViewModel : ViewModelBase
     {
 
         public ObservableCollection<PowerType> PowerTypes { get; set; }
