@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:local="clr-namespace:WeatherAndPower.UI.Views"
+             xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -20,7 +21,7 @@
         </Grid.RowDefinitions>
         
         <Label Content="Category :" Grid.Row="0" Grid.Column="0" />
-        <ComboBox Grid.Row="0" Grid.Column="1"  />
+        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=PowerTypes}" SelectedItem="{Binding Path=SPowerTypes}" DisplayMemberPath="Name" />
 
         <Label Content="Start Date Time :" Grid.Row="1" Grid.Column="0"  />
         <toolkit:DateTimePicker Height="25"  HorizontalAlignment="Stretch" Name="DateTimePicker1" VerticalAlignment="Top"
@@ -32,4 +33,7 @@
         <Label Content="Plot Name :" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="3" Grid.Column="1" />
     </Grid>
+    <UserControl.Resources>
+        <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>
+    </UserControl.Resources>
 </UserControl>
