@@ -11,20 +11,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
     public class MainViewModel : ViewModelBase
     {
-        private IAddWindowModel _model;
-
-        public IAddWindowModel Model
-        {
-            get { return _model; }
-            set
-            {
-                if (_model != value)
-                {
-                    _model = value;
-                    Command = new RelayCommand(() => Model.RadioButtonAction());
-                }
-            }
-        }
+        
         private ViewModelBase _selectedViewModel = new PowerInputViewModel();
         private DataFormat _dataType = DataFormat.Power;
 
@@ -50,7 +37,6 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
-        public RelayCommand Command;
 
         public MainViewModel()
         {

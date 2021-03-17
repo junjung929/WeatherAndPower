@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractModel.cs" />
-    <Compile Include="AddWindowModel.cs" />
     <Compile Include="DataPlotModel.cs" />
     <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

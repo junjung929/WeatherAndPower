@@ -28,8 +28,10 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="Data Type :" VerticalAlignment="Center" />
-            <RadioButton Content="Power" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Power}"  VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
-            <RadioButton Content="Weather" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Temperature}" VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Weather" />
+            <RadioButton Content="Power" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Power}"  
+                         VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
+            <RadioButton Content="Temperature" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Temperature}" 
+                         VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Temperature" />
         </StackPanel>
         <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >

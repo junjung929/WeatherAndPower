@@ -16,6 +16,6 @@ namespace WeatherAndPower.Contracts
 
 		void PlaceholderAction5();
 
-		void OpenAddWindowAction(IAddWindow addWindow);
+
 	}
 }
