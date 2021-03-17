@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.ViewModels.AddWindow;
 
 namespace WeatherAndPower.UI.Commands
@@ -26,11 +27,11 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter.ToString() == "Power")
+            if (parameter.ToString() == DataFormat.Power.ToString())
             {
                 viewModel.SelectedViewModel = new PowerInputViewModel();
             }
-            else if (parameter.ToString() == "Weather")
+            else if (parameter.ToString() == DataFormat.Temperature.ToString())
             {
                 viewModel.SelectedViewModel = new WeatherInputViewModel();
             }

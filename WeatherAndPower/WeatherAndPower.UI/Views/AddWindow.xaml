@@ -7,6 +7,7 @@
         xmlns:viewmodels="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
         xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
         mc:Ignorable="d"
+        x:Name="AddWindowName"
         Title="AddWindow" Height="450" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
@@ -35,7 +36,7 @@
         </StackPanel>
         <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Add_Click" />
+            <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>
     </Grid>
