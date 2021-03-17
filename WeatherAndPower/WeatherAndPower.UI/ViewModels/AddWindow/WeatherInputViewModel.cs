@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    class WeatherInputViewModel : BaseViewModel
+    class WeatherInputViewModel : ViewModelBase
     {
     }
 }

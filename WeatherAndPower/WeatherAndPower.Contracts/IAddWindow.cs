@@ -9,5 +9,6 @@ namespace WeatherAndPower.Contracts
     public interface IAddWindow
     {
         void Open();
+        void SetModel(IAddWindowModel model);
     }
 }

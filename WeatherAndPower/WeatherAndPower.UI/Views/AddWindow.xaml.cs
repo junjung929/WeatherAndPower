@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WeatherAndPower.Contracts;
+using WeatherAndPower.UI.ViewModels.AddWindow;
 
 namespace WeatherAndPower.UI.Views
 {
@@ -23,12 +24,12 @@ namespace WeatherAndPower.UI.Views
         public AddWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModels.AddWindow.MainViewModel();
+            DataContext = new MainViewModel();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -36,9 +37,19 @@ namespace WeatherAndPower.UI.Views
 
         }
 
+        public MainViewModel ViewModel
+        {
+            get { return (MainViewModel) DataContext; }
+        }
+
         public void Open()
         {
-            this.Show();
+            Show();
+        }
+
+        public void SetModel(IAddWindowModel model)
+        {
+            ViewModel.Model = model;
         }
     }
 }

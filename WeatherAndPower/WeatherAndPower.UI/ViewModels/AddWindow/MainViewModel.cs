@@ -16,15 +16,16 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public IAddWindowModel Model
         {
             get { return _model; }
-            private set
+            set
             {
                 if (_model != value)
                 {
                     _model = value;
+                    Command = new RelayCommand(() => Model.RadioButtonAction());
                 }
             }
         }
-        private BaseViewModel _selectedViewModel = new PowerInputViewModel();
+        private ViewModelBase _selectedViewModel = new PowerInputViewModel();
         private DataFormat _dataType = DataFormat.Power;
 
         public DataFormat DataType
@@ -39,7 +40,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public ICommand UpdateViewCommand { get; set; }
 
 
-        public BaseViewModel SelectedViewModel
+        public ViewModelBase SelectedViewModel
         {
             get { return _selectedViewModel; }
             set
@@ -49,11 +50,10 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
-        //public RelayCommand Command = new RelayCommand(() => Model.RadioButtonAction());
+        public RelayCommand Command;
 
-        public MainViewModel(/*IAddWindowModel model*/)
+        public MainViewModel()
         {
-            //_model = model;
             UpdateViewCommand = new UpdateViewCommand(this);
         }
     }

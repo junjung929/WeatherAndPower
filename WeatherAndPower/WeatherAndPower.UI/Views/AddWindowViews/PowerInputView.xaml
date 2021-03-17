@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
         
         <Label Content="Category :" Grid.Row="0" Grid.Column="0" />
-        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=PowerTypes}" SelectedItem="{Binding Path=SPowerTypes}" DisplayMemberPath="Name" />
+        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=PowerTypes}" SelectedItem="{Binding Path=SPowerType}" DisplayMemberPath="Name" />
 
         <Label Content="Start Date Time :" Grid.Row="1" Grid.Column="0"  />
         <toolkit:DateTimePicker Height="25"  HorizontalAlignment="Stretch" Name="DateTimePicker1" VerticalAlignment="Top"

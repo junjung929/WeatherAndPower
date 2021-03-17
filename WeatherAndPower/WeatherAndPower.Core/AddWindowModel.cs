@@ -26,7 +26,7 @@ namespace WeatherAndPower.Core
 
         public void RadioButtonAction()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(DataType);
         }
     }
 }
