@@ -38,7 +38,7 @@ namespace WeatherAndPower.Data
             return apikey;
         }
 
-        public static async Task<IData> Get(Power.PowerTypes variableId, string format = null)
+        public static async Task<IData> Get(PowerType powerType, string format = null)
         {
             if (format == null)
             {
@@ -58,7 +58,7 @@ namespace WeatherAndPower.Data
 
             if (format == "xml")
             {
-                IData singleData = ParseXMLToSingleData(variableId, body);
+                IData singleData = ParseXMLToSingleData(powerType.Id, body);
 
                 Console.WriteLine(singleData.Value);
                 return singleData;
@@ -74,7 +74,7 @@ namespace WeatherAndPower.Data
         /// <summary>
         /// Get request to retrieve power information with the given id and parameters
         /// </summary>
-        /// <param name="variableId">ID of power information type</param>
+        /// <param name="powerType">ID of power information type</param>
         /// <param name="startTime">Beginning of date time range</param>
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
@@ -86,7 +86,7 @@ namespace WeatherAndPower.Data
                 format = DEFAULT_FORMAT;
                 }
             string query = ParseParamsToQuery(startTime, endTime);
-            string requestUri = ParseRequestUri(variableId, query, format);
+            string requestUri = ParseRequestUri(powerType.Id, query, format);
 
 
             var httpRequestMessage = new HttpRequestMessage();
@@ -100,7 +100,7 @@ namespace WeatherAndPower.Data
 
             if (format == "xml")
             {
-                DataSeries dataseries = ParseXMLToDataSeries(variableId, body);
+                DataSeries dataseries = ParseXMLToDataSeries(powerType.Id, body);
                 Console.WriteLine("Printing result " + dataseries.Name);
                 foreach (var data in dataseries.Series)
                 {
@@ -134,9 +134,9 @@ namespace WeatherAndPower.Data
         /// <param name="query"></param>
         /// <param name="format">format for return data csv | json | xml</param>
         /// <returns>Request URI</returns>
-        private static string ParseRequestUri(Power.PowerTypes variableId, string query, string format)
+        private static string ParseRequestUri(int variableId, string query, string format)
         {
-            string request = $"{SERVER_URL}/{(int)variableId}/events/{format}?{query}";
+            string request = $"{SERVER_URL}/{variableId}/events/{format}?{query}";
             return request;
         }
 
@@ -169,7 +169,7 @@ namespace WeatherAndPower.Data
             ));
         }
 
-        private static IData ParseXMLToSingleData(Power.PowerTypes variableId, string XMLString)
+        private static IData ParseXMLToSingleData(int variableId, string XMLString)
         {
             var doc = new XmlDocument();
             doc.LoadXml(XMLString);
@@ -189,7 +189,7 @@ namespace WeatherAndPower.Data
         /// </summary>
         /// <param name="XMLString"></param>
         /// <returns>DataSeries with power type and series of information</returns>
-        private static DataSeries ParseXMLToDataSeries(Power.PowerTypes variableId, string XMLString)
+        private static DataSeries ParseXMLToDataSeries(int variableId, string XMLString)
         {
             List<Tuple<DateTime, IData>> powerSeries = new List<Tuple<DateTime, IData>>();
             var doc = new XmlDocument();
@@ -211,7 +211,7 @@ namespace WeatherAndPower.Data
                     Console.WriteLine($"{startTime} {endTime} {val}");
                 }
             }
-            return new DataSeries(Power.powerTypes[variableId], DataFormat.Power, powerSeries);
+            return new DataSeries("", DataFormat.Power, powerSeries);
         }
     }
 }

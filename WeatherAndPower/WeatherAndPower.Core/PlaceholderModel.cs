@@ -64,7 +64,7 @@ namespace WeatherAndPower.Core
 		public void PlaceholderAction5()
 		{
 			var seires = Task.Run(() => Fingrid.Get(
-				Power.PowerTypes.WindPowerProdRT,
+				PowerType.WindPowerProdRT,
 				new DateTime(2021, 3, 14, 2, 00, 00),
 				new DateTime(2021, 3, 14, 5, 00, 00)))
 				.Result;
@@ -73,7 +73,7 @@ namespace WeatherAndPower.Core
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {
-			var series = Task.Run(() => Fingrid.Get((Power.PowerTypes)powerType.Id, startTime, endTime)).Result;
+			var series = Task.Run(() => Fingrid.Get(powerType, startTime, endTime)).Result;
 			series.Name = PlotName;
 			DataPlot.Data.Add(series);
         }
