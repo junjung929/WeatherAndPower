@@ -19,7 +19,7 @@ namespace WeatherAndPower.UI.Views
     /// <summary>
     /// Interaction logic for AddWindow.xaml
     /// </summary>
-    public partial class AddWindow : Window, IAddWindow
+    public partial class AddWindow : Window
     {
         public AddWindow()
         {
@@ -40,16 +40,6 @@ namespace WeatherAndPower.UI.Views
         public MainViewModel ViewModel
         {
             get { return (MainViewModel) DataContext; }
-        }
-
-        public void Open()
-        {
-            Show();
-        }
-
-        public void SetModel(IAddWindowModel model)
-        {
-            ViewModel.Model = model;
         }
     }
 }

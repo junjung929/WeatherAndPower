@@ -12,17 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WeatherAndPower.UI.Views;
 
 namespace WeatherAndPower.UI
 {
-	/// <summary>
-	/// Interaction logic for UserControl1.xaml
-	/// </summary>
-	public partial class PlaceholderView : UserControl
-	{
-		public PlaceholderView()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Interaction logic for UserControl1.xaml
+    /// </summary>
+    public partial class PlaceholderView : UserControl
+    {
+        public PlaceholderView()
+        {
+            InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var addWindow = new AddWindow();
+            addWindow.Show();
+        }
     }
 }
