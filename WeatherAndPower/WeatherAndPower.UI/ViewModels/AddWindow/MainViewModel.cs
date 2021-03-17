@@ -25,6 +25,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
 
         public ICommand UpdateViewCommand { get; set; }
+        public ICommand AddPlotCommand { get; set; }
 
 
         public ViewModelBase SelectedViewModel
@@ -38,9 +39,10 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         }
 
 
-        public MainViewModel()
+        public MainViewModel(PlaceholderViewModel viewModel)
         {
             UpdateViewCommand = new UpdateViewCommand(this);
+            AddPlotCommand = new AddPlotCommand(this, viewModel);
         }
     }
 }

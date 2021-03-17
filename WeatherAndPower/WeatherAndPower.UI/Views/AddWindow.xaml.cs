@@ -21,20 +21,15 @@ namespace WeatherAndPower.UI.Views
     /// </summary>
     public partial class AddWindow : Window
     {
-        public AddWindow()
+        public AddWindow(PlaceholderViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = new MainViewModel(viewModel);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void Add_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         public MainViewModel ViewModel
