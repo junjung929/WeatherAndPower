@@ -32,10 +32,24 @@ namespace WeatherAndPower.UI.Commands
             if (_viewModel.DataType.Equals(DataFormat.Power))
             {
                 var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-                //powerViewModel.StartTime;
-                System.Windows.MessageBox.Show(powerViewModel.SPowerType + powerViewModel.StartTime.ToString() + powerViewModel.StartTime.ToString() + powerViewModel.PlotName);
+                
+                if (powerViewModel.SPowerType == null)
+                {
+                    System.Windows.MessageBox.Show("Please choose the category");
+                    return;
+                }
+                if (powerViewModel.StartTime.Equals(powerViewModel.EndTime))
+                {
+                    System.Windows.MessageBox.Show("Please choose valid time range");
+                    return;
+                }
+                if (powerViewModel.PlotName == null || powerViewModel.PlotName == "")
+                {
+                    System.Windows.MessageBox.Show("Please type the name of new plot");
+                    return;
+                }
 
-                _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, powerViewModel.StartTime, powerViewModel.StartTime, powerViewModel.PlotName);
+                _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, powerViewModel.StartTime, powerViewModel.EndTime, powerViewModel.PlotName);
                 var window = (System.Windows.Window)parameter;
                 window.Close();
             }

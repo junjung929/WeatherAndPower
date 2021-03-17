@@ -26,11 +26,11 @@
         <Label Content="Start Date Time :" Grid.Row="1" Grid.Column="0"  />
         <toolkit:DateTimePicker Height="25"  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
                                 Value="{Binding StartTime}" TextAlignment="Left"
-                                Grid.Row="1" Grid.Column="1"  />
+                                Grid.Row="1" Grid.Column="1" />
         <Label Content="End Date Time :" Grid.Row="2" Grid.Column="0" />
         <toolkit:DateTimePicker Height="25" HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
                                 Grid.Row="2" Grid.Column="1" TextAlignment="Left"
-                                 Value="{Binding EndTime}" />
+                                Value="{Binding EndTime}" />
 
         <Label Content="Plot Name :" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="PlotName" Text="{Binding PlotName}" />
