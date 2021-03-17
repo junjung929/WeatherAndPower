@@ -3,6 +3,7 @@
                     xmlns:local="clr-namespace:WeatherAndPower.UI.ValueConverters">
 
 	<local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <local:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
 	<local:EpochToDateConverter x:Key="EpochToDateConverter"/>
-	<local:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
+    <local:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
 </ResourceDictionary>

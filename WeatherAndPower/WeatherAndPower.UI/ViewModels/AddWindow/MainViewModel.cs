@@ -4,18 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : ViewModelBase
     {
-        private BaseViewModel _selectedViewModel = new PowerInputViewModel();
+        private IAddWindowModel _model;
 
-        public MainViewModel()
+        public IAddWindowModel Model
         {
-            UpdateViewCommand = new UpdateViewCommand(this);
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
         }
+        private BaseViewModel _selectedViewModel = new PowerInputViewModel();
+        private DataFormat _dataType = DataFormat.Power;
+
+        public DataFormat DataType
+        {
+            get { return _dataType; }
+            set { _dataType = value; NotifyPropertyChanged("DataType"); }
+        }
+
+        
 
 
         public ICommand UpdateViewCommand { get; set; }
@@ -24,11 +42,19 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public BaseViewModel SelectedViewModel
         {
             get { return _selectedViewModel; }
-            set 
-            { 
+            set
+            {
                 _selectedViewModel = value;
-                OnPropertyChanged(nameof(SelectedViewModel));
+                NotifyPropertyChanged(nameof(SelectedViewModel));
             }
+        }
+
+        //public RelayCommand Command = new RelayCommand(() => Model.RadioButtonAction());
+
+        public MainViewModel(/*IAddWindowModel model*/)
+        {
+            //_model = model;
+            UpdateViewCommand = new UpdateViewCommand(this);
         }
     }
 }

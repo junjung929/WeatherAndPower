@@ -11,24 +11,34 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI.Views
 {
     /// <summary>
     /// Interaction logic for AddWindow.xaml
     /// </summary>
-    public partial class AddWindow : Window
+    public partial class AddWindow : Window, IAddWindow
     {
         public AddWindow()
         {
             InitializeComponent();
-
             DataContext = new ViewModels.AddWindow.MainViewModel();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public void Open()
+        {
+            this.Show();
         }
     }
 }
