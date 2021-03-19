@@ -15,6 +15,7 @@ namespace WeatherAndPower.Data
         private static string SERVER_URL = "https://api.fingrid.fi/v1/variable";
         private static string FINGRID_API = GetApiKey();
         private static string DEFAULT_FORMAT = "xml";
+        private static string DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
         public static Dictionary<string, string> contentTypes = new Dictionary<string, string>()
         {
@@ -45,7 +46,6 @@ namespace WeatherAndPower.Data
                 format = DEFAULT_FORMAT;
             }
             string requestUri = $"{SERVER_URL}/{powerType.Id}/event/{format}";
-            Console.WriteLine(requestUri);
 
             var httpRequestMessage = new HttpRequestMessage();
             httpRequestMessage.Method = HttpMethod.Get;
@@ -54,13 +54,10 @@ namespace WeatherAndPower.Data
 
             var response = await _client.SendAsync(httpRequestMessage);
             var body = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(body);
 
             if (format == "xml")
             {
                 IData singleData = ParseXMLToSingleData(powerType.Id, body);
-
-                Console.WriteLine(singleData.Value);
                 return singleData;
             }
             else
@@ -96,16 +93,10 @@ namespace WeatherAndPower.Data
 
             var response = await _client.SendAsync(httpRequestMessage);
             var body = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(body);
 
             if (format == "xml")
             {
                 DataSeries dataseries = ParseXMLToDataSeries(powerType.Id, body);
-                Console.WriteLine("Printing result " + dataseries.Name);
-                foreach (var data in dataseries.Series)
-                {
-                    Console.WriteLine(data.Item1.ToString("yyyy-MM-ddThh:mm:ssZ") + ", " + data.Item2.Value);
-                }
                 return dataseries;
             }
             else
@@ -149,7 +140,7 @@ namespace WeatherAndPower.Data
         /// </returns>
         private static string ParseDateTimeFormat(DateTime dateTime)
         {
-            return dateTime.ToString("yyyy-MM-ddThh:mm:ssZ");
+            return dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
 
         /// <summary>
@@ -175,12 +166,10 @@ namespace WeatherAndPower.Data
             doc.LoadXml(XMLString);
 
             var evt = doc.SelectSingleNode("event");
-            Console.WriteLine(evt);
             string val = evt.SelectSingleNode("value").InnerText;
             string start_time = evt.SelectSingleNode("start_time").InnerText;
             string end_time = evt.SelectSingleNode("end_time").InnerText;
             IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time), DateTime.Parse(end_time));
-            Console.WriteLine($"{start_time} {end_time} {val}");
             return power;
         }
 
@@ -196,19 +185,17 @@ namespace WeatherAndPower.Data
             doc.LoadXml(XMLString);
 
             XmlNodeList evts = doc.SelectNodes("events/event");
-            Console.WriteLine(evts.Count);
 
             foreach (XmlNode evt in evts)
             {
                 if (evt != null)
                 {
                     double val = double.Parse(evt.SelectSingleNode("value").InnerText, CultureInfo.InvariantCulture);
-                    DateTime startTime = Convert.ToDateTime(evt.SelectSingleNode("start_time").InnerText);
-                    DateTime endTime = Convert.ToDateTime(evt.SelectSingleNode("end_time").InnerText);
+                    DateTime startTime = DateTime.Parse(evt.SelectSingleNode("start_time").InnerText);
+                    DateTime endTime = DateTime.Parse(evt.SelectSingleNode("end_time").InnerText);
                     Power data = new Power(variableId, val, startTime, endTime);
                     Tuple<DateTime, IData> plotPoint = new Tuple<DateTime, IData>(startTime, data);
                     powerSeries.Add(plotPoint);
-                    Console.WriteLine($"{startTime} {endTime} {val}");
                 }
             }
             return new DataSeries("", DataFormat.Power, powerSeries);
