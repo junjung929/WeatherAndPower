@@ -7,9 +7,10 @@
 <!--Converters-->
 	<conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 	<conv:EpochToDateConverter x:Key="EpochToDateConverter"/>
-	<conv:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
+    <conv:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
+    <conv:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
 
-<!--Styles-->
+    <!--Styles-->
 	<Style x:Key="TimeAxisStyle" TargetType="Control">
 		<Setter Property="FontSize" Value="15"/>
 		<Setter Property="Foreground" Value="Black"/>
