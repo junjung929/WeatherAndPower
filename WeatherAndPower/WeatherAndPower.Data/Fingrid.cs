@@ -44,7 +44,7 @@ namespace WeatherAndPower.Data
             {
                 format = DEFAULT_FORMAT;
         }
-            string requestUri = $"{SERVER_URL}/{(int)variableId}/event/{format}";
+            string requestUri = $"{SERVER_URL}/{powerType.Id}/event/{format}";
             Console.WriteLine(requestUri);
 
             var httpRequestMessage = new HttpRequestMessage();
@@ -79,7 +79,7 @@ namespace WeatherAndPower.Data
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
-        public static async Task<DataSeries> Get(Power.PowerTypes variableId, DateTime startTime, DateTime endTime, string format = null)
+        public static async Task<DataSeries> Get(PowerType powerType, DateTime startTime, DateTime endTime, string format = null)
             {
             if (format == null)
                 {
