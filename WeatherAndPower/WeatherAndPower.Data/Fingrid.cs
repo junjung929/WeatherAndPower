@@ -52,7 +52,18 @@ namespace WeatherAndPower.Data
             httpRequestMessage.RequestUri = new Uri(requestUri);
             SetHeaders(httpRequestMessage, format);
 
-            var response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response;
+
+            try
+            {
+                response = await _client.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException e)
+            {
+                throw new HttpRequestException(e.Message);
+            }
+           
             var body = await response.Content.ReadAsStringAsync();
 
             if (format == "xml")
@@ -63,7 +74,7 @@ namespace WeatherAndPower.Data
             else
             {
                 Console.WriteLine($"Return data type {format} doesn't support yet");
-                return null;
+                throw new NotImplementedException($"Return data type {format} doesn't support yet");
             }
 
         }
@@ -91,7 +102,18 @@ namespace WeatherAndPower.Data
             httpRequestMessage.RequestUri = new Uri(requestUri);
             SetHeaders(httpRequestMessage, format);
 
-            var response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response;
+
+            try
+            {
+                response = await _client.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException e)
+            {
+                throw new HttpRequestException(e.Message);
+            }
+
             var body = await response.Content.ReadAsStringAsync();
 
             if (format == "xml")
@@ -102,7 +124,7 @@ namespace WeatherAndPower.Data
             else
             {
                 Console.WriteLine($"Return data type {format} doesn't support yet");
-                return null;
+                throw new NotImplementedException($"Return data type {format} doesn't support yet");
             }
 
         }
