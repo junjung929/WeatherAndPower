@@ -22,7 +22,7 @@ namespace WeatherAndPower.Data
             { "xml", "application/xml" },
             { "json", "application/json" }
         };
-        
+
 
         /// <summary>
         /// Get Fingrid api key from environment variables
@@ -43,7 +43,7 @@ namespace WeatherAndPower.Data
             if (format == null)
             {
                 format = DEFAULT_FORMAT;
-        }
+            }
             string requestUri = $"{SERVER_URL}/{powerType.Id}/event/{format}";
             Console.WriteLine(requestUri);
 
@@ -70,7 +70,7 @@ namespace WeatherAndPower.Data
             }
 
         }
-        
+
         /// <summary>
         /// Get request to retrieve power information with the given id and parameters
         /// </summary>
@@ -80,11 +80,11 @@ namespace WeatherAndPower.Data
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
         public static async Task<DataSeries> Get(PowerType powerType, DateTime startTime, DateTime endTime, string format = null)
-            {
+        {
             if (format == null)
-                {
+            {
                 format = DEFAULT_FORMAT;
-                }
+            }
             string query = ParseParamsToQuery(startTime, endTime);
             string requestUri = ParseRequestUri(powerType.Id, query, format);
 

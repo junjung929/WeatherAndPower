@@ -7,14 +7,14 @@
 			 d:DataContext="{d:DesignInstance local:PlaceholderViewModel, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="180" d:DesignWidth="120">
-	<UserControl.Resources>
-		<ResourceDictionary Source="/WeatherAndPower.UI;component/Resources.xaml"/>
-	</UserControl.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+    <UserControl.Resources>
+        <ResourceDictionary Source="/WeatherAndPower.UI;component/Resources.xaml"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
