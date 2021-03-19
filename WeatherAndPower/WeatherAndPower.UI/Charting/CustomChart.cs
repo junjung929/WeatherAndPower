@@ -213,7 +213,11 @@ namespace WeatherAndPower.UI
 		{
 
 			Axes.Add(X);
+
 			Axes.Add(TemperatureAxis);
+			Axes.Add(PowerAxis);
+			Axes.Add(CloudinessAxis);
+			Axes.Add(WindAxis);
 
 			ShowLegend = false;
 
@@ -262,13 +266,17 @@ namespace WeatherAndPower.UI
 			series.DependentRangeAxis = GetAxis(data.Format);
 
 			series.MouseDown += SeriesClicked;
+			series.MouseEnter += SeriesHover;
+			series.MouseLeave += SeriesHover;
 
 			series.Background = new SolidColorBrush(Colors.Red);
 
 			base.Series.Add(series);
 			data.Id = series.GetHashCode();
 		}
+		public event MouseEventHandler SeriesMouseEnter;
 		public event MouseButtonEventHandler SeriesClicked;
+		public event MouseEventHandler SeriesHover;
 
 		private void Clear()
 		{

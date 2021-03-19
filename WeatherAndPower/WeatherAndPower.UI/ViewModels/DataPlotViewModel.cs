@@ -10,6 +10,7 @@ using System.Windows.Controls.DataVisualization.Charting;
 using WeatherAndPower.Contracts;
 using System.Windows.Media;
 using DataFormat = WeatherAndPower.Contracts.DataFormat;
+using System.Windows.Input;
 
 namespace WeatherAndPower.UI
 {
@@ -55,10 +56,20 @@ namespace WeatherAndPower.UI
 			Model = model;
 			_Chart = (CustomChart)view.FindName("theChart");
 			_Chart.XInterval = new TimeSpan(0, 1, 0, 0);
-			_Chart.SeriesClicked += _Chart_SeriesClicked;
+			_Chart.SeriesClicked += SeriesClicked;
+			_Chart.SeriesHover += _Chart_SeriesHover;
 		}
 
-		private void _Chart_SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void _Chart_SeriesHover(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			if (e.RoutedEvent.Name == "MouseEnter") {
+				Console.WriteLine("Hovering on " + ((DataPointSeries)sender).Title);
+			} else if (e.RoutedEvent.Name == "MouseLeave") {
+
+			}
+		}
+
+		private void SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			Remove(sender.GetHashCode());
 		}
