@@ -24,10 +24,9 @@ namespace WeatherAndPower.Core
 		}
 		private List<Temperature> _GenerateRandomPlot(double min, double max, double count)
 		{
-			Random rng = new Random(DateTime.Now.Second);
 			var list = new List<Temperature>();
 			for (var i = 0; i < count; i++) {
-				var number = (rng.Next() % (max - min)) + min;
+				var number = (Globals.rand.Next() % (max - min)) + min;
 				list.Add(new Temperature(number));
 			}
 			return list;
@@ -42,7 +41,7 @@ namespace WeatherAndPower.Core
 			var y = _GenerateRandomPlot(0, 400, 48);
 
 			var series = x.Zip(y, (_x, _y) => new Tuple<DateTime, IData>(_x, _y)).ToList();
-			Data.Add(new DataSeries(name, DataFormat.Power, series));
+			Data.Add(new DataSeries(name, DataFormat.Temperature, series));
 		}
 
 		public void Clear()
