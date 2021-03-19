@@ -42,10 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSeries.cs" />
+    <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="IData.cs" />
     <Compile Include="IDataPlotModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
+    <Compile Include="Power.cs" />
+    <Compile Include="PowerType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Temperature.cs" />
   </ItemGroup>

@@ -13,5 +13,11 @@ namespace WeatherAndPower.Contracts
 		void PlaceholderAction1();
 		void PlaceholderAction2();
 		void PlaceholderAction3();
+
+		void PlaceholderAction5();
+
+		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName);
+
+
 	}
 }

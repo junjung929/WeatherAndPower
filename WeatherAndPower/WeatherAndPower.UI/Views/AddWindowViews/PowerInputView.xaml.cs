@@ -13,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WeatherAndPower.UI
+namespace WeatherAndPower.UI.Views.AddWindowViews
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for PowerInputView.xaml
     /// </summary>
-    public partial class PlaceholderView : UserControl
+    public partial class PowerInputView : UserControl
     {
-        public PlaceholderView()
+        public PowerInputView()
         {
             InitializeComponent();
         }
-
     }
 }

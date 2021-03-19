@@ -48,6 +48,7 @@ namespace WeatherAndPower.Core
 		public void PlaceholderAction1()
 		{
 			DataPlot.AddRandomPlot(DataName);
+
 		}
 
 		public void PlaceholderAction2()
@@ -59,9 +60,30 @@ namespace WeatherAndPower.Core
 		{
 			DataPlot.Remove(DataName);
 		}
-		public PlaceholderModel(DataPlotModel dataPlot)
+
+		public void PlaceholderAction5()
+		{
+			var seires = Task.Run(() => Fingrid.Get(
+				PowerType.WindPowerProdRT,
+				new DateTime(2021, 3, 14, 2, 00, 00),
+				new DateTime(2021, 3, 14, 5, 00, 00)))
+				.Result;
+			DataPlot.Data.Add(seires);
+		}
+
+        public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
+        {
+			var series = Task.Run(() => Fingrid.Get(powerType, startTime, endTime)).Result;
+			series.Name = PlotName;
+			DataPlot.Data.Add(series);
+        }
+
+        public PlaceholderModel(DataPlotModel dataPlot)
 		{
 			DataPlot = dataPlot;
 		}
+		
+
+		
 	}
 }
