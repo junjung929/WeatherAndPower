@@ -12,6 +12,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,16 +22,16 @@
         </Grid.RowDefinitions>
         
         <Label Content="Category :" Grid.Row="0" Grid.Column="0" />
-        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=PowerTypes}" SelectedItem="{Binding Path=SPowerType}" DisplayMemberPath="Name" />
+        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=PowerTypes}" SelectedItem="{Binding Path=SPowerType}" DisplayMemberPath="Name" Margin="0,0,0,10" />
 
         <Label Content="Start Date Time :" Grid.Row="1" Grid.Column="0"  />
         <toolkit:DateTimePicker Height="25"  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
                                 Value="{Binding StartTime}" TextAlignment="Left"
-                                Grid.Row="1" Grid.Column="1" />
+                                Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" />
         <Label Content="End Date Time :" Grid.Row="2" Grid.Column="0" />
         <toolkit:DateTimePicker Height="25" HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
                                 Grid.Row="2" Grid.Column="1" TextAlignment="Left"
-                                Value="{Binding EndTime}" />
+                                Value="{Binding EndTime}" Margin="0,0,0,10" />
 
         <Label Content="Plot Name :" Grid.Row="3" Grid.Column="0" />
         <TextBox Grid.Row="3" Grid.Column="1" x:Name="PlotName" Text="{Binding PlotName}" />

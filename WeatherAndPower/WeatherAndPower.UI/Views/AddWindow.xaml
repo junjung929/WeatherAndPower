@@ -27,7 +27,7 @@
 
 
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
             <Label Content="Data Type :" VerticalAlignment="Center" />
             <RadioButton Content="Power" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Power}"  
                          VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
