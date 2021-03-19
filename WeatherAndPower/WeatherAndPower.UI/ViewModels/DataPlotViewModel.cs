@@ -55,10 +55,16 @@ namespace WeatherAndPower.UI
 			Model = model;
 			_Chart = (CustomChart)view.FindName("theChart");
 			_Chart.XInterval = new TimeSpan(0, 1, 0, 0);
-			_Chart.SeriesClicked += _Chart_SeriesClicked;
+			_Chart.SeriesClicked += SeriesClicked;
+			_Chart.SeriesHover += SeriesHover;
 		}
 
-		private void _Chart_SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void SeriesHover(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			Remove(sender.GetHashCode());
 		}
