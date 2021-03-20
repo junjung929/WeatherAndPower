@@ -57,10 +57,10 @@ namespace WeatherAndPower.UI
 			_Chart = (CustomChart)view.FindName("theChart");
 			_Chart.XInterval = new TimeSpan(0, 1, 0, 0);
 			_Chart.SeriesClicked += SeriesClicked;
-			_Chart.SeriesHover += _Chart_SeriesHover;
+			_Chart.SeriesHover += SeriesHover;
 		}
 
-		private void _Chart_SeriesHover(object sender, System.Windows.Input.MouseEventArgs e)
+		private void SeriesHover(object sender, MouseEventArgs e)
 		{
 			if (e.RoutedEvent.Name == "MouseEnter") {
 				Console.WriteLine("Hovering on " + ((DataPointSeries)sender).Title);
@@ -69,7 +69,7 @@ namespace WeatherAndPower.UI
 			}
 		}
 
-		private void SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
 			Remove(sender.GetHashCode());
 		}
