@@ -10,6 +10,7 @@ using System.Windows.Controls.DataVisualization.Charting;
 using WeatherAndPower.Contracts;
 using System.Windows.Media;
 using DataFormat = WeatherAndPower.Contracts.DataFormat;
+using System.Windows.Input;
 
 namespace WeatherAndPower.UI
 {
@@ -59,12 +60,16 @@ namespace WeatherAndPower.UI
 			_Chart.SeriesHover += SeriesHover;
 		}
 
-		private void SeriesHover(object sender, DependencyPropertyChangedEventArgs e)
+		private void SeriesHover(object sender, MouseEventArgs e)
 		{
-			throw new NotImplementedException();
+			if (e.RoutedEvent.Name == "MouseEnter") {
+				Console.WriteLine("Hovering on " + ((DataPointSeries)sender).Title);
+			} else if (e.RoutedEvent.Name == "MouseLeave") {
+
+			}
 		}
 
-		private void SeriesClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
 			Remove(sender.GetHashCode());
 		}

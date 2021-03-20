@@ -266,15 +266,17 @@ namespace WeatherAndPower.UI
 			series.DependentRangeAxis = GetAxis(data.Format);
 
 			series.MouseDown += SeriesClicked;
-			series.IsMouseDirectlyOverChanged += SeriesHover;
+			series.MouseEnter += SeriesHover;
+			series.MouseLeave += SeriesHover;
 
 			series.Background = new SolidColorBrush(Colors.Red);
 
 			base.Series.Add(series);
 			data.Id = series.GetHashCode();
 		}
+		public event MouseEventHandler SeriesMouseEnter;
 		public event MouseButtonEventHandler SeriesClicked;
-		public event DependencyPropertyChangedEventHandler SeriesHover;
+		public event MouseEventHandler SeriesHover;
 
 		private void Clear()
 		{
