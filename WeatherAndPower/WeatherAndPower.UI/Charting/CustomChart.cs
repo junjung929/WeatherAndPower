@@ -70,8 +70,6 @@ namespace WeatherAndPower.UI
 		private TimeAxis X = new TimeAxis()
 		{
 			Name = "TimeAxis",
-			Orientation = AxisOrientation.X,
-			AxisLabelStyle = (Style)Application.Current.Resources["TimeAxisStyle"],
 		};
 
 
@@ -105,32 +103,7 @@ namespace WeatherAndPower.UI
 				}
 			}
 		}
-		
-		private int? _XMin = null;
-		
-		public int? XMin
-		{
-			get { return _XMin; }
-			set {
-				if (_XMin != value) {
-					_XMin = value;
-					//NotifyPropertyChanged("XMin");
-				}
-			}
-		}
 
-		private int? _XMax = null;
-
-		public int? XMax
-		{
-			get { return _XMax; }
-			set {
-				if (_XMax != value) {
-					_XMax = value;
-					//NotifyPropertyChanged("XMax");
-				}
-			}
-		}
 
 		#endregion
 
@@ -220,9 +193,7 @@ namespace WeatherAndPower.UI
 			Axes.Add(WindAxis);
 
 			ShowLegend = false;
-
 		}
-
 
 		private Style GetLineStyle(byte[] color)
 		{
@@ -259,11 +230,12 @@ namespace WeatherAndPower.UI
 			LineSeries series = new LineSeries();
 			series.ItemsSource = data.Series;
 			series.DependentValuePath = "Item2.Value";
-			series.IndependentValuePath = "Item1.Ticks";
+			series.IndependentValuePath = "Item1";
 			series.Title = data.Name;
 			
 			series.DataPointStyle = GetLineStyle(data.Color);
 			series.DependentRangeAxis = GetAxis(data.Format);
+			series.IndependentAxis = X;
 
 			series.MouseDown += SeriesClicked;
 			series.MouseEnter += SeriesHover;

@@ -35,7 +35,7 @@ namespace WeatherAndPower.Core
 		public void AddRandomPlot(string name)
 		{
 			var x = _CreateTimeSeries(
-				DateTime.Now.Subtract(new TimeSpan(12,0,0)),
+				DateTime.Now.Subtract(new TimeSpan(0,12,0,0)),
 				DateTime.Now,
 				48);
 			var y = _GenerateRandomPlot(0, 400, 48);

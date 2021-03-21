@@ -91,6 +91,8 @@ namespace WeatherAndPower.Data
             httpRequestMessage.RequestUri = new Uri(requestUri);
             SetHeaders(httpRequestMessage, format);
 
+            Console.WriteLine(httpRequestMessage.RequestUri);
+
             var response = await _client.SendAsync(httpRequestMessage);
             var body = await response.Content.ReadAsStringAsync();
 
