@@ -6,8 +6,9 @@
 
 <!--Converters-->
 	<conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+	<conv:EpochToDateMultiConverter x:Key="EpochToDateMultiConverter"/>
 	<conv:EpochToDateConverter x:Key="EpochToDateConverter"/>
-    <conv:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
+	<conv:EpochToSpanConverter x:Key="EpochToSpanConverter"/>
     <conv:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
 
     <!--Styles-->
@@ -18,6 +19,27 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="dvc:AxisLabel">
 					<TextBlock Text="{Binding Converter={StaticResource EpochToDateConverter}}">
+						<!--<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource EpochToDateConverter}">
+								<Binding Path="."/>
+								<Binding Path="LabelType" RelativeSource="{RelativeSource AncestorType={x:Type local:TimeAxis}}"/>
+							</MultiBinding>
+						</TextBlock.Text>-->
+						<TextBlock.LayoutTransform>
+							<RotateTransform Angle="90" CenterX="100" CenterY="0"/>
+						</TextBlock.LayoutTransform>
+					</TextBlock>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="TimeAxisDayStyle" TargetType="Control">
+		<Setter Property="FontSize" Value="15"/>
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="dvc:AxisLabel">
+					<TextBlock Text="{Binding Converter={StaticResource EpochToDateConverter}, ConverterParameter={x:Reference Name=Tag}}">
 						<TextBlock.LayoutTransform>
 							<RotateTransform Angle="90" CenterX="100" CenterY="0"/>
 						</TextBlock.LayoutTransform>

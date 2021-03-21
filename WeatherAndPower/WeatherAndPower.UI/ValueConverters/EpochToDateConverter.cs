@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
-using System.Globalization;
 
 namespace WeatherAndPower.UI.ValueConverters
 {
@@ -14,9 +13,7 @@ namespace WeatherAndPower.UI.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var date = new DateTime((long)((double)value));
-
-			return date.ToString("t");
+			return ((DateTime)value).ToString("M");
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

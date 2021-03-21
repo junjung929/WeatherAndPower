@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ namespace WeatherAndPower.Contracts
 		Wind			= 0x8
 	}
 
-	
 	public class Globals
 	{
 		public static Random rand = new Random();
@@ -26,6 +26,21 @@ namespace WeatherAndPower.Contracts
 				{ DataFormat.Power, "PowerAxis" },
 				{ DataFormat.Cloudiness, "CloudinessAxis" },
 				{ DataFormat.Wind, "WindAxis" }
+			};
+		
+		public static int MaxTimeAxisLabels = 10; // Maximum amount of labels on X-axis (time)
+		public static List<TimeSpan?> TimeIntervalOptions = new List<TimeSpan?>()
+			{
+				new TimeSpan(0, 5, 0),
+				new TimeSpan(0, 15, 0),
+				new TimeSpan(0, 30, 0),
+				new TimeSpan(1, 0, 0),
+				new TimeSpan(2, 0, 0),
+				new TimeSpan(3, 0, 0),
+				new TimeSpan(6, 0, 0),
+				new TimeSpan(12, 0, 0),
+				new TimeSpan(1, 0, 0, 0),
+				new TimeSpan(7, 0, 0, 0)
 			};
 	}
 }
