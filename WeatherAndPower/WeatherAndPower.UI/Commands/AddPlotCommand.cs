@@ -32,13 +32,14 @@ namespace WeatherAndPower.UI.Commands
             if (_viewModel.DataType.Equals(DataFormat.Power))
             {
                 var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-                
+
                 if (powerViewModel.SPowerType == null)
                 {
                     System.Windows.MessageBox.Show("Please choose the category");
                     return;
                 }
-                if (powerViewModel.StartTime.Equals(powerViewModel.EndTime))
+                if (powerViewModel.StartTime.Equals(powerViewModel.EndTime)
+                    || DateTime.Compare(powerViewModel.StartTime, powerViewModel.EndTime) > 0)
                 {
                     System.Windows.MessageBox.Show("Please choose valid time range");
                     return;
@@ -48,10 +49,17 @@ namespace WeatherAndPower.UI.Commands
                     System.Windows.MessageBox.Show("Please type the name of new plot");
                     return;
                 }
+                try
+                {
+                    _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, powerViewModel.StartTime, powerViewModel.EndTime, powerViewModel.PlotName);
+                    var window = (System.Windows.Window)parameter;
+                    window.Close();
+                }
+                catch (Exception)
+                {
+                    System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again.");
+                }
 
-                _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, powerViewModel.StartTime, powerViewModel.EndTime, powerViewModel.PlotName);
-                var window = (System.Windows.Window)parameter;
-                window.Close();
             }
         }
     }
