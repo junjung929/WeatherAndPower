@@ -106,7 +106,7 @@ namespace WeatherAndPower.Core
         public void FMIAction()
         {
 
-            FMI.Place = _CityName;
+            //FMI.Place = _CityName;
             FMI.Parameters = _DataName;
             FMI.StartTime = "2021-04-20T09:00:00Z";
             FMI.EndTime = "2021-04-20T21:00:00Z";
@@ -122,7 +122,7 @@ namespace WeatherAndPower.Core
             {
                 series_list_task.Wait();
                 var series_list = series_list_task.Result;
-                DataPlot.AddPlot(series_list[0]);
+                //DataPlot.AddPlot(series_list[0]);
             }
             catch (AggregateException ae)
             {

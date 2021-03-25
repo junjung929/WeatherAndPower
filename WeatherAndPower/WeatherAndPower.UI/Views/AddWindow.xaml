@@ -6,6 +6,7 @@
         xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
         xmlns:viewmodels="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
         xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
+        xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
         x:Name="AddWindowName"
         Title="AddWindow" Height="450" Width="800">
@@ -17,26 +18,91 @@
             <views:WeatherInputView/>
         </DataTemplate>
         <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+        <DataTemplate x:Key="ListBoxItemTemplate">
+            <RadioButton Content="{Binding}"
+                                 IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
+                         />
+        </DataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="10" >
+        <Grid.Resources >
+            <Style TargetType="Border" >
+                <Setter Property="Padding" Value="0,0,0,10" />
+            </Style>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Content="Open Preference" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
+                <Button Content="Save Preference" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
+            </StackPanel>
+        </Border>
 
+        <Border Grid.Row="1"  Grid.Column="0">
+            <Label Content="Data Type :" VerticalAlignment="Center" x:Name="DataTypePanel" />
+        </Border>
+        <Border Grid.Row="1"  Grid.Column="1" Grid.ColumnSpan="2">
+            <ListBox 
+                     ItemsSource="{Binding DataTypes}"
+                     SelectedItem="{Binding DataType}"
+                     BorderBrush="Transparent"
+                     BorderThickness="0"
+                     ItemTemplate="{StaticResource ListBoxItemTemplate}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Border>
 
+        <Border  Grid.Row="2" Grid.ColumnSpan="3">
+            <ContentControl Content="{Binding SelectedViewModel}" />
+        </Border>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
-            <Label Content="Data Type :" VerticalAlignment="Center" />
-            <RadioButton Content="Power" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Power}"  
-                         VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Power" />
-            <RadioButton Content="Temperature" IsChecked="{Binding DataType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Temperature}" 
-                         VerticalAlignment="Center" Margin="3,0" Command="{Binding UpdateViewCommand}" CommandParameter="Temperature" />
-        </StackPanel>
-        <ContentControl Content="{Binding SelectedViewModel}" Grid.Row="1" />
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Content="Add" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
+        <Border Grid.Row="3" Grid.Column="0">
+            <Label Content="Start Date Time :"   />
+        </Border>
+        <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+            <toolkit:DateTimePicker  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
+                                Value="{Binding StartTime}" TextAlignment="Left" Padding="5" />
+        </Border>
+
+        <Border Grid.Row="4" Grid.Column="0">
+            <Label Content="End Date Time :" Grid.Row="4" Grid.Column="0" />
+        </Border>
+        <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
+            <toolkit:DateTimePicker HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
+                                Grid.Row="4" Grid.Column="1" TextAlignment="Left"
+                                Value="{Binding EndTime}" Padding="5" />
+        </Border>
+
+        <Border Grid.Row="5" Grid.Column="0">
+            <Label Content="Plot Name :" Grid.Row="5" Grid.Column="0" />
+        </Border>
+        <Border Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
+            <TextBox Grid.Row="5" Grid.Column="1" x:Name="PlotName" Text="{Binding PlotName}"  Padding="5" />
+        </Border>
+
+        <StackPanel Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>
     </Grid>

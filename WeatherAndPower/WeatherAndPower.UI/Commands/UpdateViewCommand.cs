@@ -27,11 +27,12 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
+            Console.WriteLine("asdf " + parameter);
             if (parameter.ToString() == DataFormat.Power.ToString())
             {
                 viewModel.SelectedViewModel = new PowerInputViewModel();
             }
-            else if (parameter.ToString() == DataFormat.Temperature.ToString())
+            else
             {
                 viewModel.SelectedViewModel = new WeatherInputViewModel();
             }
