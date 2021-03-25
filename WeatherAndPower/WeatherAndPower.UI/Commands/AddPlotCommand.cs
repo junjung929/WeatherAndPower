@@ -38,20 +38,20 @@ namespace WeatherAndPower.UI.Commands
                     System.Windows.MessageBox.Show("Please choose the category");
                     return;
                 }
-                if (powerViewModel.StartTime.Equals(powerViewModel.EndTime)
-                    || DateTime.Compare(powerViewModel.StartTime, powerViewModel.EndTime) > 0)
+                if (_viewModel.StartTime.Equals(_viewModel.EndTime)
+                    || DateTime.Compare(_viewModel.StartTime, _viewModel.EndTime) > 0)
                 {
                     System.Windows.MessageBox.Show("Please choose valid time range");
                     return;
                 }
-                if (powerViewModel.PlotName == null || powerViewModel.PlotName == "")
+                if (_viewModel.PlotName == null || _viewModel.PlotName == "")
                 {
                     System.Windows.MessageBox.Show("Please type the name of new plot");
                     return;
                 }
                 try
                 {
-                    _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, powerViewModel.StartTime, powerViewModel.EndTime, powerViewModel.PlotName);
+                    _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName);
                     var window = (System.Windows.Window)parameter;
                     window.Close();
                 }
