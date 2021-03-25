@@ -98,23 +98,26 @@ namespace WeatherAndPower.Data
         public static string BuildRequest(string query)
         {
             var options = new Dictionary<string, string>();
-            options.Add("service", "WFS");
-            options.Add("version", "2.0.0");
-            options.Add("request", "getFeature");
-            options.Add("storedquery_id", "fmi::forecast::harmonie::surface::point::simple");
-            options.Add("place", place);
-            string request = $"{SERVER_URL}?" + string.Join("&", options.ToList().Select(x =>
-              x.Key + "=" + x.Value
-            ));
+            // Default timestep 60 minutes
+            options.Add("timestep", "60");
+
+            options.Add("storedquery_id", query);
+            options.Add("place", Place);
+            options.Add("parameters", Parameters);
+            options.Add("starttime", StartTime);
+            options.Add("endtime", EndTime);
+
+
+            string request = $"{SERVER_URL}" + string.Join("&", options.ToList().Select(x =>
+              x.Key + "=" + x.Value));
             return request;
         }
-        public static async void GetTemperature()
-        {
-            var request = GetRequest("", "hervanta");
-            Console.WriteLine($"Sending request: {request}");
 
-            var response = await _client.GetAsync(request);
-            var body = await response.Content.ReadAsStringAsync();
+        public static async Task<List<DataSeries>> GetData(string url)
+        {
+            var httpResponse = await _client.GetAsync(url);
+            var bytes = await httpResponse.Content.ReadAsByteArrayAsync();
+            var body = System.Text.Encoding.Default.GetString(bytes);
 
             var doc = new XmlDocument();
             doc.LoadXml(body);
@@ -179,17 +182,32 @@ namespace WeatherAndPower.Data
             return plots;
         }
 
-        var nodes = doc.SelectNodes("//wfs:member", mng);
+        private static XmlNamespaceManager CreateManager(XmlDocument doc)
+        {
+            var mng = new XmlNamespaceManager(doc.NameTable);
 
-			foreach (XmlNode node in nodes) {
-				var name = node.SelectSingleNode(".//BsWfs:ParameterName", mng).InnerText;
-        var value = node.SelectSingleNode(".//BsWfs:ParameterValue", mng).InnerText;
-        var pos = node.SelectSingleNode(".//gml:pos", mng).InnerText;
-        var time = node.SelectSingleNode(".//BsWfs:Time", mng).InnerText;
+            mng.AddNamespace("om", "http://www.opengis.net/om/2.0");
+            mng.AddNamespace("wml2", "http://www.opengis.net/waterml/2.0");
+            mng.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            mng.AddNamespace("gml", "http://www.opengis.net/gml/3.2");
 
-				if (name == "Temperature")
-					Console.WriteLine($"{name} = {value} at {pos} at {time}");
-			}
+            return mng;
+        }
+        /// <summary>
+        /// Sets the data format based on the given parameter
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="mng"></param>
+        /// <returns></returns>
+        private static DataFormat SetFormat(XmlNode node, XmlNamespaceManager mng)
+        {
+            var param_id = node.SelectSingleNode(".//wml2:MeasurementTimeseries", mng);
+            string attribute = param_id.Attributes["gml:id"].Value;
+            string parameter = attribute.Split('-').Last();
+            DataFormat format = FORMAT_PARAMS[parameter];
+            Console.WriteLine(format);
+            return format;
+        }
+    }
 }
-	}
-}
+
