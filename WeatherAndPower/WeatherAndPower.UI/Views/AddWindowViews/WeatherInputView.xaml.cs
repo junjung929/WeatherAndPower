@@ -24,5 +24,10 @@ namespace WeatherAndPower.UI.Views.AddWindowViews
         {
             InitializeComponent();
         }
+
+        private void PropertyGroupDescription_Expanded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
