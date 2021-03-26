@@ -51,6 +51,7 @@
     <Compile Include="PowerType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Temperature.cs" />
+    <Compile Include="WeatherType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
