@@ -47,9 +47,14 @@ namespace WeatherAndPower.UI
         public RelayCommand PlaceholderCommand5 => new RelayCommand(() => Model.PlaceholderAction5());
         public RelayCommand SaveChartCommand => new RelayCommand(() => Model.SaveChart());
 
-        public void AddPowerDataToPlotCommand(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
+        public void AddPowerGraphCommand(PowerType powerType, DateTime startTime, DateTime endTime, string plotName)
         {
-            Model.AddPowerDataToPlotAction(powerType, startTime, endTime, PlotName);
+            Model.AddPowerDataToPlotAction(powerType, startTime, endTime, plotName);
+        }
+
+        public void AddWeatherGraphCommand(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
+        {
+            Model.AddWeatherGraphAction(cityName, parameters, startTime, endTime, plotName, parameterType);
         }
 
         public ICommand OpenAddWindowCommand { get; set; }
