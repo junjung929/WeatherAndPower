@@ -69,6 +69,7 @@
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="Commands\AddPlotCommand.cs" />
     <Compile Include="Commands\OpenAddWindowCommand.cs" />
+    <Compile Include="Commands\UpdateSelectedParameterCommand.cs" />
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
