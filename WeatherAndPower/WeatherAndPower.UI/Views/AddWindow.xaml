@@ -9,7 +9,7 @@
         xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
         x:Name="AddWindowName"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
         Title="AddWindow" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
@@ -22,7 +22,9 @@
 
         <DataTemplate x:Key="ListBoxItemTemplate">
             <RadioButton Content="{Binding}"
-                                 IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
+                         IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type ListBoxItem}}, 
+                                                            Path=IsSelected}"
                          />
         </DataTemplate>
     </Window.Resources>
@@ -78,7 +80,7 @@
         </Border>
 
         <Border Grid.Row="3" Grid.Column="0">
-            <Label Content="Start Date Time :"   />
+            <Label Content="Start Time :"   />
         </Border>
         <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
             <toolkit:DateTimePicker  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
@@ -86,7 +88,7 @@
         </Border>
 
         <Border Grid.Row="4" Grid.Column="0">
-            <Label Content="End Date Time :" Grid.Row="4" Grid.Column="0" />
+            <Label Content="End Time :" Grid.Row="4" Grid.Column="0" />
         </Border>
         <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
             <toolkit:DateTimePicker HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
