@@ -79,6 +79,11 @@ namespace WeatherAndPower.Core
             DataPlot.Data.Add(seires);
         }
 
+        public void SaveChart()
+		{
+			DataPlot.SaveChart("test.jpg");
+		}
+
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {
             var series_task = Task.Run(() => Fingrid.Get(powerType, startTime, endTime));

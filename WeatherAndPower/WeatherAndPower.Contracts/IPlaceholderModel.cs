@@ -16,6 +16,8 @@ namespace WeatherAndPower.Contracts
 
 		void PlaceholderAction5();
 
+		void SaveChart();
+
 		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName);
 
 

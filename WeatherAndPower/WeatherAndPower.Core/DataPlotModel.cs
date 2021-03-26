@@ -10,7 +10,8 @@ namespace WeatherAndPower.Core
 {
 	public class DataPlotModel : AbstractModel, IDataPlotModel
 	{
-		public ObservableCollection<DataSeries> Data { get; set; }
+		public ICustomChart Chart { get; set; }
+		public ObservableCollection<DataSeries> Data { get; }
 			= new ObservableCollection<DataSeries>();
 
 		private List<DateTime> _CreateTimeSeries(DateTime from, DateTime to, int count)
@@ -55,6 +56,16 @@ namespace WeatherAndPower.Core
 				var item = Data.First(i => i.Name == name);
 				Data.Remove(item);
 			}
+		}
+
+		public bool SaveChart(string path)
+		{
+			return Chart.Save(path);
+		}
+
+		public DataPlotModel(ICustomChart chart)
+		{
+			Chart = chart;
 		}
 	}
 }

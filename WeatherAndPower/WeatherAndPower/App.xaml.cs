@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WeatherAndPower.Contracts;
 using WeatherAndPower.Core;
 using WeatherAndPower.UI;
 
@@ -34,8 +35,10 @@ namespace WeatherAndPower
 
 			//Initialize all the various modules here
 
-			var dataPlotView = ((FrameworkElement)MainWindow.FindName("DataPlot"));
-			var dataPlotModel = new DataPlotModel();
+			var dataPlotView = (FrameworkElement)MainWindow.FindName("DataPlot");
+			var chartView = (ICustomChart)dataPlotView.FindName("theChart");
+			var dataPlotModel = new DataPlotModel(chartView);
+			//var dataPlotModel = new DataPlotModel();
 			var dataPlotViewModel = new DataPlotViewModel(dataPlotModel, dataPlotView);
 			dataPlotView.DataContext = dataPlotViewModel;
 
