@@ -162,7 +162,7 @@ namespace WeatherAndPower.Data
         /// </returns>
         private static string ParseDateTimeFormat(DateTime dateTime)
         {
-            return dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            return dateTime.ToString(DATETIME_FORMAT);
         }
 
         /// <summary>
