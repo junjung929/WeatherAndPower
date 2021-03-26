@@ -16,8 +16,8 @@ namespace WeatherAndPower.Contracts
 
 		void PlaceholderAction5();
 
-		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName);
+		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string plotName);
 
-
+		void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType);
 	}
 }
