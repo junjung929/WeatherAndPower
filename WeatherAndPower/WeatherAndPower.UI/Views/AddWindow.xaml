@@ -9,7 +9,8 @@
         xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         mc:Ignorable="d"
         x:Name="AddWindowName"
-        Title="AddWindow" Height="450" Width="800">
+        SizeToContent="WidthAndHeight"
+        Title="AddWindow" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
             <views:PowerInputView />
@@ -45,7 +46,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
@@ -101,7 +101,7 @@
             <TextBox Grid.Row="5" Grid.Column="1" x:Name="PlotName" Text="{Binding PlotName}"  Padding="5" />
         </Border>
 
-        <StackPanel Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+        <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>
