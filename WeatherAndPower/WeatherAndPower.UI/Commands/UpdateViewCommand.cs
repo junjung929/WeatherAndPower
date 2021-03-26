@@ -27,8 +27,7 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine("asdf " + parameter);
-            if (parameter.ToString() == DataFormat.Power.ToString())
+            if (parameter.ToString() == MainViewModel.DataTypeEnum.Power.ToString())
             {
                 viewModel.SelectedViewModel = new PowerInputViewModel();
             }
