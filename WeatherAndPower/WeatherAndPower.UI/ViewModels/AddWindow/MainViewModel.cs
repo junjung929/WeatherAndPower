@@ -11,10 +11,16 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
     public class MainViewModel : ViewModelBase
     {
-        private ViewModelBase _selectedViewModel;
-        private DataFormat _dataType = (DataFormat)0x01;
+        public enum DataTypeEnum
+        {
+            Power = 0x01,
+            Weather = 0x02
+        }
 
-        public DataFormat DataType
+        private ViewModelBase _selectedViewModel;
+        private DataTypeEnum _dataType = (DataTypeEnum)0x01;
+
+        public DataTypeEnum DataType
         {
             get { return _dataType; }
             set
@@ -40,7 +46,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         public Array DataTypes
         {
-            get { return Enum.GetValues(typeof(DataFormat)); }
+            get { return Enum.GetValues(typeof(DataTypeEnum)); }
         }
 
         private DateTime _startTime = DateTime.Now;
