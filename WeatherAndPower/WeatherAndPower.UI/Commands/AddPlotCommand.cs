@@ -29,38 +29,89 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            if (_viewModel.DataType.Equals(DataFormat.Power))
+            if (_viewModel.DataType.Equals(MainViewModel.DataTypeEnum.Power))
             {
-                var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-
-                if (powerViewModel.SPowerType == null)
-                {
-                    System.Windows.MessageBox.Show("Please choose the category");
-                    return;
-                }
-                if (_viewModel.StartTime.Equals(_viewModel.EndTime)
-                    || DateTime.Compare(_viewModel.StartTime, _viewModel.EndTime) > 0)
-                {
-                    System.Windows.MessageBox.Show("Please choose valid time range");
-                    return;
-                }
-                if (_viewModel.PlotName == null || _viewModel.PlotName == "")
-                {
-                    System.Windows.MessageBox.Show("Please type the name of new plot");
-                    return;
-                }
-                try
-                {
-                    _placeholderViewModel.AddPowerDataToPlotCommand(powerViewModel.SPowerType, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName);
-                    var window = (System.Windows.Window)parameter;
-                    window.Close();
-                }
-                catch (Exception)
-                {
-                    System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again.");
-                }
-
+                AddPowerGraph((System.Windows.Window)parameter);
             }
+            else
+            {
+                AddWeatherGraph((System.Windows.Window)parameter);
+            }
+        }
+
+        private void AddPowerGraph(System.Windows.Window window)
+        {
+            var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
+
+            if (powerViewModel.SPowerType == null)
+            {
+                System.Windows.MessageBox.Show("Please choose the category");
+                return;
+            }
+
+            // Checks date times and plot name are valid
+            if (!CommonInputValidator()) return;
+
+            try
+            {
+                _placeholderViewModel.AddPowerGraphCommand(powerViewModel.SPowerType, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName);
+                window.Close();
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again.");
+            }
+        }
+
+        private void AddWeatherGraph(System.Windows.Window window)
+        {
+            var weatherViewModel = (WeatherInputViewModel)_viewModel.SelectedViewModel;
+            string parameters = String.Join(",", weatherViewModel.SelectedParameters);
+
+
+            // Checks date times and plot name are valid
+            if (!CommonInputValidator()) return;
+
+            if (weatherViewModel.CityName == null || weatherViewModel.CityName == "")
+            {
+                System.Windows.MessageBox.Show("Please give a name of cities in Finland");
+                return;
+            }
+            try
+            {
+                _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
+                window.Close();
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again.");
+            }
+        }
+        private Boolean CommonInputValidator()
+        {
+            if (!IsTimeValid()) return false;
+            if (!IsPlotNameValid()) return false;
+            return true;
+        }
+
+        private Boolean IsTimeValid()
+        {
+            if (_viewModel.StartTime.Equals(_viewModel.EndTime)
+                    || DateTime.Compare(_viewModel.StartTime, _viewModel.EndTime) > 0)
+            {
+                System.Windows.MessageBox.Show("Please choose valid time range");
+                return false;
+            }
+            return true;
+        }
+        private Boolean IsPlotNameValid()
+        {
+            if (_viewModel.PlotName == null || _viewModel.PlotName == "")
+            {
+                System.Windows.MessageBox.Show("Please type the name of new plot");
+                return false;
+            }
+            return true;
         }
     }
 }

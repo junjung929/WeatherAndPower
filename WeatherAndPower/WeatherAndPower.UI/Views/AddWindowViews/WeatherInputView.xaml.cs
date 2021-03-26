@@ -23,11 +23,13 @@ namespace WeatherAndPower.UI.Views.AddWindowViews
         public WeatherInputView()
         {
             InitializeComponent();
+            
         }
 
-        private void PropertyGroupDescription_Expanded(object sender, RoutedEventArgs e)
+        private void ParameterList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            // disable displaying selected item
+            ParameterList.SelectedIndex = -1;
         }
     }
 }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
+             xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
              xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
              mc:Ignorable="d" 
              d:DesignWidth="800" Height="Auto">
@@ -29,19 +30,25 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="1"  Grid.Column="0">
+        <Border Grid.Row="0"  Grid.Column="0">
             <Label Content="Parameters :" VerticalAlignment="Top" x:Name="DataTypePanel" />
         </Border>
-        <Border Grid.Row="1"  Grid.Column="1" Grid.ColumnSpan="2">
+        <Border Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="2">
 
 
             <ListBox
                 x:Name="ParameterList"
-                     ItemsSource="{Binding Source={StaticResource WeatherTypeList}}"
-                     BorderBrush="Transparent"
-                     BorderThickness="0">
+                ItemsSource="{Binding Source={StaticResource WeatherTypeList}}"
+                SelectionChanged="ParameterList_SelectionChanged"
+                MaxHeight="150"
+                >
                 <ListBox.GroupStyle>
                     <GroupStyle>
+                        <!--<GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name, StringFormat=Choose {0} Parameters}" Padding="3"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>-->
                         <GroupStyle.Panel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel Orientation="Vertical" />
@@ -53,10 +60,10 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <Expander
-                                                Padding="0"                                           
+                                                Padding="0,3"                                           
                                                 BorderThickness="0"
-                                                Header="{Binding Name}"
-                                                IsExpanded="False">  
+                                                Header="{Binding Name, StringFormat=Choose {0} Parameters}"
+                                                IsExpanded="True">
                                                 <ItemsPresenter/>
                                             </Expander>
                                         </ControlTemplate>
@@ -67,20 +74,26 @@
                     </GroupStyle>
                 </ListBox.GroupStyle>
                 <ListBox.ItemTemplate>
-                    
                     <DataTemplate>
-                        <Border BorderThickness="0">
-                            <Grid>
-                                <StackPanel Orientation="Horizontal">
-                                    <CheckBox IsChecked="False" />
-                                    <TextBlock Text="{Binding Description, StringFormat={} {0}}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <StackPanel Orientation="Horizontal"  >
+                            
+                            <CheckBox x:Name="ParameterCheckBox" 
+                                            IsChecked="False"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                            Command="{Binding DataContext.UpdateSelectedParameterCommand,
+                                                    RelativeSource={RelativeSource FindAncestor,
+                                                                    AncestorType={x:Type UserControl}}}"
+                                            />
+                            <TextBlock Text="{Binding Description, StringFormat={} {0}}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
+
+
+        <Label Grid.Row="1" Grid.Column="0" Content="City :" />
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="CityName" Text="{Binding CityName}"  Padding="5" />
     </Grid>
 
 </UserControl>

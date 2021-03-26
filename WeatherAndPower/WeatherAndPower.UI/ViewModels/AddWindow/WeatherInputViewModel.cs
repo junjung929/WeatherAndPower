@@ -4,18 +4,33 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WeatherAndPower.Contracts;
+using WeatherAndPower.UI.Commands;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    class WeatherInputViewModel : ViewModelBase
+    public class WeatherInputViewModel : ViewModelBase
     {
+        public WeatherType.ParameterEnum SelectedParameterType { get; set; }
+
+        private string _cityName;
+        public string CityName
+        {
+            get { return _cityName; }
+            set { _cityName = value; NotifyPropertyChanged("CityName"); }
+        }
+
         public ObservableCollection<WeatherType> WeatherTypes { get; set; }
-        public List<WeatherType> SWeatherTypes { get; set; } = new List<WeatherType>();
+
+        public List<WeatherType> SelectedParameters { get; set; } = new List<WeatherType>();
+
+        public ICommand UpdateSelectedParameterCommand { get; set; }
 
         public WeatherInputViewModel()
         {
             WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
+            UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
         }
     }
 }
