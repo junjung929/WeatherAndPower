@@ -27,9 +27,7 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine(parameter);
             var checkBox = (System.Windows.Controls.CheckBox)parameter;
-            Console.WriteLine(checkBox.DataContext);
             var weatherType = (WeatherType)checkBox.DataContext;
 
 
