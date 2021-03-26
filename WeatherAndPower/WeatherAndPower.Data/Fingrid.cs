@@ -191,7 +191,7 @@ namespace WeatherAndPower.Data
             string val = evt.SelectSingleNode("value").InnerText;
             string start_time = evt.SelectSingleNode("start_time").InnerText;
             string end_time = evt.SelectSingleNode("end_time").InnerText;
-            IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time), DateTime.Parse(end_time));
+            IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time).ToLocalTime(), DateTime.Parse(end_time).ToLocalTime());
             return power;
         }
 
