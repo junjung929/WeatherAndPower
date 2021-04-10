@@ -72,11 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSeries.cs" />
-    <Compile Include="DataSeriesJsonConverter.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="ICustomChart.cs" />
     <Compile Include="IData.cs" />
+    <Compile Include="IDataJsonConverter.cs" />
     <Compile Include="IDataPlotModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
     <Compile Include="Power.cs" />

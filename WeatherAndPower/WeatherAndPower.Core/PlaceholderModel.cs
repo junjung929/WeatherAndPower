@@ -86,7 +86,7 @@ namespace WeatherAndPower.Core
 
         public void SaveChart()
 		{
-            DataPlot.SaveChartJson(0, "test.json");
+            DataPlot.SaveChartJson("test.json", 0);
 		}
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)

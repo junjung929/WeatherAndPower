@@ -191,7 +191,8 @@ namespace WeatherAndPower.Data
             string val = evt.SelectSingleNode("value").InnerText;
             string start_time = evt.SelectSingleNode("start_time").InnerText;
             string end_time = evt.SelectSingleNode("end_time").InnerText;
-            IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time).ToLocalTime(), DateTime.Parse(end_time).ToLocalTime());
+            //IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time).ToLocalTime(), DateTime.Parse(end_time).ToLocalTime());
+            IData power = new Power(Double.Parse(val));
             return power;
         }
 
@@ -215,7 +216,8 @@ namespace WeatherAndPower.Data
                     double val = double.Parse(evt.SelectSingleNode("value").InnerText, CultureInfo.InvariantCulture);
                     DateTime startTime = DateTime.Parse(evt.SelectSingleNode("start_time").InnerText);
                     DateTime endTime = DateTime.Parse(evt.SelectSingleNode("end_time").InnerText);
-                    Power data = new Power(variableId, val, startTime, endTime);
+                    //Power data = new Power(variableId, val, startTime, endTime); // IData objects should only contain value
+                    Power data = new Power(val);
                     Tuple<DateTime, IData> plotPoint = new Tuple<DateTime, IData>(startTime, data);
                     powerSeries.Add(plotPoint);
                 }

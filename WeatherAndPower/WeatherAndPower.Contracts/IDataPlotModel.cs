@@ -17,6 +17,8 @@ namespace WeatherAndPower.Contracts
 
 		bool SaveChartImage(string path);
 
-		bool SaveChartJson(int id, string path);
+		bool SaveChartJson(string path, params int[] ids);
+
+		bool LoadChartJson(string path);
 	}
 }

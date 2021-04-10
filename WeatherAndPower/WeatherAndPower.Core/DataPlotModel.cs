@@ -66,27 +66,35 @@ namespace WeatherAndPower.Core
 			return Chart.Save(path);
 		}
 
-		public bool SaveChartJson(int id, string path)
+		public bool SaveChartJson(string path, params int[] ids)
 		{
-			var data = Data.FirstOrDefault(p => p.Id == id);
-			var writerOptions = new JsonWriterOptions()
-			{
-				Indented = true,
-				SkipValidation = true
-			};
-			var serializerOptions = new JsonSerializerOptions()
-			{
-				WriteIndented = true
-			};
-			FileStream stream;
+			var data = Data.Where(p => ids.Contains(p.Id)).ToArray();
+
 			try {
-				stream = File.Create(path);
+				var options = new JsonSerializerOptions()
+				{
+					WriteIndented = true
+				};
+				options.Converters.Add(new IDataJsonConverter());
+				File.WriteAllText(path, JsonSerializer.Serialize(data, options: options));
 			} catch(IOException) {
 				return false;
 			}
-			DataSeriesJsonConverter converter = new DataSeriesJsonConverter();
-			using Utf8JsonWriter writer = new Utf8JsonWriter(stream, options: writerOptions);
-			converter.Write(writer, data, serializerOptions);
+
+			return true;
+		}
+
+		public bool LoadChartJson(string path)
+		{
+			var jsonString = File.ReadAllText(path);
+			var options = new JsonSerializerOptions();
+			options.Converters.Add(new IDataJsonConverter());
+			var data = JsonSerializer.Deserialize<DataSeries[]>(jsonString, options: options);
+
+			foreach (DataSeries d in data) {
+				Data.Add(d);
+			}
+
 			return true;
 		}
 
