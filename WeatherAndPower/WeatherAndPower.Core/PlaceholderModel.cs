@@ -79,6 +79,11 @@ namespace WeatherAndPower.Core
             DataPlot.Data.Add(seires);
         }
 
+        public void SaveChart()
+		{
+			DataPlot.SaveChart("test.jpg");
+		}
+
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {
             var series_task = Task.Run(() => Fingrid.Get(powerType, startTime, endTime));
@@ -135,6 +140,8 @@ namespace WeatherAndPower.Core
             }
         }
 
+
+
         public void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
         {
             FMI.Place = cityName;
@@ -181,6 +188,8 @@ namespace WeatherAndPower.Core
         {
             DataPlot = dataPlot;
         }
+
+
 
     }
 }

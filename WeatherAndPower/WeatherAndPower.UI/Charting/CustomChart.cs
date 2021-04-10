@@ -17,10 +17,11 @@ using System.IO;
 using DataFormat = WeatherAndPower.Contracts.DataFormat;
 using System.Windows.Input;
 using System.Windows.Controls.DataVisualization;
+using System.Windows.Media.Imaging;
 
 namespace WeatherAndPower.UI
 {
-	public class CustomChart : Chart
+	public class CustomChart : Chart, ICustomChart
 	{
 		private DataFormat _Formats = 0;
 
@@ -181,6 +182,34 @@ namespace WeatherAndPower.UI
 
 		#endregion
 
+		#region Saving
+
+		public bool Save(string fileName)
+		{
+			RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+				(int)ActualWidth,
+				(int)ActualHeight,
+				96.0,
+				96.0,
+				PixelFormats.Pbgra32);
+			var vis = new DrawingVisual();
+
+			var content = vis.RenderOpen();
+			content.DrawRectangle(Brushes.White, null, new Rect(0,0, (int)ActualWidth, (int)ActualHeight));
+			content.Close();
+
+			renderBitmap.Render(vis);
+			renderBitmap.Render(this);
+
+			using (FileStream stream = new FileStream(fileName, FileMode.Create)) {
+				JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+				encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+				encoder.Save(stream);
+			}
+			return true;
+		}
+
+		#endregion
 
 		public CustomChart()
 		{
