@@ -135,6 +135,7 @@ namespace WeatherAndPower.Core
                 foreach (var ex in ae.InnerExceptions)
                 {
                     Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
         }
@@ -166,8 +167,11 @@ namespace WeatherAndPower.Core
             {
                 series_list_task.Wait();
                 var series_list = series_list_task.Result;
-                series_list[0].Name = plotName;
-                DataPlot.Data.Add(series_list[0]);
+                foreach (var series in series_list)
+                {
+                    series.Name = plotName;
+                    DataPlot.Data.Add(series);
+                }
             }
             catch (AggregateException ae)
             {
@@ -175,6 +179,7 @@ namespace WeatherAndPower.Core
                 foreach (var ex in ae.InnerExceptions)
                 {
                     Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
         }
