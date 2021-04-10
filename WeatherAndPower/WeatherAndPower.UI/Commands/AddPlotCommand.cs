@@ -82,9 +82,9 @@ namespace WeatherAndPower.UI.Commands
                 _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
                 window.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again.");
+                System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again: " + e.Message);
             }
         }
         private Boolean CommonInputValidator()
