@@ -76,6 +76,7 @@ namespace WeatherAndPower.Core
 					WriteIndented = true
 				};
 				options.Converters.Add(new IDataJsonConverter());
+				options.Converters.Add(new ByteColorJsonConverter());
 				File.WriteAllText(path, JsonSerializer.Serialize(data, options: options));
 			} catch(IOException) {
 				return false;
@@ -89,6 +90,7 @@ namespace WeatherAndPower.Core
 			var jsonString = File.ReadAllText(path);
 			var options = new JsonSerializerOptions();
 			options.Converters.Add(new IDataJsonConverter());
+			options.Converters.Add(new ByteColorJsonConverter());
 			var data = JsonSerializer.Deserialize<DataSeries[]>(jsonString, options: options);
 
 			foreach (DataSeries d in data) {

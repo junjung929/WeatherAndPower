@@ -261,6 +261,7 @@ namespace WeatherAndPower.UI
 
 		private void Plot(DataSeries data) {
 			LineSeries series = new LineSeries();
+			series.DataContext = data;
 			series.ItemsSource = data.Series;
 			series.DependentValuePath = "Item2.Value";
 			series.IndependentValuePath = "Item1";
@@ -277,7 +278,8 @@ namespace WeatherAndPower.UI
 			series.Background = new SolidColorBrush(Colors.Red);
 
 			base.Series.Add(series);
-			data.Id = series.GetHashCode();
+			//data.Id = series.GetHashCode();
+			
 		}
 		public event MouseEventHandler SeriesMouseEnter;
 		public event MouseButtonEventHandler SeriesClicked;

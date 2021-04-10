@@ -16,9 +16,11 @@ namespace WeatherAndPower.Contracts
 
 		void PlaceholderAction5();
 
-		void SaveChartImage();
+		bool SaveChartImage(string path);
 
-		void SaveChart();
+		bool SaveChart(string path, params int[] ids);
+
+		bool LoadChart(string path);
 
 		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string plotName);
 

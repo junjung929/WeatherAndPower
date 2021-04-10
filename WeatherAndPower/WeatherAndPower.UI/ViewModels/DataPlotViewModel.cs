@@ -71,8 +71,8 @@ namespace WeatherAndPower.UI
 
 		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
-			//Model.SaveChartJson("test.json", sender.GetHashCode());
-			Model.LoadChartJson("test.json");
+			var id = ((sender as LineSeries).DataContext as DataSeries).Id;
+			Model.SaveChartJson("test.json", id);
 		}
 	}
 }

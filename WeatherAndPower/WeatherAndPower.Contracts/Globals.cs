@@ -11,7 +11,7 @@ using Test = System.Collections.Generic.List<System.Tuple<double, double>>;
 
 namespace WeatherAndPower.Contracts
 {
-    public enum DataFormat
+    public enum DataFormt
     {
         Temperature = 0x1,
         Power = 0x2,

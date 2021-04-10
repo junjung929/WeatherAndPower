@@ -25,6 +25,6 @@
         <Button Command="{ Binding PlaceholderCommand3 }" Content="Remove" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
         <Button Command="{ Binding PlaceholderCommand2 }" Content="Clear" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
         <Button Command="{ Binding OpenAddWindowCommand }" Content="Add" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" />
-        <Button Command="{ Binding SaveChartCommand }" Content="Save" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" />
+        <Button Command="{ Binding LoadChartCommand }" Content="Load" Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" />
     </Grid>
 </UserControl>

@@ -79,15 +79,20 @@ namespace WeatherAndPower.Core
             DataPlot.Data.Add(seires);
         }
 
-        public void SaveChartImage()
+        public bool SaveChartImage(string path)
 		{
-			DataPlot.SaveChartImage("test.jpg");
+			return DataPlot.SaveChartImage(path);
 		}
 
-        public void SaveChart()
+        public bool SaveChart(string path, params int[] ids)
 		{
-            DataPlot.SaveChartJson("test.json", 0);
+            return DataPlot.SaveChartJson(path, ids);
 		}
+
+        public bool LoadChart(string path)
+        {
+            return DataPlot.LoadChartJson(path);
+        }
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {

@@ -8,11 +8,12 @@ namespace WeatherAndPower.Contracts
 {
 	public class DataSeries
 	{
-		public int Id { get; set; } = 0;
+		private static int identificationCounter = 1;
+		public int Id { get; set; }
 
 		public string Name { get; set; }
 
-		public byte[] Color { get; } = { 0, 0, 0 };
+		public byte[] Color { get; set; } = { 0, 0, 0 };
 
 		public DataFormat Format { get; set; }
 
@@ -44,6 +45,7 @@ namespace WeatherAndPower.Contracts
 		}
 		public DataSeries(string name, DataFormat format, List<Tuple<DateTime, IData>> series)
 		{
+			Id = identificationCounter++;
 			Name = name;
 			Format = format;
 			Series = series;

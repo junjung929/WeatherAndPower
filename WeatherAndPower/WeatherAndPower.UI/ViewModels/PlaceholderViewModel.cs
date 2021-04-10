@@ -45,7 +45,7 @@ namespace WeatherAndPower.UI
         public RelayCommand PlaceholderCommand3 => new RelayCommand(() => Model.PlaceholderAction3());
 
         public RelayCommand PlaceholderCommand5 => new RelayCommand(() => Model.PlaceholderAction5());
-        public RelayCommand SaveChartCommand => new RelayCommand(() => Model.SaveChart());
+        public RelayCommand LoadChartCommand => new RelayCommand(() => Model.LoadChart("test.json"));
 
         public void AddPowerGraphCommand(PowerType powerType, DateTime startTime, DateTime endTime, string plotName)
         {

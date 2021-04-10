@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ByteColorJsonConverter.cs" />
     <Compile Include="DataSeries.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
