@@ -78,7 +78,12 @@ namespace WeatherAndPower.Core
 			{
 				WriteIndented = true
 			};
-			FileStream stream = File.Create(path);
+			FileStream stream;
+			try {
+				stream = File.Create(path);
+			} catch(IOException) {
+				return false;
+			}
 			DataSeriesJsonConverter converter = new DataSeriesJsonConverter();
 			using Utf8JsonWriter writer = new Utf8JsonWriter(stream, options: writerOptions);
 			converter.Write(writer, data, serializerOptions);

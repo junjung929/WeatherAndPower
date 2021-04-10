@@ -201,12 +201,16 @@ namespace WeatherAndPower.UI
 			renderBitmap.Render(vis);
 			renderBitmap.Render(this);
 
-			using (FileStream stream = new FileStream(fileName, FileMode.Create)) {
-				JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-				encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-				encoder.Save(stream);
+			try {
+				using (FileStream stream = new FileStream(fileName, FileMode.Create)) {
+					JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+					encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+					encoder.Save(stream);
+				}
+				return true;
+			} catch(IOException) {
+				return false;
 			}
-			return true;
 		}
 
 		#endregion
