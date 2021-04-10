@@ -15,6 +15,8 @@ namespace WeatherAndPower.Contracts
 
 		void Remove(string name);
 
-		bool SaveChart(string path);
+		bool SaveChartImage(string path);
+
+		bool SaveChartJson(int id, string path);
 	}
 }

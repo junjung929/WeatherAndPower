@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
 
 namespace WeatherAndPower.Core
 {
@@ -58,9 +61,28 @@ namespace WeatherAndPower.Core
 			}
 		}
 
-		public bool SaveChart(string path)
+		public bool SaveChartImage(string path)
 		{
 			return Chart.Save(path);
+		}
+
+		public bool SaveChartJson(int id, string path)
+		{
+			var data = Data.FirstOrDefault(p => p.Id == id);
+			var writerOptions = new JsonWriterOptions()
+			{
+				Indented = true,
+				SkipValidation = true
+			};
+			var serializerOptions = new JsonSerializerOptions()
+			{
+				WriteIndented = true
+			};
+			FileStream stream = File.Create(path);
+			DataSeriesJsonConverter converter = new DataSeriesJsonConverter();
+			using Utf8JsonWriter writer = new Utf8JsonWriter(stream, options: writerOptions);
+			converter.Write(writer, data, serializerOptions);
+			return true;
 		}
 
 		public DataPlotModel(ICustomChart chart)

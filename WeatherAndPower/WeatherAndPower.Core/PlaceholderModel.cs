@@ -79,9 +79,14 @@ namespace WeatherAndPower.Core
             DataPlot.Data.Add(seires);
         }
 
+        public void SaveChartImage()
+		{
+			DataPlot.SaveChartImage("test.jpg");
+		}
+
         public void SaveChart()
 		{
-			DataPlot.SaveChart("test.jpg");
+            DataPlot.SaveChartJson(0, "test.json");
 		}
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
@@ -183,8 +188,5 @@ namespace WeatherAndPower.Core
         {
             DataPlot = dataPlot;
         }
-
-
-
     }
 }
