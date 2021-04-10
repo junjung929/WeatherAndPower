@@ -177,10 +177,81 @@ namespace WeatherAndPower.Core
             }
         }
 
+        public void FMIAction()
+        {
+
+            //FMI.Place = _CityName;
+            FMI.Parameters = _DataName;
+            FMI.StartTime = "2021-04-20T09:00:00Z";
+            FMI.EndTime = "2021-04-20T21:00:00Z";
+
+            //string query = FMI.BuildQuery("observations::weather");
+            string query = FMI.BuildQuery("forecast::hirlam::surface::point");
+            string request = FMI.BuildRequest(query);
+            Console.WriteLine(request);
+
+            var series_list_task = Task.Run(() => FMI.GetData(request));
+
+            try
+            {
+                series_list_task.Wait();
+                var series_list = series_list_task.Result;
+                //DataPlot.AddPlot(series_list[0]);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
+        {
+            FMI.Place = cityName;
+            FMI.Parameters = parameters;
+            FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            string query;
+
+            if (parameterType == WeatherType.ParameterEnum.Forecast)
+            {
+                query = FMI.BuildQuery("forecast::hirlam::surface::point");
+            }
+            else
+            {
+                query = FMI.BuildQuery("observations::weather");
+            }
+            string request = FMI.BuildRequest(query);
+            Console.WriteLine(request);
+
+            var series_list_task = Task.Run(() => FMI.GetData(request));
+
+            try
+            {
+                series_list_task.Wait();
+                var series_list = series_list_task.Result;
+                series_list[0].Name = plotName;
+                DataPlot.Data.Add(series_list[0]);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
         public PlaceholderModel(DataPlotModel dataPlot)
         {
             DataPlot = dataPlot;
         }
+
+
 
     }
 }
