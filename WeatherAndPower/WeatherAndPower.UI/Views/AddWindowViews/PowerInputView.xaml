@@ -12,7 +12,7 @@
                 <PropertyGroupDescription PropertyName="ParameterType" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-        <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>
+        <!--<viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>-->
     </UserControl.Resources>
     <Grid Margin="0" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
@@ -24,40 +24,50 @@
         </Grid.RowDefinitions>
 
         <Label Content="Category :" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" />
-        <ListView
-            Grid.Row="0"
-            Grid.Column="1"
+        <Viewbox Stretch="Fill"
+                 Grid.Row="0"
+                 Grid.Column="1">
+
+            <ListView
             ItemsSource="{Binding Source={StaticResource PowerTypeList}}"
             MaxHeight="150"
             SelectedItem="{Binding SPowerType}"
             >
-            <ListView.Resources>
-                <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="ToolTip" Value="{Binding Description}"></Setter>
-                </Style>
-                <Style x:Key="HeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
-                    <Setter Property="Padding" Value="10,0"/>
-                </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="Auto" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <RadioButton GroupName="CategoryRadioButtons" 
+                <ListView.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="ToolTip" Value="{Binding Description}"></Setter>
+                    </Style>
+                    <Style x:Key="HeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="Padding" Value="10,0"/>
+                    </Style>
+
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="Auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <RadioButton GroupName="CategoryRadioButtons" 
                                              IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                                                             AncestorType={x:Type ListViewItem}}, 
                                                             Path=IsSelected}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Name}" Header="Name"/>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ParameterType}" Header="Type"/>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Source}" Header="Source" HeaderContainerStyle="{StaticResource HeaderStyle}"/>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Interval, StringFormat={}{0} m}" Header="Interval" HeaderContainerStyle="{StaticResource HeaderStyle}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Name}" Header="Name"/>
+                        <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ParameterType}" Header="Type"/>
+                        <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Source}" Header="Source" HeaderContainerStyle="{StaticResource HeaderStyle}"/>
+                        <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Interval, StringFormat={}{0} mins}" Header="Interval" HeaderContainerStyle="{StaticResource HeaderStyle}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Viewbox>
+
     </Grid>
 
 </UserControl>
