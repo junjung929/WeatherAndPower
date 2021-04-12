@@ -56,6 +56,11 @@ namespace WeatherAndPower.UI.Commands
                 startTime = today.AddHours(now.Hour + 1);
                 endTime = startTime.AddHours(24).AddTicks(-1);
             }
+            else if (dateTimeRange == "n36h")
+            {
+                startTime = today.AddHours(now.Hour + 1);
+                endTime = startTime.AddHours(36).AddTicks(-1);
+            }
             else if (dateTimeRange == "n7d")
             {
                 startTime = today.AddDays(1);
@@ -102,35 +107,8 @@ namespace WeatherAndPower.UI.Commands
                 startTime = new DateTime(today.Year, 1, 1);
                 endTime = startTime.AddYears(1).AddTicks(-1);
             }
-            viewModel.StartTime = startTime;
-            viewModel.EndTime = endTime;
-        }
-
-
-        private DateTime MoveDays(DateTime dateTime, int dayDifference)
-        {
-            DateTime newDate = dateTime.AddDays(dayDifference);
-            return SetTimeToMidnight(newDate);
-        }
-
-        private DateTime MoveHours(DateTime dateTime, int hourDifference)
-        {
-            Console.WriteLine("before move " + dateTime);
-            DateTime newTime = dateTime.AddHours(hourDifference);
-            return SetTimeToFullHour(newTime);
-        }
-
-        private DateTime SetTimeToFullHour(DateTime dateTime)
-        {
-            Console.WriteLine("before full hour " + dateTime);
-            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
-                dateTime.Hour, 0, 0);
-        }
-
-        private DateTime SetTimeToMidnight(DateTime dateTime)
-        {
-            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
-                0, 0, 0);
+            if (viewModel.IsStartTimePickerEnabled) viewModel.StartTime = startTime;
+            if (viewModel.IsEndTimePickerEnabled) viewModel.EndTime = endTime;
         }
     }
 }
