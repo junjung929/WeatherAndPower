@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace WeatherAndPower.Contracts
@@ -9,6 +10,9 @@ namespace WeatherAndPower.Contracts
 	public class DataSeries
 	{
 		private static int identificationCounter = 1;
+
+
+		[JsonIgnore]
 		public int Id { get; set; }
 
 		public string Name { get; set; }
@@ -43,6 +47,12 @@ namespace WeatherAndPower.Contracts
 			Color[1] = b;
 			Color[2] = g;
 		}
+
+		public void SetId()
+		{
+
+		}
+
 		public DataSeries(string name, DataFormat format, List<Tuple<DateTime, IData>> series)
 		{
 			Id = identificationCounter++;
@@ -50,6 +60,15 @@ namespace WeatherAndPower.Contracts
 			Format = format;
 			Series = series;
 			RandomizeColor();
+		}
+
+		/**
+		 * Only for JSON!
+		 */
+		[JsonConstructor]
+		public DataSeries()
+		{
+			Id = identificationCounter++;
 		}
 	}
 }
