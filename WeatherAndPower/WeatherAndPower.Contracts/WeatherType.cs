@@ -111,8 +111,12 @@ namespace WeatherAndPower.Contracts
 
         public ParameterEnum ParameterType { get; private set; }
 
+        // Data period. Unit: minute
+        public int Interval { get; private set; }
+
         public WeatherType(int id, string name) : base(id, name)
         {
+            Interval = 60;
         }
     }
 }
