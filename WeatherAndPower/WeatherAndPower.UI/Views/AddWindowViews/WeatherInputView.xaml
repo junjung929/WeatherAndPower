@@ -14,7 +14,7 @@
                 <PropertyGroupDescription PropertyName="ParameterType" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-        <viewmodel:WeatherInputViewModel x:Key="vm"></viewmodel:WeatherInputViewModel>
+        <!--<viewmodel:WeatherInputViewModel x:Key="vm"></viewmodel:WeatherInputViewModel>-->
     </UserControl.Resources>
     <Grid Margin="0" VerticalAlignment="Center">
         <Grid.Resources >

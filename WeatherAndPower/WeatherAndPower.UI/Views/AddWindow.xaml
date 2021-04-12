@@ -93,7 +93,11 @@
                                      TextAlignment="Left" Padding="5"
                                      IsEnabled="{Binding IsStartTimePickerEnabled}"
                                      Minimum="{Binding DateTimeMin}"
-                                     Maximum="{Binding DateTimeMax}"/>
+                                     Maximum="{Binding DateTimeMax}"
+                                     Format="Custom"
+                                     FormatString="ddd dd'/'MM'/'yyyy HH:mm:ss" CultureInfo="en-US"
+                                     TimeFormat="Custom"
+                                     TimeFormatString="HH:mm:ss"/>
         </Border>
 
         <Border Grid.Row="4" Grid.Column="0">
@@ -107,7 +111,11 @@
                                     Value="{Binding EndTime}" Padding="5"
                                     IsEnabled="{Binding IsEndTimePickerEnabled}"
                                     Minimum="{Binding DateTimeMin}"
-                                    Maximum="{Binding DateTimeMax}" />
+                                    Maximum="{Binding DateTimeMax}"
+                                    Format="Custom"
+                                    FormatString="ddd dd'/'MM'/'yyyy HH:mm:ss" CultureInfo="en-US"
+                                    TimeFormat="Custom"
+                                    TimeFormatString="HH:mm:ss"/>
         </Border>
 
 
