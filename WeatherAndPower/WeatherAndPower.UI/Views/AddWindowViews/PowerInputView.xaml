@@ -6,6 +6,14 @@
              xmlns:local="clr-namespace:WeatherAndPower.UI.Views"
              xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
              mc:Ignorable="d" d:DesignWidth="800" Height="Auto" VerticalAlignment="Center">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="PowerTypeList" Source="{Binding Path=PowerTypes}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="ParameterType" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+        <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>
+    </UserControl.Resources>
     <Grid Margin="0" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
@@ -15,17 +23,38 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Label Content="Category :" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="0" Grid.Column="1" 
-                  ItemsSource="{Binding Path=PowerTypes}" 
-                  SelectedItem="{Binding Path=SPowerType}" 
-                  DisplayMemberPath="Name" 
-                  VerticalAlignment="Center" 
-                  Padding="5" />
-
-
+        <Label Content="Category :" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" />
+        <ListView
+            Grid.Row="0"
+            Grid.Column="1"
+            ItemsSource="{Binding Source={StaticResource PowerTypeList}}"
+            MaxHeight="150"
+            SelectedItem="{Binding SPowerType}"
+            >
+            <ListView.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="ToolTip" Value="{Binding Description}"></Setter>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="Auto" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <RadioButton GroupName="CategoryRadioButtons" 
+                                             IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type ListViewItem}}, 
+                                                            Path=IsSelected}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Name}" Header="Name"/>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ParameterType}" Header="Type"/>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Source}" Header="Source"/>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Interval, StringFormat={}{0} m}" Header="Interval" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
-    <UserControl.Resources>
-        <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>
-    </UserControl.Resources>
+
 </UserControl>
