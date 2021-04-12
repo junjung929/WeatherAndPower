@@ -28,6 +28,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
                 selectedPowerType = value;
                 NotifyPropertyChanged("SPowerType");
 
+                if (value == null) return;
                 //ParentViewModel.IsStartTimePickerEnabled = true;
                 //ParentViewModel.IsEndTimePickerEnabled = true;
                 ParentViewModel.SetDateTimeMinMaxToDefault();
@@ -44,16 +45,11 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
                     ParentViewModel.UpdateDateTimeCommand.Execute("n36h");
                     ParentViewModel.DateTimeMax = ParentViewModel.EndTime;
                 }
-                if (value.ParameterType.Equals(PowerType.ParameterEnum.Observation)
+                else if (value.ParameterType.Equals(PowerType.ParameterEnum.Observation)
                     || value.ParameterType.Equals(PowerType.ParameterEnum.RealTime))
                 {
-                    DateTime currentHour = DateTime.Today.AddHours(DateTime.Now.Hour);
-                    if (DateTime.Compare(ParentViewModel.StartTime, currentHour) > 0)
-                    {
-                        ParentViewModel.StartTime = currentHour.AddHours(-1);
-                    }
-                    ParentViewModel.EndTime = currentHour.AddTicks(-1);
-                    ParentViewModel.DateTimeMax = currentHour.AddTicks(-1);
+                    ParentViewModel.UpdateDateTimeCommand.Execute("");
+                    ParentViewModel.DateTimeMax = ParentViewModel.EndTime;
                 }
             }
         }

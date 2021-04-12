@@ -83,13 +83,13 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             {
                 if (DateTime.Compare(value, DateTimeMin) < 0)
                 {
-                    System.Windows.MessageBox.Show("The minimum range of date time is "
+                    System.Windows.MessageBox.Show("The minimum range of start date time is "
                         + DateTimeMin.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
                     _startTime = DateTimeMin;
                 }
                 else if (DateTime.Compare(value, DateTimeMax) > 0)
                 {
-                    System.Windows.MessageBox.Show("The maximum range of date time is "
+                    System.Windows.MessageBox.Show("The maximum range of start date time is "
                        + DateTimeMax.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
                     _startTime = DateTimeMax;
                 }
@@ -105,13 +105,13 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             {
                 if (DateTime.Compare(value, DateTimeMin) < 0)
                 {
-                    System.Windows.MessageBox.Show("The minimum range of date time is "
+                    System.Windows.MessageBox.Show("The minimum range of end date time is "
                         + DateTimeMin.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
                     _endTime = DateTimeMin;
                 }
                 else if (DateTime.Compare(value, DateTimeMax) > 0)
                 {
-                    System.Windows.MessageBox.Show("The maximum range of date time is "
+                    System.Windows.MessageBox.Show("The maximum range of end date time is "
                         + DateTimeMax.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
                     _endTime = DateTimeMax;
                 }
