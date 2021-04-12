@@ -86,17 +86,28 @@
             <Label Content="Start Time :"   />
         </Border>
         <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
-                                Value="{Binding StartTime}" TextAlignment="Left" Padding="5" />
+            <toolkit:DateTimePicker  HorizontalAlignment="Stretch"
+                                     x:Name="StartTimePicker"
+                                     VerticalAlignment="Top"
+                                     Value="{Binding StartTime}"
+                                     TextAlignment="Left" Padding="5"
+                                     IsEnabled="{Binding IsStartTimePickerEnabled}"
+                                     Minimum="{Binding DateTimeMin}"
+                                     Maximum="{Binding DateTimeMax}"/>
         </Border>
 
         <Border Grid.Row="4" Grid.Column="0">
             <Label Content="End Time :" />
         </Border>
         <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
-                                TextAlignment="Left"
-                                Value="{Binding EndTime}" Padding="5" />
+            <toolkit:DateTimePicker HorizontalAlignment="Stretch"
+                                    x:Name="EndTimePicker"
+                                    VerticalAlignment="Top"
+                                    TextAlignment="Left"
+                                    Value="{Binding EndTime}" Padding="5"
+                                    IsEnabled="{Binding IsEndTimePickerEnabled}"
+                                    Minimum="{Binding DateTimeMin}"
+                                    Maximum="{Binding DateTimeMax}" />
         </Border>
 
 
@@ -142,7 +153,7 @@
                 <Button Content="Today"
                         Name="today" />
                 <Button Content="Tomorrow"
-                        Name="Tomorrow" />
+                        Name="tomorrow" />
                 <Button Content="This Month"
                         Name="tmonth" />
                 <Button Content="This Year"
