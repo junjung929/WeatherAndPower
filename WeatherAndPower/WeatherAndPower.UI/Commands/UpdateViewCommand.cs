@@ -29,11 +29,11 @@ namespace WeatherAndPower.UI.Commands
         {
             if (parameter.ToString() == MainViewModel.DataTypeEnum.Power.ToString())
             {
-                viewModel.SelectedViewModel = new PowerInputViewModel();
+                viewModel.SelectedViewModel = new PowerInputViewModel(viewModel);
             }
             else
             {
-                viewModel.SelectedViewModel = new WeatherInputViewModel();
+                viewModel.SelectedViewModel = new WeatherInputViewModel(viewModel);
             }
         }
     }

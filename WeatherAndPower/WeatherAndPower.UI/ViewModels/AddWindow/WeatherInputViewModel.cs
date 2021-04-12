@@ -12,6 +12,8 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
     public class WeatherInputViewModel : ViewModelBase
     {
+        MainViewModel ParentViewModel { get; set; }
+       
         public WeatherType.ParameterEnum SelectedParameterType { get; set; }
 
         private string _cityName;
@@ -27,8 +29,9 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         public ICommand UpdateSelectedParameterCommand { get; set; }
 
-        public WeatherInputViewModel()
+        public WeatherInputViewModel(MainViewModel viewModel)
         {
+            ParentViewModel = viewModel;
             WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
             UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
         }
