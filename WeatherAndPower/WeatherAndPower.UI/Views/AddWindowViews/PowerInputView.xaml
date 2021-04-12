@@ -35,6 +35,9 @@
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="ToolTip" Value="{Binding Description}"></Setter>
                 </Style>
+                <Style x:Key="HeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Padding" Value="10,0"/>
+                </Style>
             </ListView.Resources>
             <ListView.View>
                 <GridView>
@@ -50,8 +53,8 @@
                     </GridViewColumn>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Name}" Header="Name"/>
                     <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding ParameterType}" Header="Type"/>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Source}" Header="Source"/>
-                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Interval, StringFormat={}{0} m}" Header="Interval" />
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Source}" Header="Source" HeaderContainerStyle="{StaticResource HeaderStyle}"/>
+                    <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Interval, StringFormat={}{0} m}" Header="Interval" HeaderContainerStyle="{StaticResource HeaderStyle}" />
                 </GridView>
             </ListView.View>
         </ListView>

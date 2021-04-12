@@ -42,7 +42,7 @@ namespace WeatherAndPower.UI.Commands
         private void AddPowerGraph(System.Windows.Window window)
         {
             var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-            
+            Console.WriteLine(powerViewModel.SPowerType);
             if (powerViewModel.SPowerType == null)
             {
                 System.Windows.MessageBox.Show("Please choose the category");
