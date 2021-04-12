@@ -34,61 +34,59 @@
             <Label Content="Parameters :" VerticalAlignment="Top" x:Name="DataTypePanel" />
         </Border>
         <Border Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="2">
-
-
-            <ListBox
+            <StackPanel>
+                <ListBox
                 x:Name="ParameterList"
                 ItemsSource="{Binding Source={StaticResource WeatherTypeList}}"
                 SelectionChanged="ParameterList_SelectionChanged"
                 MaxHeight="150"
                 >
-                <ListBox.GroupStyle>
-                    <GroupStyle>
-                        <!--<GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name, StringFormat=Choose {0} Parameters}" Padding="3"/>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>-->
-                        <GroupStyle.Panel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </GroupStyle.Panel>
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <Expander
-                                                Padding="0,3"                                           
-                                                BorderThickness="0"
-                                                Header="{Binding Name, StringFormat=Choose {0} Parameters}"
-                                                IsExpanded="True">
-                                                <ItemsPresenter/>
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListBox.GroupStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal"  >
-                            
-                            <CheckBox x:Name="ParameterCheckBox" 
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.Panel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </GroupStyle.Panel>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Expander
+                                                    Padding="0,3"                                           
+                                                    BorderThickness="0"
+                                                    IsExpanded="True">
+                                                    <Expander.Header>
+                                                            <TextBlock Text="{Binding Name, StringFormat={}Choose Parameters for {0}}" />
+                                                    </Expander.Header>
+                                                    <ItemsPresenter/>
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="ParameterCheckBox" 
                                             IsChecked="False"
                                             CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                             Command="{Binding DataContext.UpdateSelectedParameterCommand,
                                                     RelativeSource={RelativeSource FindAncestor,
-                                                                    AncestorType={x:Type UserControl}}}"
-                                            />
-                            <TextBlock Text="{Binding Description, StringFormat={} {0}}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                                                     AncestorType={x:Type UserControl}}}"
+                                          Grid.Column="0"/>
+                                <TextBlock Text="{Binding Description, StringFormat={} {0}}"                                         />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Foreground="Red">Choose one or more parameters of either Observation or Forecast</TextBlock>
+                <TextBlock Foreground="Red">Median parameters are obtional</TextBlock>
+            </StackPanel>
         </Border>
 
 
