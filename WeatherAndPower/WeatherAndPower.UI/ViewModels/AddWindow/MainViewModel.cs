@@ -30,6 +30,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
+
         public ICommand UpdateViewCommand { get; set; }
         public ICommand AddPlotCommand { get; set; }
         public ICommand UpdateDateTimeCommand { get; set; }
@@ -50,6 +51,27 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             get { return Enum.GetValues(typeof(DataTypeEnum)); }
         }
 
+        private bool _isStartTimePickerEnabled = true;
+        private bool _isEndTimePickerEnabled = true;
+        public bool IsStartTimePickerEnabled
+        {
+            get { return _isStartTimePickerEnabled; }
+            set
+            {
+                _isStartTimePickerEnabled = value;
+                NotifyPropertyChanged(nameof(IsStartTimePickerEnabled));
+            }
+        }
+        public bool IsEndTimePickerEnabled
+        {
+            get { return _isEndTimePickerEnabled; }
+            set
+            {
+                _isEndTimePickerEnabled = value;
+                NotifyPropertyChanged(nameof(IsEndTimePickerEnabled));
+            }
+        }
+
         private DateTime _startTime = DateTime.Now;
         private DateTime _endTime = DateTime.Now;
 
@@ -64,6 +86,10 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             get { return _endTime; }
             set { _endTime = value; NotifyPropertyChanged("EndTime"); }
         }
+
+        public DateTime DateTimeMin { get; set; } = DateTime.Today.AddYears(-2);
+        public DateTime DateTimeMax { get; set; } = DateTime.Today.AddMonths(2).AddTicks(-1);
+
         public string PlotName { get; set; }
         public MainViewModel(PlaceholderViewModel viewModel)
         {
