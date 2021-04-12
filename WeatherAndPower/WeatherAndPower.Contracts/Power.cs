@@ -9,29 +9,66 @@ namespace WeatherAndPower.Contracts
 {
     public class Power : IData
     {
-        //public Power(int variableId, double value, DateTime startTime, DateTime endTime)
-        public Power(double value)
-        {
-            //this.VariableId = variableId;
-            this.Value = value;
-            //this.StartTime = startTime;
-            //this.EndTime = endTime;
-        }
-        //public int VariableId { get; }
+        // Million watt
+        public double Megawatt { get; set; }
+
 
         public double Value
         {
-            get;
+            get { return Megawatt; }
         }
-        //public DateTime StartTime
-        //{
-        //    get;
-        //}
+        public double Watt
+        {
+            get
+            {
+                return Megawatt * (10 ^ 6);
+            }
+            set
+            {
+                double megawatt = value * (10 ^ -6);
+                if (megawatt != Megawatt)
+                {
+                    Megawatt = megawatt;
+                }
+            }
+        }
 
-        //public DateTime EndTime
-        //{
-        //    get;
-        //}
+        public double Kilowatt
+        {
+            get
+            {
+                return Megawatt * (10 ^ 3);
+            }
+            set
+            {
+                double megawatt = value * (10 ^ -3);
+                if (megawatt != Megawatt)
+                {
+                    Megawatt = megawatt;
+                }
+            }
+        }
+
+        public double Gigaawatt
+        {
+            get
+            {
+                return Megawatt * (10 ^ -3);
+            }
+            set
+            {
+                double megawatt = value * (10 ^ 3);
+                if (megawatt != Megawatt)
+                {
+                    Megawatt = megawatt;
+                }
+            }
+        }
+
+        public Power(double value)
+        {
+            this.Megawatt = value;
+        }
 
     }
 }
