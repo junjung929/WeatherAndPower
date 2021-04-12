@@ -33,7 +33,7 @@ namespace WeatherAndPower.Contracts
             Format = DataFormat.Humidity,
             ParameterType = ParameterEnum.Observation
         };
-        public static WeatherType PrecipitationObserv = new WeatherType(4, "rhr_1h")
+        public static WeatherType PrecipitationObserv = new WeatherType(4, "r_1h")
         {
             Description = "Precipitation amount",
             Format = DataFormat.Precipitation,
@@ -85,22 +85,22 @@ namespace WeatherAndPower.Contracts
         };
 
         // median enum definitions
-        public static WeatherType AveTempMedian = new WeatherType(7, "TA_PT1H_AVG")
+        public static WeatherType AveTempMedian = new WeatherType(12, "TA_PT1H_AVG")
         {
             Description = "Average temperature",
-            Format = DataFormat.Temperature,
+            //Format = DataFormat.Temperature,
             ParameterType = ParameterEnum.Median
         };
-        public static WeatherType MaxTempMedian = new WeatherType(7, "TA_PT1H_MAX")
+        public static WeatherType MaxTempMedian = new WeatherType(13, "TA_PT1H_MAX")
         {
             Description = "Max temperature",
-            Format = DataFormat.Temperature,
+            //Format = DataFormat.Temperature,
             ParameterType = ParameterEnum.Median
         };
-        public static WeatherType MinTempMedian = new WeatherType(7, "TA_PT1H_MIN")
+        public static WeatherType MinTempMedian = new WeatherType(14, "TA_PT1H_MIN")
         {
             Description = "Min temperature",
-            Format = DataFormat.Temperature,
+            //Format = DataFormat.Temperature,
             ParameterType = ParameterEnum.Median
         };
 
