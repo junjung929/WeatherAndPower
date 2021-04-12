@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Charting\CustomChart.cs" />
+    <Compile Include="Charting\CustomLineSeries.cs" />
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="Commands\AddPlotCommand.cs" />
     <Compile Include="Commands\OpenAddWindowCommand.cs" />

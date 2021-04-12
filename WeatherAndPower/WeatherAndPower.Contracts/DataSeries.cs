@@ -48,11 +48,6 @@ namespace WeatherAndPower.Contracts
 			Color[2] = g;
 		}
 
-		public void SetId()
-		{
-
-		}
-
 		public DataSeries(string name, DataFormat format, List<Tuple<DateTime, IData>> series)
 		{
 			Id = identificationCounter++;

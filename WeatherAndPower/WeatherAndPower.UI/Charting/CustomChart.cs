@@ -217,9 +217,7 @@ namespace WeatherAndPower.UI
 
 		public CustomChart()
 		{
-
 			Axes.Add(X);
-
 			Axes.Add(TemperatureAxis);
 			Axes.Add(PowerAxis);
 			Axes.Add(CloudinessAxis);
@@ -228,62 +226,24 @@ namespace WeatherAndPower.UI
 			ShowLegend = false;
 		}
 
-		private Style GetLineStyle(byte[] color)
-		{
-			Color col1 = Color.FromRgb(
-				(byte)Math.Min(color[0]+10,255),
-				(byte)Math.Min(color[1]+10,255),
-				(byte)Math.Min(color[2]+10,255));
-			Color col2 = Color.FromRgb(
-				(byte)Math.Max(color[0]-10,0),
-				(byte)Math.Max(color[1]-10,0),
-				(byte)Math.Max(color[2]-10,0));
-			var gradient = new LinearGradientBrush() { EndPoint = new Point(0, 0), StartPoint = new Point(0, 1) };
-			gradient.GradientStops.Add(new GradientStop(col1, 0));
-			gradient.GradientStops.Add(new GradientStop(col2, 1));
-			Setter colorSetter = new Setter()
-			{
-				Property = LineDataPoint.BackgroundProperty,
-				Value = gradient
-			};
-			Setter opacitySetter = new Setter()
-			{
-				Property = LineDataPoint.OpacityProperty,
-				Value = 0.0
-			};
-			Style style = new Style();
-			style.Setters.Add(colorSetter);
-			style.Setters.Add(opacitySetter);
-
-			return style;
-		}
-
-
 		private void Plot(DataSeries data) {
-			LineSeries series = new LineSeries();
+			var series = new CustomLineSeries();
 			series.DataContext = data;
 			series.ItemsSource = data.Series;
 			series.DependentValuePath = "Item2.Value";
 			series.IndependentValuePath = "Item1";
 			series.Title = data.Name;
 			
-			series.DataPointStyle = GetLineStyle(data.Color);
 			series.DependentRangeAxis = GetAxis(data.Format);
 			series.IndependentAxis = X;
 
 			series.MouseDown += SeriesClicked;
-			series.MouseEnter += SeriesHover;
-			series.MouseLeave += SeriesHover;
 
-			series.Background = new SolidColorBrush(Colors.Red);
+			series.LineColor = Color.FromRgb(data.Color[0], data.Color[1], data.Color[2]);
 
 			base.Series.Add(series);
-			//data.Id = series.GetHashCode();
-			
 		}
-		public event MouseEventHandler SeriesMouseEnter;
 		public event MouseButtonEventHandler SeriesClicked;
-		public event MouseEventHandler SeriesHover;
 
 		private void Clear()
 		{
@@ -293,7 +253,7 @@ namespace WeatherAndPower.UI
 		private void Remove(int id)
 		{
 			try {
-				var item = base.Series.First(i => i.GetHashCode() == id);
+				var item = base.Series.First(i => ((i as LineSeries).DataContext as DataSeries).Id == id);
 				base.Series.Remove(item);
 			} catch (InvalidOperationException) { }
 		}

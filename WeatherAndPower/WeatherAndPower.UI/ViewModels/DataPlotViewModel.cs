@@ -57,21 +57,11 @@ namespace WeatherAndPower.UI
 			_Chart = (CustomChart)view.FindName("theChart");
 			_Chart.XInterval = new TimeSpan(0, 1, 0, 0);
 			_Chart.SeriesClicked += SeriesClicked;
-			_Chart.SeriesHover += SeriesHover;
-		}
-
-		private void SeriesHover(object sender, MouseEventArgs e)
-		{
-			if (e.RoutedEvent.Name == "MouseEnter") {
-				Console.WriteLine("Hovering on " + ((DataPointSeries)sender).Title);
-			} else if (e.RoutedEvent.Name == "MouseLeave") {
-
-			}
 		}
 
 		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
-			var id = ((sender as LineSeries).DataContext as DataSeries).Id;
+			var id = ((sender as CustomLineSeries).DataContext as DataSeries).Id;
 			Model.SaveChartJson("test.json", id);
 		}
 	}
