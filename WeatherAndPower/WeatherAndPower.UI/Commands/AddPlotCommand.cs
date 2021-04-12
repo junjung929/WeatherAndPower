@@ -42,7 +42,7 @@ namespace WeatherAndPower.UI.Commands
         private void AddPowerGraph(System.Windows.Window window)
         {
             var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-
+            
             if (powerViewModel.SPowerType == null)
             {
                 System.Windows.MessageBox.Show("Please choose the category");
@@ -68,15 +68,24 @@ namespace WeatherAndPower.UI.Commands
             var weatherViewModel = (WeatherInputViewModel)_viewModel.SelectedViewModel;
             string parameters = String.Join(",", weatherViewModel.SelectedParameters);
 
+            var parameterTypes = weatherViewModel.SelectedParameters.ToList().Select(x => x.ParameterType).Distinct();
 
-            // Checks date times and plot name are valid
-            if (!CommonInputValidator()) return;
+            if (!parameterTypes.Contains(WeatherType.ParameterEnum.Forecast)
+                && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
+            {
+                System.Windows.MessageBox.Show("Please choose at least one parameter from either Observation or Forecast");
+                return;
+            }
 
             if (weatherViewModel.CityName == null || weatherViewModel.CityName == "")
             {
                 System.Windows.MessageBox.Show("Please give a name of cities in Finland");
                 return;
             }
+
+            // Checks date times and plot name are valid
+            if (!CommonInputValidator()) return;
+           
             try
             {
                 _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
