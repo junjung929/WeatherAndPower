@@ -27,6 +27,5 @@ namespace WeatherAndPower.UI
 			new Chart(); // WPF cant find the assembly if we dont call it before InitializeComponent for some reason.
 			InitializeComponent();
 		}
-
 	}
 }

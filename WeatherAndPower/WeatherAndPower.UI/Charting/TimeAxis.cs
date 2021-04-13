@@ -4,79 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.DataVisualization;
 using System.Windows.Controls.DataVisualization.Charting;
+using System.Windows.Media;
 using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI
 {
 	public class TimeAxis : DateTimeAxis
 	{
-		public new TimeSpan? Interval
+		protected override void PrepareAxisLabel(Control label, object dataContext)
 		{
-			get {
-				if (base.Interval != null) {
-					return new TimeSpan((long)base.Interval);
+			var lb = label as DateTimeAxisLabel;
+			var time = dataContext as DateTime?;
+			base.PrepareAxisLabel(lb, dataContext);
+			if (lb.IntervalType == DateTimeIntervalType.Hours) {
+				if (time?.TimeOfDay.Ticks == 0L) {
+					lb.HoursIntervalStringFormat = "{0:t}\n{0:dd-MMM}";
 				} else {
-					return null;
+					lb.HoursIntervalStringFormat = "{0:t}";
 				}
 			}
-			set { base.Interval = value?.Ticks; }
+			lb.Margin = new Thickness(3,0,3,0);
+			if (VisualTreeHelper.GetChildrenCount(lb) > 0) {
+				var text = VisualTreeHelper.GetChild(lb, 0) as TextBlock;
+				text.TextAlignment = TextAlignment.Center;
+			}
 		}
-		//public new DateTime? Minimum
-		//{
-		//	get {
-		//		if (base.Minimum != null) {
-		//			return new DateTime((long)base.Minimum);
-		//		}
-		//		else {
-		//			return null;
-		//		}
-		//	}
-		//	set { base.Minimum = value?.Ticks; }
-		//}
-
-		//public new DateTime? Maximum
-		//{
-		//	get {
-		//		if (base.Maximum != null) {
-		//			return new DateTime((long)base.Maximum);
-		//		}
-		//		else {
-		//			return null;
-		//		}
-		//	}
-		//	set { base.Maximum = value?.Ticks; }
-		//}
-		//public string LabelType
-		//{
-		//	get { 
-		//		if (Interval < new TimeSpan(1, 0, 0)) {
-		//			return "t";
-		//		}
-		//		if (Interval < new TimeSpan(1, 0, 0, 0)) {
-		//			return "dd MMM HH:mm";
-		//		}
-		//		if (Interval < new TimeSpan(180, 0, 0 , 0)) {
-		//			return "m";
-		//		}
-		//		return "d";
-		//	}
-		//}
 
 		public TimeAxis()
 		{
 			ShowGridLines = true;
 			Orientation = AxisOrientation.X;
-			//AxisLabelStyle = (Style)Application.Current.Resources["TimeAxisStyle"];
 		}
-
-		//protected override void OnActualRangeChanged(Range<IComparable> range)
-		//{
-		//	base.OnActualRangeChanged(range);
-		//	var span = new TimeSpan((ActualMaximum.Value.Ticks - ActualMinimum.Value.Ticks) / Globals.MaxTimeAxisLabels);
-		//	var interval = Globals.TimeIntervalOptions.FirstOrDefault(o => o?.Ticks > span.Ticks);
-		//	Interval = interval;
-		//}
 	}
 }

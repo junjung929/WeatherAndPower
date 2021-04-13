@@ -37,7 +37,7 @@ namespace WeatherAndPower.Contracts
 				Math.Abs((int)Color[2] - average) < 40) ||
 				(luminance > 205 || luminance < 50)) {
 				//Check if RGB values are all very similar, then color is close to grayscale.
-				//Also calculate luminance to see if the color is very bright. 
+				//Also calculate luminance to see if the color is very bright or dark.
 				RandomizeColor(); // if either of these is the case, re-randomize a different color
 			}
 		}

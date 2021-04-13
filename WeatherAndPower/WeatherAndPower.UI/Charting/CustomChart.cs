@@ -76,6 +76,9 @@ namespace WeatherAndPower.UI
 
 		public bool ShowLegend
 		{
+			get {
+				return (LegendStyle != null);
+			}
 			set {
 				if (!value) {
 					Style style = new Style(typeof(Legend));
@@ -214,6 +217,9 @@ namespace WeatherAndPower.UI
 		}
 
 		#endregion
+
+
+
 
 		public CustomChart()
 		{
