@@ -31,8 +31,92 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0"  Grid.Column="0">
+        <Border Grid.Row="0" Grid.Column="0">
+            <Label Content="Power Source :" />
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding WeatherParameters}"
+                 SelectedItem="{Binding SelectedParameter}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0"
+                >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton 
+                            Command="{Binding DataContext.UpdateWeatherParameterCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding}"   
+                                     IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                     
+                                  />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding WeatherTypes}"
+                 SelectedItem="{Binding SelectedWeatherType}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox 
+                            Command="{Binding DataContext.UpdateWeatherTypeCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding Description}"   
+                                    
+                                />
+                        <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"-->
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Border Grid.Row="2" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding Medians}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox 
+                            Command="{Binding DataContext.UpdateMedianCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding Description}"   
+                                    
+                                />
+                        <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"-->
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <!--<Border Grid.Row="0"  Grid.Column="0">
             <Label Content="Parameters :" VerticalAlignment="Top" x:Name="DataTypePanel" />
         </Border>
         <Border Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="2">
@@ -89,13 +173,16 @@
                 <TextBlock Foreground="Red">Choose one or more parameters of either Observation or Forecast</TextBlock>
                 <TextBlock Foreground="Red">Median parameters are obtional</TextBlock>
             </StackPanel>
+        </Border>-->
+
+        <Border  Grid.Row="3" Grid.Column="0">
+            <Label   Content="City :" />
+        </Border>
+        <Border  Grid.Row="3" Grid.Column="1">
+            <TextBox  x:Name="CityName" Text="{Binding CityName}"  Padding="5" />
         </Border>
 
-
-        <Label Grid.Row="1" Grid.Column="0" Content="City :" />
-        <TextBox Grid.Row="1" Grid.Column="1" x:Name="CityName" Text="{Binding CityName}"  Padding="5" />
-
-        <Border  Grid.Row="2" Grid.ColumnSpan="3">
+        <Border  Grid.Row="4" Grid.ColumnSpan="3">
             <views:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
         </Border>
     </Grid>

@@ -29,7 +29,7 @@ namespace WeatherAndPower.UI.Views.AddWindowViews
         private void ParameterList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // disable displaying selected item
-            ParameterList.SelectedIndex = -1;
+            //ParameterList.SelectedIndex = -1;
         }
     }
 }
