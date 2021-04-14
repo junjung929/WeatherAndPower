@@ -21,6 +21,28 @@ namespace WeatherAndPower.Contracts
         Precipitation = 0x32
     }
 
+    public struct Interval
+    {
+        public int Value { get; set; }
+
+        public bool IsEnabled { get; set; }
+        public override string ToString()
+        {
+            var days = Value / (60 * 24);
+            var hours = Value % (60 * 24) / 60;
+            var mins = Value % (60 * 24) % 60;
+
+            return (days > 0 ? days + " days" : "")
+                + (hours > 0 ? hours + " hours" : "")
+                + (mins > 0 ? mins + " mins" : "");
+        }
+        public Interval(int Value)
+        {
+            this.Value = Value;
+            IsEnabled = true;
+        }
+    }
+
     public enum WindowTypes
 	{
         Pie
