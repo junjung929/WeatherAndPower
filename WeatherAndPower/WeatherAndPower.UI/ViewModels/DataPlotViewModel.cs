@@ -55,7 +55,6 @@ namespace WeatherAndPower.UI
 		{
 			Model = model;
 			_Chart = (CustomChart)view.FindName("theChart");
-			_Chart.XInterval = new TimeSpan(0, 1, 0, 0);
 			_Chart.SeriesClicked += SeriesClicked;
 		}
 

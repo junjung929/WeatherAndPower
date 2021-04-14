@@ -24,14 +24,6 @@ namespace WeatherAndPower.Contracts
     public class Globals
     {
         public static Random rand = new Random();
-        public static Dictionary<DataFormat, string> AxisNames
-            = new Dictionary<DataFormat, string>()
-            {
-                { DataFormat.Temperature, "TemperatureAxis" },
-                { DataFormat.Power, "PowerAxis" },
-                { DataFormat.Cloudiness, "CloudinessAxis" },
-                { DataFormat.Wind, "WindAxis" }
-            };
 
         // Maximum data points to draw on graph per line
         public static int MaximumDataPoints = 200;

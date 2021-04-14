@@ -31,7 +31,7 @@ namespace WeatherAndPower
 
 		private void AssembleMainWindow()
 		{
-			MainWindow = new UI.MainWindow();
+			MainWindow = new MainWindow();
 
 			//Initialize all the various modules here
 

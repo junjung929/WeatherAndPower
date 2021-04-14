@@ -67,7 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Charting\CustomChart.cs" />
+    <Compile Include="Charting\CustomChart.xaml.cs">
+      <DependentUpon>CustomChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Charting\CustomLineSeries.cs" />
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="Commands\AddPlotCommand.cs" />
@@ -107,6 +109,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Charting\CustomChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

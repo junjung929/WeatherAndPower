@@ -1,43 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows;
-using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Controls.DataVisualization.Charting;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using DataFormat = WeatherAndPower.Contracts.DataFormat;
+using System.Windows.Shapes;
 using WeatherAndPower.Contracts;
 using System.Collections.Specialized;
-using System.Windows.Media;
-using System.ComponentModel;
-using System.Windows.Data;
-using System.Windows.Controls;
-using System.Windows.Markup;
 using System.IO;
-using DataFormat = WeatherAndPower.Contracts.DataFormat;
-using System.Windows.Input;
 using System.Windows.Controls.DataVisualization;
-using System.Windows.Media.Imaging;
+using System.ComponentModel;
+using System.Windows.Controls.DataVisualization.Charting.Primitives;
 
 namespace WeatherAndPower.UI
 {
-	public class CustomChart : Chart, ICustomChart
+	/// <summary>
+	/// Interaction logic for CustomChart.xaml
+	/// </summary>
+	[TemplatePart(Name = "VerticalCursor", Type = typeof(Grid))]
+	[TemplatePart(Name = "CursorCanvas", Type = typeof(Grid))]
+	public partial class CustomChart : Chart, ICustomChart, INotifyPropertyChanged
 	{
 		private DataFormat _Formats = 0;
 
-		public new IEnumerable<DataSeries> Series
+		public IEnumerable<DataSeries> BindableSeries
 		{
-			get { return (IEnumerable<DataSeries>)GetValue(SeriesProperty); }
+			get { return (IEnumerable<DataSeries>)GetValue(BindableSeriesProperty); }
 			set {
 				if (value is ObservableCollection<DataSeries>) {
 					((ObservableCollection<DataSeries>)value).CollectionChanged += SeriesChanged;
 				}
-				SetValue(SeriesProperty, value);
+				SetValue(BindableSeriesProperty, value);
 			}
 		}
-		public static readonly DependencyProperty SeriesProperty =
+		public static readonly DependencyProperty BindableSeriesProperty =
 			DependencyProperty.Register(
-				"Series",
+				"BindableSeries",
 				typeof(IEnumerable<DataSeries>),
 				typeof(CustomChart),
 				new FrameworkPropertyMetadata(null,
@@ -52,136 +60,56 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+		public event MouseButtonEventHandler SeriesClicked;
+		public event PropertyChangedEventHandler PropertyChanged;
+		public void NotifyPropertyChanged(string propName)
+		{
+			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+		}
+
+		private Grid VerticalCursor;
+		private Grid CursorCanvas;
+
+		public string CursorLabel { get; set; }
+
+		public bool ShowCursor { get; set; } = true;
+
 		#region Axis stuff
 		private LinearAxis GetAxis(DataFormat format)
 		{
-			return (LinearAxis)this.Axes.First(a => ((FrameworkElement)a).Name == Globals.AxisNames[format]);
+			return (LinearAxis)this.Axes.First(a => {
+				var tag = (a as FrameworkElement).Tag as DataFormat?;
+				return tag == format;
+				});
 		}
 
 		private void RefreshAxisVisibilities()
 		{
-			TemperatureAxis.Visibility = ShowTemperatureAxis ? Visibility.Visible : Visibility.Collapsed;
-			PowerAxis.Visibility = ShowPowerAxis ? Visibility.Visible : Visibility.Collapsed;
-			WindAxis.Visibility = ShowWindAxis ? Visibility.Visible : Visibility.Collapsed;
-			CloudinessAxis.Visibility = ShowCloudinessAxis ? Visibility.Visible : Visibility.Collapsed;
+			NotifyPropertyChanged("ShowTemperatureAxis");
+			NotifyPropertyChanged("ShowPowerAxis");
+			NotifyPropertyChanged("ShowCloudinessAxis");
+			NotifyPropertyChanged("ShowWindAxis");
 		}
-
-		#region X Axis
-
-		private TimeAxis X = new TimeAxis()
-		{
-			Name = "TimeAxis",
-		};
-
-
-		public bool ShowLegend
-		{
-			get {
-				return (LegendStyle != null);
-			}
-			set {
-				if (!value) {
-					Style style = new Style(typeof(Legend));
-					style.Setters.Add(new Setter(VisibilityProperty, Visibility.Collapsed));
-					style.Setters.Add(new Setter(WidthProperty, 0.0));
-					style.Setters.Add(new Setter(HeightProperty, 0.0));
-					LegendStyle = style;
-				} else {
-					LegendStyle = null;
-				}
-			}
-		}
-
-
-		private TimeSpan? _XInterval = null;
-
-		public TimeSpan? XInterval
-		{
-			get {
-				return _XInterval;
-			}
-			set {
-				if (_XInterval != value) {
-					_XInterval = value;
-					//NotifyPropertyChanged("XInterval");
-				}
-			}
-		}
-
-
-		#endregion
-
-		#region Temperature
-
-		//public IAxis TemperatureAxis
-		//{
-		//	get { return _Chart.Axes.First(e => ((LinearAxis)e).Name == "TemperatureAxis"); }
-		//}
-		public LinearAxis TemperatureAxis = new LinearAxis()
-		{
-			Name = Globals.AxisNames[DataFormat.Temperature],
-			Orientation = AxisOrientation.Y,
-			Visibility = Visibility.Collapsed,
-			Title = "Temperature (C)"
-		};
 
 		public bool ShowTemperatureAxis
 		{
 			get { return (_Formats & DataFormat.Temperature) != 0; }
 		}
 
-
-		#endregion
-		#region Power
-
-		public LinearAxis PowerAxis = new LinearAxis()
-		{
-			Name = Globals.AxisNames[DataFormat.Power],
-			Orientation = AxisOrientation.Y,
-			Visibility = Visibility.Collapsed,
-			Title = "Power (W)",
-		};
-
-		private bool ShowPowerAxis
+		public bool ShowPowerAxis
 		{
 			get { return (_Formats & DataFormat.Power) != 0; }
 		}
 
-		#endregion
-
-		#region Cloudiness
-
-		public LinearAxis CloudinessAxis = new LinearAxis()
-		{
-			Name = Globals.AxisNames[DataFormat.Cloudiness],
-			Orientation = AxisOrientation.Y,
-			Visibility = Visibility.Collapsed,
-			Title = "Cloudiness (1-8)"
-		};
-
-		private bool ShowCloudinessAxis
+		public bool ShowCloudinessAxis
 		{
 			get { return (_Formats & DataFormat.Cloudiness) != 0; }
 		}
-
-		#endregion
-
-		#region Wind
-
-		public LinearAxis WindAxis = new LinearAxis()
-		{
-			Name = Globals.AxisNames[DataFormat.Wind],
-			Orientation = AxisOrientation.Y,
-			Visibility = Visibility.Collapsed,
-			Title = "Wind (m/s)"
-		};
 
 		public bool ShowWindAxis
 		{
 			get { return (_Formats & DataFormat.Wind) != 0; }
 		}
-
-		#endregion
 
 		#endregion
 
@@ -219,17 +147,37 @@ namespace WeatherAndPower.UI
 		#endregion
 
 
+		private Shape _CreateTestShape()
+		{
+			return new Ellipse()
+			{
+				Height = 200,
+				Width = 200,
+				StrokeThickness = 4,
+				Stroke = new SolidColorBrush() { Color = Colors.Blue },
+				Fill = new SolidColorBrush() { Color = Colors.Red }
+			};
+		}
+
+		public List<Tuple<int, int>> Line { get; set; } = new List<Tuple<int, int>>();
+
+
 
 
 		public CustomChart()
 		{
-			Axes.Add(X);
-			Axes.Add(TemperatureAxis);
-			Axes.Add(PowerAxis);
-			Axes.Add(CloudinessAxis);
-			Axes.Add(WindAxis);
+			//Axes.Add(X);
+			//Axes.Add(TemperatureAxis);
+			//Axes.Add(PowerAxis);
+			//Axes.Add(CloudinessAxis);
+			//Axes.Add(WindAxis);
 
-			ShowLegend = false;
+			Line.Add(new Tuple<int, int>(1, 2));
+			Line.Add(new Tuple<int, int>(2, 3));
+
+			//ShowLegend = false;
+
+			InitializeComponent();
 		}
 
 		private void Plot(DataSeries data) {
@@ -248,20 +196,19 @@ namespace WeatherAndPower.UI
 
 			series.LineColor = Color.FromRgb(data.Color[0], data.Color[1], data.Color[2]);
 
-			base.Series.Add(series);
+			Series.Add(series);
 		}
-		public event MouseButtonEventHandler SeriesClicked;
 
 		private void Clear()
 		{
-			base.Series.Clear();
+			Series.Clear();
 		}
 
 		private void Remove(int id)
 		{
 			try {
 				var item = base.Series.First(i => ((i as LineSeries).DataContext as DataSeries).Id == id);
-				base.Series.Remove(item);
+				Series.Remove(item);
 			} catch (InvalidOperationException) { }
 		}
 
@@ -297,6 +244,29 @@ namespace WeatherAndPower.UI
 				}
 			}
 			RefreshAxisVisibilities();
+		}
+
+		private void MouseOverHandler(object sender, MouseEventArgs e)
+		{
+			double pos = e.GetPosition(CursorCanvas).X;
+			TimeSpan? span = X.ActualMaximum - X.ActualMinimum;
+
+			double ratio = pos / CursorCanvas.ActualWidth;
+			VerticalCursor.Margin =
+				new Thickness(pos - (VerticalCursor.ActualWidth / 2),0,0,0);
+
+			
+			if (span.HasValue) {
+				CursorLabel = new DateTime((long)(span.Value.Ticks * ratio) + X.ActualMinimum.Value.Ticks).ToString("HH:mm\ndd-MMM");
+				NotifyPropertyChanged("CursorLabel");
+			}
+		}
+
+		public override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
+			VerticalCursor = GetTemplateChild("VerticalCursor") as Grid;
+			CursorCanvas = GetTemplateChild("CursorCanvas") as Grid;
 		}
 	}
 }

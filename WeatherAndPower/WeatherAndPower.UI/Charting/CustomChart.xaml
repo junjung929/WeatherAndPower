@@ -1,0 +1,109 @@
+﻿<charting:Chart
+			 x:Class="WeatherAndPower.UI.CustomChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WeatherAndPower.UI"
+			 xmlns:contracts="clr-namespace:WeatherAndPower.Contracts;assembly=WeatherAndPower.Contracts"
+             xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+			 xmlns:Primitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="228.839" d:DesignWidth="800">
+	<charting:Chart.Resources>
+		<ResourceDictionary Source="/WeatherAndPower.UI;component/Resources.xaml"/>
+	</charting:Chart.Resources>
+	<charting:Chart.Template>
+		<ControlTemplate TargetType="{x:Type charting:Chart}">
+			<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<visualizationToolkit:Title Content="{TemplateBinding Title}" Style="{TemplateBinding TitleStyle}"/>
+					<Grid Margin="0,15" Grid.Row="1">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<Primitives:EdgePanel x:Name="ChartArea" Style="{TemplateBinding ChartAreaStyle}">
+							<Grid Style="{TemplateBinding PlotAreaStyle}" Panel.ZIndex="-1"/>
+							<Border BorderBrush="#FF919191" BorderThickness="1" Panel.ZIndex="10"/>
+							<Grid Name="CursorCanvas"
+								  Panel.ZIndex="11"
+								  MouseMove="MouseOverHandler"
+								  Margin="0,-40,0,0"
+								  Background="Transparent"
+								  Visibility="{Binding Path=ShowCursor,
+													   RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+													   Converter={StaticResource BoolToVisibilityConverter}}">
+								<Grid Name="VerticalCursor"
+									  VerticalAlignment="Stretch"
+									  HorizontalAlignment="Left"
+									  MinWidth="80"
+									  Visibility="{Binding ElementName=CursorCanvas, 
+														   Path=IsMouseOver,
+														   Converter={StaticResource BoolToVisibilityConverter}}">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="40"/>
+										<RowDefinition Height="1*"/>
+									</Grid.RowDefinitions>
+									<TextBlock Name="CursorHeader"
+											   Text="{Binding CursorLabel,
+															  RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}}}"
+											   MinWidth="100"
+											   Grid.Row="0"
+											   TextAlignment="Center"
+											   HorizontalAlignment="Center"/>
+									<Rectangle Grid.Row="1"
+											   VerticalAlignment="Stretch"
+											   HorizontalAlignment="Center"
+											   Fill="DimGray"
+											   Width="2"
+											   Panel.ZIndex="9"
+											   IsHitTestVisible="False"/>
+								</Grid>
+							</Grid>
+						</Primitives:EdgePanel>
+					</Grid>
+				</Grid>
+			</Border>
+		</ControlTemplate>
+	</charting:Chart.Template>
+	<charting:Chart.Axes>
+		<local:TimeAxis x:Name="X"/>
+		<charting:LinearAxis Name="TemperatureAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowTemperatureAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Temperature}"
+							 Title="Temperature (C)"/>
+
+		<charting:LinearAxis Name="PowerAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowPowerAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Power}"
+							 Title="Power (MW)"/>
+
+		<charting:LinearAxis Name="CloudinessAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowCloudinessAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Cloudiness}"
+							 Title="Cloudiness (1-8)"/>
+
+		<charting:LinearAxis Name="WindAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowWindAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Wind}"
+							 Title="Wind (m/s)"/>
+	</charting:Chart.Axes>
+</charting:Chart>

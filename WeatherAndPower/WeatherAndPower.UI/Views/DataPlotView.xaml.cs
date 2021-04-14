@@ -24,7 +24,7 @@ namespace WeatherAndPower.UI
 	{
 		public DataPlotView()
 		{
-			new Chart(); // WPF cant find the assembly if we dont call it before InitializeComponent for some reason.
+			//new CustomChart(); // WPF cant find the assembly if we dont call it before InitializeComponent for some reason.
 			InitializeComponent();
 		}
 	}

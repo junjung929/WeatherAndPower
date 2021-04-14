@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 	<Grid>
-		<local:CustomChart x:Name="theChart" Series="{Binding Data}">
+		<local:CustomChart x:Name="theChart" BindableSeries="{Binding Data}">
 		</local:CustomChart>
 	</Grid>
 </UserControl>
