@@ -24,6 +24,12 @@ namespace WeatherAndPower.Contracts
             Solar = 0x16
         }
 
+        public enum ServiceEnum
+        {
+            Consumption = 0x01,
+            Production = 0x02,
+        }
+
         public static PowerType Econsum = new PowerType(124, "Electricity consumption in Finland")
         {
             Description = "Electricity consumption in Finland is based on Fingrid's production measurements.\n" +
@@ -32,7 +38,8 @@ namespace WeatherAndPower.Contracts
             "Updated hourly.",
             ParameterType = ParameterEnum.Observation,
             Interval = 60,
-            Source = SourceEnum.All
+            Source = SourceEnum.All,
+            Service = ServiceEnum.Consumption
         };
         public static PowerType EConsumForecast24H = new PowerType(165, "Electricity consumption forecast - max. next 24 hours")
         {
@@ -40,7 +47,8 @@ namespace WeatherAndPower.Contracts
             "Forecast is published previous day at 12:00 EET.",
             Source = SourceEnum.All,
             ParameterType = ParameterEnum.Forecast,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Consumption
         };
         public static PowerType EProdPrediction24H = new PowerType(242, "A tentative production prediction - max. next 24 hours")
         {
@@ -50,7 +58,8 @@ namespace WeatherAndPower.Contracts
             "to match the updated production plans that balance responsible parties send to Fingrid hourly.",
             Source = SourceEnum.All,
             ParameterType = ParameterEnum.Forecast,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Production
         };
         public static PowerType EProd = new PowerType(74, "Electricity production in Finland")
         {
@@ -59,7 +68,8 @@ namespace WeatherAndPower.Contracts
             "Updated hourly.",
             Source = SourceEnum.All,
             ParameterType = ParameterEnum.Observation,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Production
         };
         public static PowerType EProdRT = new PowerType(192, "Electricity production in Finland - real time data")
         {
@@ -67,7 +77,8 @@ namespace WeatherAndPower.Contracts
             "in Fingrid's operation control system The data is updated every 3 minutes.",
             Source = SourceEnum.All,
             ParameterType = ParameterEnum.RealTime,
-            Interval = 3
+            Interval = 3,
+            Service = ServiceEnum.Production
         };
         public static PowerType WindPowerGeneration = new PowerType(75, "Wind power generation")
         {
@@ -77,14 +88,16 @@ namespace WeatherAndPower.Contracts
             "Non-measured wind parks are about a tenth of the production capacity.",
             Source = SourceEnum.Wind,
             ParameterType = ParameterEnum.Observation,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Production
         };
         public static PowerType WindPowerGenerationForecast = new PowerType(245, "Wind power generation forecast - max. next 36 hours")
         {
             Description = "Finnish wind power generation forecast for the next 36 hours. Updated hourly.",
             Source = SourceEnum.Wind,
             ParameterType = ParameterEnum.Forecast,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Production
         };
         public static PowerType WindPowerProdRT = new PowerType(181, "Wind power production - real time data")
         {
@@ -93,7 +106,8 @@ namespace WeatherAndPower.Contracts
             "The data is updated every 3 minutes.",
             Source = SourceEnum.Wind,
             ParameterType = ParameterEnum.RealTime,
-            Interval = 3
+            Interval = 3,
+            Service = ServiceEnum.Production
         };
         public static PowerType NucPowerPordRT = new PowerType(188, "Nuclear power production - real time data")
         {
@@ -101,7 +115,8 @@ namespace WeatherAndPower.Contracts
             "The data is updated every 3 minutes.",
             Source = SourceEnum.Nuclear,
             ParameterType = ParameterEnum.RealTime,
-            Interval = 3
+            Interval = 3,
+            Service = ServiceEnum.Production
         };
         public static PowerType HydroPowerProdRT = new PowerType(191, "Hydro power production - real time data")
         {
@@ -109,14 +124,16 @@ namespace WeatherAndPower.Contracts
             "The data is updated every 3 minutes.",
             Source = SourceEnum.Hydro,
             ParameterType = ParameterEnum.RealTime,
-            Interval = 3
+            Interval = 3,
+            Service = ServiceEnum.Production
         };
-        public static PowerType SolarPowerGenerationForecast= new PowerType(248, "Solar power generation forecast - max. next 36 hours")
+        public static PowerType SolarPowerGenerationForecast = new PowerType(248, "Solar power generation forecast - max. next 36 hours")
         {
             Description = "Hourly updated solar power generation forecast for the next 36 hours.",
             Source = SourceEnum.Solar,
             ParameterType = ParameterEnum.Forecast,
-            Interval = 60
+            Interval = 60,
+            Service = ServiceEnum.Production
         };
 
         public string Unit { get; private set; }
@@ -127,6 +144,8 @@ namespace WeatherAndPower.Contracts
         public ParameterEnum ParameterType { get; private set; }
 
         public SourceEnum Source { get; private set; }
+
+        public ServiceEnum Service { get; private set; }
 
         public string Description { get; private set; }
 
