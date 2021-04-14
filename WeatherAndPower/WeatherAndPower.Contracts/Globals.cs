@@ -33,7 +33,9 @@ namespace WeatherAndPower.Contracts
                 { DataFormat.Wind, "WindAxis" }
             };
 
-        public static int MaxTimeAxisLabels = 10; // Maximum amount of labels on X-axis (time)
+        // Maximum data points to draw on graph per line
+        public static int MaximumDataPoints = 200;
+
         public static List<TimeSpan?> TimeIntervalOptions = new List<TimeSpan?>()
             {
                 new TimeSpan(0, 5, 0),

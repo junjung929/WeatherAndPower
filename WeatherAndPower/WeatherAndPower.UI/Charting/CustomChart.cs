@@ -122,7 +122,7 @@ namespace WeatherAndPower.UI
 			Name = Globals.AxisNames[DataFormat.Temperature],
 			Orientation = AxisOrientation.Y,
 			Visibility = Visibility.Collapsed,
-			Title = "Temperature"
+			Title = "Temperature (C)"
 		};
 
 		public bool ShowTemperatureAxis
@@ -139,7 +139,7 @@ namespace WeatherAndPower.UI
 			Name = Globals.AxisNames[DataFormat.Power],
 			Orientation = AxisOrientation.Y,
 			Visibility = Visibility.Collapsed,
-			Title = "Power"
+			Title = "Power (W)",
 		};
 
 		private bool ShowPowerAxis
@@ -156,7 +156,7 @@ namespace WeatherAndPower.UI
 			Name = Globals.AxisNames[DataFormat.Cloudiness],
 			Orientation = AxisOrientation.Y,
 			Visibility = Visibility.Collapsed,
-			Title = "Cloudiness"
+			Title = "Cloudiness (1-8)"
 		};
 
 		private bool ShowCloudinessAxis
@@ -173,7 +173,7 @@ namespace WeatherAndPower.UI
 			Name = Globals.AxisNames[DataFormat.Wind],
 			Orientation = AxisOrientation.Y,
 			Visibility = Visibility.Collapsed,
-			Title = "Wind"
+			Title = "Wind (m/s)"
 		};
 
 		public bool ShowWindAxis
@@ -235,7 +235,8 @@ namespace WeatherAndPower.UI
 		private void Plot(DataSeries data) {
 			var series = new CustomLineSeries();
 			series.DataContext = data;
-			series.ItemsSource = data.Series;
+			var nth = (data.Series.Count / Globals.MaximumDataPoints) + 1;
+			series.ItemsSource = data.Series.Where((e, i) => i % nth == 0);
 			series.DependentValuePath = "Item2.Value";
 			series.IndependentValuePath = "Item1";
 			series.Title = data.Name;

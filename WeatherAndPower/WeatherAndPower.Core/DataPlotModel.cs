@@ -38,11 +38,12 @@ namespace WeatherAndPower.Core
 
 		public void AddRandomPlot(string name)
 		{
+			var count = 500;
 			var x = _CreateTimeSeries(
 				DateTime.Now.Subtract(new TimeSpan(0,24,0,0)),
 				DateTime.Now,
-				48);
-			var y = _GenerateRandomPlot(0, 400, 48);
+				count);
+			var y = _GenerateRandomPlot(0, 400, count);
 
 			var series = x.Zip(y, (_x, _y) => new Tuple<DateTime, IData>(_x, _y)).ToList();
 			Data.Add(new DataSeries(name, DataFormat.Temperature, series));
