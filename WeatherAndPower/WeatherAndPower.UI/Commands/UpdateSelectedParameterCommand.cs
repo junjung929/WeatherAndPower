@@ -31,30 +31,30 @@ namespace WeatherAndPower.UI.Commands
             var weatherType = (WeatherType)checkBox.DataContext;
 
 
-            List<WeatherType> selectedParameterTypes = viewModel.SelectedParameters;
+            //List<WeatherType> selectedParameterTypes = viewModel.SelectedParameters;
 
-            if (selectedParameterTypes.Contains(weatherType))
-            {
-                selectedParameterTypes.Remove(weatherType);
-            }
-            else
-            {
-                var parameterTypes = selectedParameterTypes.ToList().Select(x => x.ParameterType).Distinct();
+            //if (selectedParameterTypes.Contains(weatherType))
+            //{
+            //    selectedParameterTypes.Remove(weatherType);
+            //}
+            //else
+            //{
+            //    var parameterTypes = selectedParameterTypes.ToList().Select(x => x.ParameterType).Distinct();
 
-                // Make sure only either forecast or observation can be fetched at a time
-                if ((weatherType.ParameterType == WeatherType.ParameterEnum.Forecast
-                    && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
-                    || (weatherType.ParameterType == WeatherType.ParameterEnum.Observation
-                    && !parameterTypes.Contains(WeatherType.ParameterEnum.Forecast))
-                    || (weatherType.ParameterType == WeatherType.ParameterEnum.Median))
-                {
-                    selectedParameterTypes.Add(weatherType);
-                    viewModel.SelectedParameterType = weatherType.ParameterType;
-                    return;
-                }
-                System.Windows.MessageBox.Show("Please choose parameters of either observation or forecast");
-                checkBox.IsChecked = false;
-            }
+            //    // Make sure only either forecast or observation can be fetched at a time
+            //    if ((weatherType.ParameterType == WeatherType.ParameterEnum.Forecast
+            //        && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
+            //        || (weatherType.ParameterType == WeatherType.ParameterEnum.Observation
+            //        && !parameterTypes.Contains(WeatherType.ParameterEnum.Forecast))
+            //        || (weatherType.ParameterType == WeatherType.ParameterEnum.Median))
+            //    {
+            //        selectedParameterTypes.Add(weatherType);
+            //        viewModel.SelectedParameterType = weatherType.ParameterType;
+            //        return;
+            //    }
+            //    System.Windows.MessageBox.Show("Please choose parameters of either observation or forecast");
+            //    checkBox.IsChecked = false;
+            //}
         }
     }
 }

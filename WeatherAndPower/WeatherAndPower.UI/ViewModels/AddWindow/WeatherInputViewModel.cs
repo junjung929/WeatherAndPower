@@ -13,7 +13,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
     public class WeatherInputViewModel : InputViewModelBase
     {
         MainViewModel ParentViewModel { get; set; }
-       
+
         public WeatherType.ParameterEnum SelectedParameterType { get; set; }
 
         private string _cityName;
@@ -23,17 +23,83 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             set { _cityName = value; NotifyPropertyChanged("CityName"); }
         }
 
-        public ObservableCollection<WeatherType> WeatherTypes { get; set; }
+        public ObservableCollection<WeatherType.ParameterEnum> WeatherParameters { get; set; } = new ObservableCollection<WeatherType.ParameterEnum>()
+        {
+            WeatherType.ParameterEnum.Observation,
+            WeatherType.ParameterEnum.Forecast
+        };
 
-        public List<WeatherType> SelectedParameters { get; set; } = new List<WeatherType>();
+        private WeatherType.ParameterEnum _selectedParameter { get; set; } = WeatherType.ParameterEnum.Observation;
+        public WeatherType.ParameterEnum SelectedParameter
+        {
+            get { return _selectedParameter; }
+            set { _selectedParameter = value; NotifyPropertyChanged("SelectedParameter"); }
+        }
 
-        public ICommand UpdateSelectedParameterCommand { get; set; }
+        private ObservableCollection<WeatherType> _weatherTypes { get; set; }
+        public ObservableCollection<WeatherType> WeatherTypes
+        {
+            get { return _weatherTypes; }
+            set { _weatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
+        }
+
+        private WeatherType _selectedWeatherType { get; set; }
+        public WeatherType SelectedWeatherType
+        {
+            get { return _selectedWeatherType; }
+            set { _selectedWeatherType = value; NotifyPropertyChanged("SelectedWeatherType"); }
+        }
+        public List<WeatherType> SelectedWeatherTypes = new List<WeatherType>();
+
+        public ObservableCollection<WeatherType> Medians { get; set; } = new ObservableCollection<WeatherType>()
+        {
+            WeatherType.AveTempMedian, WeatherType.MinTempMedian, WeatherType.MaxTempMedian
+        };
+
+        private WeatherType _selectedMedian { get; set; }
+        public WeatherType SelectedMedian
+        {
+            get { return _selectedMedian;  }
+            set { _selectedMedian = value; NotifyPropertyChanged("SelectedMedian"); }
+        }
+
+
+        public void UpdateWeatherTypes()
+        {
+            var selectableTypes = WeatherType.GetAll<WeatherType>().ToList().FindAll(weatherType =>
+            weatherType.ParameterType == SelectedParameter);
+            WeatherTypes = new ObservableCollection<WeatherType>(selectableTypes);
+        }
+        //public ICommand UpdateSelectedParameterCommand { get; set; }
+
+        public void OnUpdateSelectedWeatherParameter()
+        {
+            Console.WriteLine("WeatherParameter " + SelectedParameter);
+            UpdateWeatherTypes();
+        }
+        public void OnUpdateSelectedWeatherType()
+        {
+            Console.WriteLine("WeatherType " + SelectedWeatherType);
+        }
+
+        public void OnUpdateSelectedMedians()
+        {
+            Console.WriteLine("Medians " + SelectedMedians);
+        }
+        public ICommand UpdateWeatherParameterCommand { get; set; }
+        public ICommand UpdateWeatherTypeCommand { get; set; }
+        public ICommand UpdateMedianCommand { get; set; }
 
         public WeatherInputViewModel(MainViewModel viewModel)
         {
             ParentViewModel = viewModel;
-            WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
-            UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
+            UpdateWeatherTypes();
+            //WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
+            //UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
+
+            UpdateWeatherParameterCommand = new RelayCommand(() => OnUpdateSelectedWeatherParameter());
+            UpdateWeatherTypeCommand = new RelayCommand(() => OnUpdateSelectedWeatherType());
+            UpdateMedianCommand = new RelayCommand(() => OnUpdateSelectedMedians());
         }
     }
 }

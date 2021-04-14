@@ -67,38 +67,38 @@ namespace WeatherAndPower.UI.Commands
 
         private void AddWeatherGraph(System.Windows.Window window)
         {
-            var weatherViewModel = (WeatherInputViewModel)_viewModel.SelectedViewModel;
-            string parameters = String.Join(",", weatherViewModel.SelectedParameters);
+            //var weatherViewModel = (WeatherInputViewModel)_viewModel.SelectedViewModel;
+            //string parameters = String.Join(",", weatherViewModel.SelectedParameters);
 
-            var parameterTypes = weatherViewModel.SelectedParameters.ToList().Select(x => x.ParameterType).Distinct();
+            //var parameterTypes = weatherViewModel.SelectedParameters.ToList().Select(x => x.ParameterType).Distinct();
 
-            if (!parameterTypes.Contains(WeatherType.ParameterEnum.Forecast)
-                && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
-            {
-                System.Windows.MessageBox.Show("Please choose at least one parameter from either Observation or Forecast");
-                return;
-            }
+            //if (!parameterTypes.Contains(WeatherType.ParameterEnum.Forecast)
+            //    && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
+            //{
+            //    System.Windows.MessageBox.Show("Please choose at least one parameter from either Observation or Forecast");
+            //    return;
+            //}
 
-            if (weatherViewModel.CityName == null || weatherViewModel.CityName == "")
-            {
-                System.Windows.MessageBox.Show("Please give a name of cities in Finland");
-                return;
-            }
+            //if (weatherViewModel.CityName == null || weatherViewModel.CityName == "")
+            //{
+            //    System.Windows.MessageBox.Show("Please give a name of cities in Finland");
+            //    return;
+            //}
 
-            // Checks date times and plot name are valid
-            if (!CommonInputValidator()) return;
+            //// Checks date times and plot name are valid
+            //if (!CommonInputValidator()) return;
            
-            try
-            {
-                var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
-                var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
-                _sidebarViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, startTime, endTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
-                window.Close();
-            }
-            catch (Exception e)
-            {
-                System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again: " + e.Message);
-            }
+            //try
+            //{
+            //    var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
+            //    var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
+            //    _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, startTime, endTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
+            //    window.Close();
+            //}
+            //catch (Exception e)
+            //{
+            //    System.Windows.MessageBox.Show("Failed to add the data into graph. Please try again: " + e.Message);
+            //}
         }
         private Boolean CommonInputValidator()
         {

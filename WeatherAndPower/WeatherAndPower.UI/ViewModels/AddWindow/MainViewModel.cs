@@ -19,7 +19,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         }
 
         private InputViewModelBase _selectedViewModel;
-        private DataTypeEnum _dataType = (DataTypeEnum)0x01;
+        private DataTypeEnum _dataType = (DataTypeEnum)0x02;
 
         public DataTypeEnum DataType
         {
