@@ -101,6 +101,11 @@ namespace WeatherAndPower.Core
 			return true;
 		}
 
+		public async Task<DateTime> Pick()
+		{
+			return await Chart.Pick();
+		}
+
 		public DataPlotModel(ICustomChart chart)
 		{
 			Chart = chart;

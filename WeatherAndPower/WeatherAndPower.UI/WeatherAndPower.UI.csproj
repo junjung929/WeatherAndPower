@@ -71,6 +71,7 @@
       <DependentUpon>CustomChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="Charting\CustomLineSeries.cs" />
+    <Compile Include="Charting\PieFactory.cs" />
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="Commands\AddPlotCommand.cs" />
     <Compile Include="Commands\OpenAddWindowCommand.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="ViewModels\AddWindow\PowerInputViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\WeatherInputViewModel.cs" />
     <Compile Include="ViewModels\DataPlotViewModel.cs" />
+    <Compile Include="ViewModels\PieViewModel.cs" />
     <Compile Include="ViewModels\PlaceholderViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AddWindow.xaml.cs">
@@ -100,6 +102,9 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PieWindow.xaml.cs">
+      <DependentUpon>PieWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlaceholderView.xaml.cs">
       <DependentUpon>PlaceholderView.xaml</DependentUpon>
@@ -130,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PieWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

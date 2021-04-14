@@ -21,6 +21,11 @@ namespace WeatherAndPower.Contracts
         Precipitation = 0x32
     }
 
+    public enum WindowTypes
+	{
+        Pie
+	}
+
     public class Globals
     {
         public static Random rand = new Random();

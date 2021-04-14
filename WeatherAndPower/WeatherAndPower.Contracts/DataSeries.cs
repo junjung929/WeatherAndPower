@@ -23,6 +23,58 @@ namespace WeatherAndPower.Contracts
 
 		public List<Tuple<DateTime, IData>> Series { get; set; }
 
+		public DateTime Minimum
+		{
+			get { return Series.Min(e => e.Item1); }
+		}
+
+		public DateTime Maximum
+		{
+			get { return Series.Max(e => e.Item1); }
+		}
+
+		public DataPoint GetDataPoint(DateTime point)
+		{
+			if (point <= Maximum && point >= Minimum) {
+				//If theres already a matching value for the time in Series use that
+				Tuple<DateTime, IData> dp = Series.FirstOrDefault(e => e.Item1 == point);
+				if (dp == null) {
+					//Otherwise calculate what the in-between value would be
+					var closestHigher = Series.Aggregate((closest, next) => {
+						var c = closest.Item1.Ticks - point.Ticks;
+						var n = next.Item1.Ticks - point.Ticks;
+						if (n > 0) {
+							if (c > n || c < 0) {
+								return next;
+							}
+						}
+						return closest;
+					});
+					var closestLower = Series.Aggregate((closest, next) =>
+					{
+						var c = point.Ticks - closest.Item1.Ticks;
+						var n = point.Ticks - next.Item1.Ticks;
+						if (n > 0) {
+							if (c > n || c < 0) {
+								return next;
+							}
+						}
+						return closest;
+					});
+
+					// Find the position of our point between the two closest dates. value between 0-1
+					double pos = (double)(point - closestLower.Item1).Ticks / (closestHigher.Item1 - closestLower.Item1).Ticks;
+
+					// Calculate the would-be value at the position
+					var value = ((closestHigher.Item2.Value - closestLower.Item2.Value) * pos) + closestLower.Item2.Value;
+					IData idata = (IData)Activator.CreateInstance(Globals.GetTypeFromDataFormat(Format), value);
+					dp = new Tuple<DateTime, IData>(point, idata);
+				}
+				return new DataPoint(Name, Color, Format, dp);
+			}
+			throw new ArgumentOutOfRangeException("DateTime outside of Series range");
+		}
+
 		public void RandomizeColor()
 		{
 			Color[0] = (byte)Globals.rand.Next(0, 255);
@@ -41,6 +93,7 @@ namespace WeatherAndPower.Contracts
 				RandomizeColor(); // if either of these is the case, re-randomize a different color
 			}
 		}
+
 		public void SetColor(byte r, byte g, byte b)
 		{
 			Color[0] = r;

@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteColorJsonConverter.cs" />
+    <Compile Include="DataPoint.cs" />
     <Compile Include="DataSeries.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
@@ -79,7 +80,9 @@
     <Compile Include="IData.cs" />
     <Compile Include="IDataJsonConverter.cs" />
     <Compile Include="IDataPlotModel.cs" />
+    <Compile Include="IPieModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
+    <Compile Include="IWindowFactory.cs" />
     <Compile Include="Power.cs" />
     <Compile Include="PowerType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

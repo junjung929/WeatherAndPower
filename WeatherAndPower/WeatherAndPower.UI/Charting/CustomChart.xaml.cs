@@ -67,12 +67,6 @@ namespace WeatherAndPower.UI
 			this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 		}
 
-		private Grid VerticalCursor;
-		private Grid CursorCanvas;
-
-		public string CursorLabel { get; set; }
-
-		public bool ShowCursor { get; set; } = true;
 
 		#region Axis stuff
 		private LinearAxis GetAxis(DataFormat format)
@@ -146,6 +140,17 @@ namespace WeatherAndPower.UI
 
 		#endregion
 
+		public async Task<DateTime> Pick()
+		{
+			cursorPicked = new TaskCompletionSource<DateTime>();
+			ShowCursor = true;
+			NotifyPropertyChanged("ShowCursor");
+			await cursorPicked.Task;
+			ShowCursor = false;
+			NotifyPropertyChanged("ShowCursor");
+
+			return cursorPicked.Task.Result;
+		}
 
 		private Shape _CreateTestShape()
 		{
@@ -246,20 +251,41 @@ namespace WeatherAndPower.UI
 			RefreshAxisVisibilities();
 		}
 
+		#region Cursor Stuff
+
+		private Grid VerticalCursor;
+		private Grid CursorCanvas;
+
+		public string CursorLabel { get; set; }
+
+		public bool ShowCursor { get; set; } = false;
+
+		private DateTime GetDateAtCursorPosition(MouseEventArgs e)
+		{
+			double pos = e.GetPosition(CursorCanvas).X;
+			var span = X.ActualMaximum - X.ActualMinimum;
+			double ratio = pos / CursorCanvas.ActualWidth;
+			var date = new DateTime((long)(span.Value.Ticks * ratio) + X.ActualMinimum.Value.Ticks);
+			return date;
+		}
+
+		private TaskCompletionSource<DateTime> cursorPicked;
+		private void MouseClickHandler(object sender, MouseButtonEventArgs e)
+		{
+			if (cursorPicked != null) {
+				cursorPicked.TrySetResult(GetDateAtCursorPosition(e));
+			}
+		}
 		private void MouseOverHandler(object sender, MouseEventArgs e)
 		{
 			double pos = e.GetPosition(CursorCanvas).X;
-			TimeSpan? span = X.ActualMaximum - X.ActualMinimum;
 
-			double ratio = pos / CursorCanvas.ActualWidth;
 			VerticalCursor.Margin =
 				new Thickness(pos - (VerticalCursor.ActualWidth / 2),0,0,0);
 
 			
-			if (span.HasValue) {
-				CursorLabel = new DateTime((long)(span.Value.Ticks * ratio) + X.ActualMinimum.Value.Ticks).ToString("HH:mm\ndd-MMM");
-				NotifyPropertyChanged("CursorLabel");
-			}
+			CursorLabel = GetDateAtCursorPosition(e).ToString("HH:mm\ndd-MMM");
+			NotifyPropertyChanged("CursorLabel");
 		}
 
 		public override void OnApplyTemplate()
@@ -268,5 +294,7 @@ namespace WeatherAndPower.UI
 			VerticalCursor = GetTemplateChild("VerticalCursor") as Grid;
 			CursorCanvas = GetTemplateChild("CursorCanvas") as Grid;
 		}
+
+		#endregion Cursor Stuff
 	}
 }

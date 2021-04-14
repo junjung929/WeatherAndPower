@@ -42,7 +42,9 @@ namespace WeatherAndPower
 			var dataPlotViewModel = new DataPlotViewModel(dataPlotModel, dataPlotView);
 			dataPlotView.DataContext = dataPlotViewModel;
 
-			var placeholderModel = new PlaceholderModel(dataPlotModel);
+			var windowFactory = new PieFactory();
+
+			var placeholderModel = new PlaceholderModel(dataPlotModel, windowFactory);
 			var placeholderViewModel = new PlaceholderViewModel(placeholderModel);
 			var placeholderView = ((FrameworkElement)MainWindow.FindName("PlaceholderModule"));
 			placeholderView.DataContext = placeholderViewModel;

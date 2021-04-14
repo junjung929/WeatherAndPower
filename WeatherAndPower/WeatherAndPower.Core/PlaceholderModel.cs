@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,18 +12,10 @@ namespace WeatherAndPower.Core
     public class PlaceholderModel : AbstractModel, IPlaceholderModel
     {
 
-        private DataPlotModel _DataPlot;
-        public DataPlotModel DataPlot
-        {
-            get { return _DataPlot; }
-            private set
-            {
-                if (_DataPlot != value)
-                {
-                    _DataPlot = value;
-                }
-            }
-        }
+        public DataPlotModel DataPlot { get; set; }
+
+        public IWindowFactory WindowFactory { get; set; }
+
         private int _PlaceholderProperty = 0;
         public int PlaceholderProperty
         {
@@ -93,6 +86,20 @@ namespace WeatherAndPower.Core
         {
             return DataPlot.LoadChartJson(path);
         }
+
+        public async void ComparePowers()
+		{
+            DateTime point = await DataPlot.Pick();
+            var data = DataPlot.Data.Where(d => {
+                return (d.Format == DataFormat.Power && d.Maximum > point && d.Minimum < point);
+            }).Select(d => d.GetDataPoint(point));
+
+            var model = new PieModel();
+            foreach (var d in data) {
+                model.Data.Add(d);
+			}
+            WindowFactory.CreateWindow(model);
+		}
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {
@@ -194,9 +201,10 @@ namespace WeatherAndPower.Core
             }
         }
 
-        public PlaceholderModel(DataPlotModel dataPlot)
+        public PlaceholderModel(DataPlotModel dataPlot, IWindowFactory windowFactory)
         {
             DataPlot = dataPlot;
+            WindowFactory = windowFactory;
         }
     }
 }

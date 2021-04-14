@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace WeatherAndPower.Contracts
 {
-	public interface ICustomChart
+	public interface IWindowFactory
 	{
-		Task<DateTime> Pick();
-		bool Save(string fileName);
+		void CreateWindow(IPieModel model);
 	}
 }
