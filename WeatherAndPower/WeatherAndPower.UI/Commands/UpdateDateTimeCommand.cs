@@ -10,9 +10,9 @@ namespace WeatherAndPower.UI.Commands
 {
     public class UpdateDateTimeCommand : ICommand
     {
-        private MainViewModel viewModel;
+        private DateTimeViewModel viewModel;
 
-        public UpdateDateTimeCommand(MainViewModel viewModel)
+        public UpdateDateTimeCommand(DateTimeViewModel viewModel)
         {
             this.viewModel = viewModel;
         }
@@ -107,8 +107,33 @@ namespace WeatherAndPower.UI.Commands
                 startTime = new DateTime(today.Year, 1, 1);
                 endTime = startTime.AddYears(1).AddTicks(-1);
             }
-            if (viewModel.IsStartTimePickerEnabled) viewModel.StartTime = startTime;
-            if (viewModel.IsEndTimePickerEnabled) viewModel.EndTime = endTime;
+
+            if (viewModel.IsStartTimePickerEnabled)
+            {
+                var isValid = viewModel.CheckDateTimeValid(startTime);
+                if (isValid < 0)
+                {
+                    startTime = viewModel.DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    startTime = viewModel.DateTimeMax;
+                }
+                viewModel.StartTime = startTime;
+            }
+            if (viewModel.IsEndTimePickerEnabled)
+            {
+                var isValid = viewModel.CheckDateTimeValid(endTime);
+                if (isValid < 0)
+                {
+                    endTime = viewModel.DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    endTime = viewModel.DateTimeMax;
+                }
+                viewModel.EndTime = endTime;
+            }
         }
     }
 }
