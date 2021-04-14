@@ -47,9 +47,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -82,101 +79,15 @@
             <ContentControl Content="{Binding SelectedViewModel}" />
         </Border>
 
+        
         <Border Grid.Row="3" Grid.Column="0">
-            <Label Content="Start Time :"   />
-        </Border>
-        <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker  HorizontalAlignment="Stretch"
-                                     x:Name="StartTimePicker"
-                                     VerticalAlignment="Top"
-                                     Value="{Binding StartTime}"
-                                     TextAlignment="Left" Padding="5"
-                                     IsEnabled="{Binding IsStartTimePickerEnabled}"
-                                     Minimum="{Binding DateTimeMin}"
-                                     Maximum="{Binding DateTimeMax}"
-                                     Format="Custom"
-                                     FormatString="ddd dd'/'MM'/'yyyy HH:mm:ss" CultureInfo="en-US"
-                                     TimeFormat="Custom"
-                                     TimeFormatString="HH:mm:ss"/>
-        </Border>
-
-        <Border Grid.Row="4" Grid.Column="0">
-            <Label Content="End Time :" />
-        </Border>
-        <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker HorizontalAlignment="Stretch"
-                                    x:Name="EndTimePicker"
-                                    VerticalAlignment="Top"
-                                    TextAlignment="Left"
-                                    Value="{Binding EndTime}" Padding="5"
-                                    IsEnabled="{Binding IsEndTimePickerEnabled}"
-                                    Minimum="{Binding DateTimeMin}"
-                                    Maximum="{Binding DateTimeMax}"
-                                    Format="Custom"
-                                    FormatString="ddd dd'/'MM'/'yyyy HH:mm:ss" CultureInfo="en-US"
-                                    TimeFormat="Custom"
-                                    TimeFormatString="HH:mm:ss"/>
-        </Border>
-
-
-        <Border Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
-            <UniformGrid Rows="2" Columns="7">
-                <UniformGrid.Resources>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Padding" Value="0,3"/>
-                        <Setter Property="Command" Value="{Binding UpdateDateTimeCommand}" />
-                        <Setter Property="CommandParameter" Value="{Binding Path=Name, RelativeSource={RelativeSource Self}}" />
-                    </Style>
-                </UniformGrid.Resources>
-                <Button Content="Past Year" 
-                        ToolTip="Past 365 days preceding today" 
-                        Name="pyear"
-                        />
-                <Button Content="Past Month"
-                        ToolTip="Past 30 days preceding today" 
-                        Name="pmonth" />
-                <Button Content="Past Week"
-                        ToolTip="Past 7 days preceding today" 
-                        Name="pweek" />
-                <Button Content="Past 24h"
-                        ToolTip="Past 24 hours from now" 
-                        Name="p24h" />
-                <Button Content="Next 24h"
-                        ToolTip="Next 24 hours from now" 
-                        Name="n24h" />
-                <Button Content="Next 7d"
-                        ToolTip="Next 7 days from now" 
-                        Name="n7d" />
-                <Button Content="Next 30d"
-                        ToolTip="Next 30 days from now" 
-                        Name="n30d" />
-                <Button Content="Last Year"
-                        ToolTip="Previous calendar year" 
-                        Name="lyear" />
-                <Button Content="Last Month"
-                        ToolTip="Previous calendar month" 
-                        Name="lmonth" />
-                <Button Content="Yesterday"
-                        Name="yesterday" />
-                <Button Content="Today"
-                        Name="today" />
-                <Button Content="Tomorrow"
-                        Name="tomorrow" />
-                <Button Content="This Month"
-                        Name="tmonth" />
-                <Button Content="This Year"
-                        Name="tyear" />
-            </UniformGrid>
-        </Border>
-
-        <Border Grid.Row="6" Grid.Column="0">
             <Label Content="Plot Name :" />
         </Border>
-        <Border Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2">
+        <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
             <TextBox x:Name="PlotName" Text="{Binding PlotName}"  Padding="5" />
         </Border>
 
-        <StackPanel Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+        <StackPanel Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>

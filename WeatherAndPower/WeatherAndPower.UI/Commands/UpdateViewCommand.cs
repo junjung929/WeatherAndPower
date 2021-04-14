@@ -11,11 +11,11 @@ namespace WeatherAndPower.UI.Commands
 {
     public class UpdateViewCommand : ICommand
     {
-        private MainViewModel viewModel;
+        private MainViewModel _viewModel { get; set; }
 
         public UpdateViewCommand(MainViewModel viewModel)
         {
-            this.viewModel = viewModel;
+            _viewModel = viewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -29,12 +29,14 @@ namespace WeatherAndPower.UI.Commands
         {
             if (parameter.ToString() == MainViewModel.DataTypeEnum.Power.ToString())
             {
-                viewModel.SelectedViewModel = new PowerInputViewModel(viewModel);
+                _viewModel.SelectedViewModel = new PowerInputViewModel(_viewModel);
             }
             else
             {
-                viewModel.SelectedViewModel = new WeatherInputViewModel(viewModel);
+                _viewModel.SelectedViewModel = new WeatherInputViewModel(_viewModel);
             }
+            _viewModel.SelectedViewModel.DateTimeViewModel = new DateTimeViewModel(_viewModel.SelectedViewModel);
+            _viewModel.SelectedViewModel.UpdateDateTimeMinMax();
         }
     }
 }

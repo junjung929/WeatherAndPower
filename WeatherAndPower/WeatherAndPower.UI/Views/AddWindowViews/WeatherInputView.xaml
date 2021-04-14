@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
              xmlns:local="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
              xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
              xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
@@ -27,6 +28,7 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -92,6 +94,10 @@
 
         <Label Grid.Row="1" Grid.Column="0" Content="City :" />
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="CityName" Text="{Binding CityName}"  Padding="5" />
+
+        <Border  Grid.Row="2" Grid.ColumnSpan="3">
+            <views:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
+        </Border>
     </Grid>
 
 </UserControl>

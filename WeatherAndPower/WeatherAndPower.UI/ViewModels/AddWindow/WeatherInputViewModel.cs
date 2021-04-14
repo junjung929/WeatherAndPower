@@ -10,7 +10,7 @@ using WeatherAndPower.UI.Commands;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    public class WeatherInputViewModel : ViewModelBase
+    public class WeatherInputViewModel : InputViewModelBase
     {
         MainViewModel ParentViewModel { get; set; }
        
