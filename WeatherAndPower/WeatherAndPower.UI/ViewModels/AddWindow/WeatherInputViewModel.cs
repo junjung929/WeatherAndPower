@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
+using static WeatherAndPower.Contracts.IWeatherInputModel;
 
 namespace WeatherAndPower.UI
 {
@@ -23,11 +26,11 @@ namespace WeatherAndPower.UI
 
         public WeatherType.ParameterEnum SelectedParameterType { get; set; }
 
-        private string _cityName;
-        public string CityName
+        private ECity _SelectedCity { get; set; } = (ECity)0x01;
+        public ECity SelectedCity
         {
-            get { return _cityName; }
-            set { _cityName = value; NotifyPropertyChanged("CityName"); }
+            get { return _SelectedCity; }
+            set { _SelectedCity = value; NotifyPropertyChanged("SelectedCity"); }
         }
 
         public ObservableCollection<WeatherType.ParameterEnum> WeatherParameters { get; set; } = new ObservableCollection<WeatherType.ParameterEnum>()
@@ -50,27 +53,32 @@ namespace WeatherAndPower.UI
             set { _weatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
         }
 
-        private WeatherType _selectedWeatherType { get; set; }
-        public WeatherType SelectedWeatherType
-        {
-            get { return _selectedWeatherType; }
-            set { _selectedWeatherType = value; NotifyPropertyChanged("SelectedWeatherType"); }
-        }
-        public List<WeatherType> SelectedWeatherTypes = new List<WeatherType>();
+        public List<WeatherType> SelectedWeatherTypes { get; set; } = new List<WeatherType>();
 
         public ObservableCollection<WeatherType> Medians { get; set; } = new ObservableCollection<WeatherType>()
         {
             WeatherType.AveTempMedian, WeatherType.MinTempMedian, WeatherType.MaxTempMedian
         };
 
-        private WeatherType _selectedMedian { get; set; }
-        public WeatherType SelectedMedian
+        public List<WeatherType> SelectedMedians { get; set; } = new List<WeatherType>();
+
+        public ObservableCollection<ECity> Cities { get; set; } = new ObservableCollection<ECity>(Enum.GetValues(typeof(ECity)).Cast<ECity>());
+
+
+        private ObservableCollection<Interval> _intervals { get; set; }
+
+        public ObservableCollection<Interval> Intervals
         {
-            get { return _selectedMedian;  }
-            set { _selectedMedian = value; NotifyPropertyChanged("SelectedMedian"); }
+            get { return _intervals; }
+            set { _intervals = value; NotifyPropertyChanged("Intervals"); }
         }
 
-
+        private Interval _selectedInterval { get; set; }
+        public Interval SelectedInterval
+        {
+            get { return _selectedInterval; }
+            set { _selectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
+        }
         public void UpdateWeatherTypes()
         {
             WeatherTypes = new ObservableCollection<WeatherType>(Model.GetUpdatedWeatherTypes(SelectedParameter));
@@ -80,31 +88,59 @@ namespace WeatherAndPower.UI
         public void OnUpdateSelectedWeatherParameter()
         {
             Console.WriteLine("WeatherParameter " + SelectedParameter);
+            UpdateDateTimeMinMax();
             UpdateWeatherTypes();
         }
         public void OnUpdateSelectedWeatherType()
         {
-            Console.WriteLine("WeatherType " + SelectedWeatherType);
+            Console.WriteLine("WeatherTypes " + SelectedWeatherTypes.Count);
+            SelectedWeatherTypes.ForEach(selected =>
+            {
+                Console.WriteLine(selected.ToString());
+            });
         }
 
         public void OnUpdateSelectedMedians()
         {
-            Console.WriteLine("Medians " + SelectedMedian);
+            Console.WriteLine("Medians " + SelectedMedians.Count);
+            SelectedMedians.ForEach(selected =>
+            {
+                Console.WriteLine(selected.ToString());
+            });
         }
-        public ICommand UpdateWeatherParameterCommand { get; set; }
-        public ICommand UpdateWeatherTypeCommand { get; set; }
-        public ICommand UpdateMedianCommand { get; set; }
+
+        public override void UpdateDateTimeMinMax()
+        {
+            var minTime = DateTime.Now.AddHours(-168);
+            var minHour = minTime.Date.AddHours(minTime.Hour);
+            if (SelectedParameter == WeatherType.ParameterEnum.Observation)
+            {
+                DateTimeViewModel.UpdateDateTimeMinMax(minHour, DateTime.Now);
+            }
+            else
+            {
+                DateTimeViewModel.UpdateDateTimeMinMax(minHour,
+                    DateTimeViewModel.DefaultDateTimeMax);
+            }
+        }
+        public override void CreateDateTimeViewModel()
+        {
+            var dateTimeInputModel = Model.CreateDateTimeInputModel();
+            DateTimeViewModel = new DateTimeViewModel(dateTimeInputModel);
+            UpdateDateTimeMinMax();
+        }
+
+        public RelayCommand UpdateWeatherParameterCommand => new RelayCommand(() => OnUpdateSelectedWeatherParameter());
+        public RelayCommand UpdateWeatherTypeCommand => new RelayCommand(() => OnUpdateSelectedWeatherType());
+        public RelayCommand UpdateMedianCommand => new RelayCommand(() => OnUpdateSelectedMedians());
 
         public WeatherInputViewModel(IWeatherInputModel model)
         {
             _model = model;
+            Intervals = new ObservableCollection<Interval>(model.Intervals);
+            SelectedInterval = Intervals.ToList().Find(interval => interval.Value == 60);
             UpdateWeatherTypes();
-            //WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
-            //UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
-
-            UpdateWeatherParameterCommand = new RelayCommand(() => OnUpdateSelectedWeatherParameter());
-            UpdateWeatherTypeCommand = new RelayCommand(() => OnUpdateSelectedWeatherType());
-            UpdateMedianCommand = new RelayCommand(() => OnUpdateSelectedMedians());
+            CreateDateTimeViewModel();
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI
 {
@@ -23,13 +24,18 @@ namespace WeatherAndPower.UI
         public WeatherInputView()
         {
             InitializeComponent();
-            
         }
 
-        private void ParameterList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void WeatherTypeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // disable displaying selected item
-            //ParameterList.SelectedIndex = -1;
+            var viewModel = (WeatherInputViewModel)DataContext;
+            viewModel.SelectedWeatherTypes = WeatherTypeListBox.SelectedItems.OfType<WeatherType>().ToList();
+        }
+
+        private void MedianListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewModel = (WeatherInputViewModel)DataContext;
+            viewModel.SelectedMedians = MedianListBox.SelectedItems.OfType<WeatherType>().ToList();
         }
     }
 }

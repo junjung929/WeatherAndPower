@@ -19,13 +19,13 @@ namespace WeatherAndPower.Core
             new Interval(60),
             new Interval(360),
             new Interval(720),
-            new Interval(1440),
-            new Interval(1440*7),
-            new Interval(1440*30)
+            new Interval(1440)
+            //new Interval(1440*7),
+            //new Interval(1440*30)
         };
         public IDateTimeInputModel CreateDateTimeInputModel()
         {
-            throw new NotImplementedException();
+            return new DateTimeInputModel();
         }
 
         public List<WeatherType> GetUpdatedWeatherTypes(WeatherType.ParameterEnum weatherParameter)

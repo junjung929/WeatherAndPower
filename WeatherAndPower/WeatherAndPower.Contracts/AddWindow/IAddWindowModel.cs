@@ -23,7 +23,8 @@ namespace WeatherAndPower.Contracts
             DateTime startTime,
             DateTime endTime,
             string graphName,
-            WeatherType.ParameterEnum parameterType);
+            WeatherType.ParameterEnum parameterType,
+            int interval);
 
         IPowerInputModel CreateNewPowerInputModel();
         IWeatherInputModel CreateNewWeatherInputModel();

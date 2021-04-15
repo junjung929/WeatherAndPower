@@ -145,8 +145,6 @@
                             AncestorType={x:Type ListBoxItem}}, 
                             Path=IsSelected}"
                                 />
-                    <!--Command="{Binding DataContext.UpdatePowerParameterCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

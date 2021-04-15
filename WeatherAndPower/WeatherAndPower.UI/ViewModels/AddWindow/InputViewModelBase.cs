@@ -1,4 +1,6 @@
-﻿namespace WeatherAndPower.UI
+﻿using System;
+
+namespace WeatherAndPower.UI
 {
     public class InputViewModelBase : ViewModelBase
     {
@@ -6,16 +8,17 @@
 
         public virtual void OnDateTimeUpdated(string dateTime)
         {
+            throw new NotImplementedException();
         }
 
         public virtual void UpdateDateTimeMinMax()
         {
-
+            throw new NotImplementedException();
         }
 
         public virtual void CreateDateTimeViewModel()
         {
-
+            throw new NotImplementedException();
         }
         public InputViewModelBase()
         {

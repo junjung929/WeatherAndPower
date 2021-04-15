@@ -72,10 +72,11 @@ namespace WeatherAndPower.UI
                .Cast<DataTypeEnum>());
 
         public RelayCommand UpdateViewCommand => new RelayCommand(() => UpdateSelectedViewModel(DataType));
-        public RelayCommand AddGraphCommand => new RelayCommand(() => {
+        public RelayCommand AddGraphCommand => new RelayCommand(() =>
+        {
             if (DataType == DataTypeEnum.Power)
             {
-                var powerViewModel = (PowerInputViewModel) SelectedViewModel;
+                var powerViewModel = (PowerInputViewModel)SelectedViewModel;
                 var dateTimeViewModel = powerViewModel.DateTimeViewModel;
                 try
                 {
@@ -86,9 +87,35 @@ namespace WeatherAndPower.UI
                 {
                     System.Windows.MessageBox.Show(e.Message);
                 }
-            }   
+            }
             else
             {
+                try
+                {
+                    var weatherViewModel = (WeatherInputViewModel)SelectedViewModel;
+                    var dateTimeViewModel = weatherViewModel.DateTimeViewModel;
+                    if (weatherViewModel.SelectedWeatherTypes.Count < 1)
+                    {
+                        throw new Exception("Please choose at least one weather type");
+                    }
+                    string parameters = String.Join(",", weatherViewModel.SelectedWeatherTypes.Concat(weatherViewModel.SelectedMedians));
+                    Console.WriteLine("Params " + parameters);
+
+
+                    Model.AddWeatherGraph(
+                        weatherViewModel.SelectedCity.ToString(),
+                        parameters,
+                        dateTimeViewModel.StartTime,
+                        dateTimeViewModel.EndTime,
+                        PlotName,
+                        weatherViewModel.SelectedParameter,
+                        weatherViewModel.SelectedInterval.Value);
+                    AddWindow.Close();
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show(e.Message);
+                }
             }
         });
 
