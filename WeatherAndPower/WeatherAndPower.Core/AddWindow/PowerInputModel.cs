@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WeatherAndPower.Contracts;
 
@@ -50,9 +51,13 @@ namespace WeatherAndPower.Core
 
         public List<PowerType.ParameterEnum> GetUpdatedPowerParameters(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService)
         {
-            var selectableTypes = PowerTypes.ToList().FindAll(powerType =>
-            powerType.Source == powerSource
-            && powerType.Service == powerService);
+            Console.WriteLine(powerSource.ToString() + powerService.ToString());
+            var selectableTypes = PowerTypes.ToList().FindAll(powerType => {
+                Console.WriteLine(powerType.Source.ToString());
+                Console.WriteLine(powerType.Service.ToString());
+                return powerType.Source == powerSource && powerType.Service == powerService;
+            }
+            );
             var selectableParameters = selectableTypes.Select(selectableType => selectableType.ParameterType).Distinct();
             return new List<PowerType.ParameterEnum>(selectableParameters);
         }

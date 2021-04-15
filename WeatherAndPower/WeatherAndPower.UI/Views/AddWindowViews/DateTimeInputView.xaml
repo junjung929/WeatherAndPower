@@ -61,17 +61,30 @@
         <Border Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
             <ListBox ItemsSource="{Binding DateTimeRanges}"
                      SelectedItem="{Binding DateTimeRange}"
-                     BorderBrush="Transparent">
+                     BorderBrush="Transparent"
+                     HorizontalContentAlignment="Stretch"
+                     VerticalContentAlignment="Stretch"
+                     >
+                
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid/>
+                        <UniformGrid Rows="2" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Margin"  Value="0"/>
+                        <Setter Property="Padding"  Value="0"/>
+                    </Style>
+                </ListBox.Resources>
+               
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Name}"
-                                ToolTip="{Binding Description}"
-                                Command="{Binding DataContext.UpdateDateTimeCommand, 
+                        <Button 
+                            Padding="5,3"
+                            Content="{Binding Name}"
+                            ToolTip="{Binding Description}"
+                            Command="{Binding DataContext.UpdateDateTimeCommand, 
                                 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             />
                     </DataTemplate>

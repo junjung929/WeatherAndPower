@@ -28,7 +28,7 @@ namespace WeatherAndPower.UI
         }
 
         private InputViewModelBase _selectedViewModel;
-        private DataTypeEnum _dataType = (DataTypeEnum)0x02;
+        private DataTypeEnum _dataType = (DataTypeEnum)0x01;
 
         public DataTypeEnum DataType
         {

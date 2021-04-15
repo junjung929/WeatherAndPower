@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.UI.Commands;
-using WeatherAndPower.UI;
 
 namespace WeatherAndPower.UI
 {
@@ -189,6 +184,7 @@ namespace WeatherAndPower.UI
 
             if (minInterval != _minInterval)
             {
+                _minInterval = minInterval;
                 Intervals = new ObservableCollection<Interval>(Model.GetUpdatedIntervals(minInterval));
                 SelectedInterval = SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
             }
@@ -199,7 +195,7 @@ namespace WeatherAndPower.UI
         public void OnUpdateSelectedPowerSource()
         {
             Console.WriteLine("Power source " + SelectedPowerSource);
-            UpdateSelectedPowerType();
+            UpdatePowerServices();
             UpdatePowerParameters();
             UpdateRealTime();
             UpdateSelectedPowerType();

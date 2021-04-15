@@ -11,7 +11,7 @@
                 <PropertyGroupDescription PropertyName="ParameterType" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-        <!--<viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>-->
+        <!--<local:PowerInputViewModel x:Key="vm"></local:PowerInputViewModel>-->
     </UserControl.Resources>
     <Grid Margin="0" VerticalAlignment="Center">
         <Grid.Resources >
