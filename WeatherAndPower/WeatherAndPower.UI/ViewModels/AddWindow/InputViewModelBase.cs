@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class InputViewModelBase : ViewModelBase
     {

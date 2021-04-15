@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeatherAndPower.Contracts.AddWindow;
 
 namespace WeatherAndPower.Contracts
 {
@@ -22,7 +23,8 @@ namespace WeatherAndPower.Contracts
 
 		bool LoadChart(string path);
 
-		public void ComparePowers();
+
+		IAddWindowModel CreateNewAddWindow();
 
 		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string plotName);
 

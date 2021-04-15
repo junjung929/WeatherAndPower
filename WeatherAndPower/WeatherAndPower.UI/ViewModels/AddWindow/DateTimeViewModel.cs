@@ -5,12 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class DateTimeViewModel : ViewModelBase
     {
+        private IDateTimeInputModel _model;
+        public IDateTimeInputModel Model
+        {
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
+        }
         private InputViewModelBase _viewModel;
 
         private bool _isStartTimePickerEnabled = true;
@@ -88,7 +101,6 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         }
 
-        public ICommand UpdateDateTimeCommand { get; set; }
 
         /// <summary>
         /// Check whether datetime is valid
@@ -142,10 +154,41 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             if (min != DateTimeMin) DateTimeMin = min;
             if (max != DateTimeMax) DateTimeMax = max;
         }
-        public DateTimeViewModel(InputViewModelBase viewModel)
+
+        public RelayCommand UpdateDateTimeCommand => new RelayCommand(() =>
         {
-            _viewModel = viewModel;
-            UpdateDateTimeCommand = new UpdateDateTimeCommand(this);
+            var (startTime, endTime) = Model.GetNewDateTimeRange("d");
+            if (IsStartTimePickerEnabled)
+            {
+                var isValid = CheckDateTimeValid(startTime);
+                if (isValid < 0)
+                {
+                    startTime = DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    startTime = DateTimeMax;
+                }
+                StartTime = startTime;
+            }
+            if (IsEndTimePickerEnabled)
+            {
+                var isValid = CheckDateTimeValid(endTime);
+                if (isValid < 0)
+                {
+                    endTime = DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    endTime = DateTimeMax;
+                }
+                EndTime = endTime;
+            }
+        });
+        public DateTimeViewModel(IDateTimeInputModel model)
+        {
+            _model = model;
+            //_viewModel = viewModel;
             SetDateTimeMinMaxToDefault();
         }
     }
