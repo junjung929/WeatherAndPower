@@ -12,20 +12,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
     public class PowerInputViewModel : InputViewModelBase
     {
-        private IPowerInputModel _model;
-
-        public IPowerInputModel Model
-        {
-            get { return _model; }
-            private set
-            {
-                if(_model != value)
-                {
-                    _model = value;
-                }
-            }
-        }
-        AddWindowViewModel ParentViewModel { get; set; }
+        MainViewModel ParentViewModel { get; set; }
 
         private bool _isRealTime { get; set; } = false;
         public bool IsRealTime
@@ -260,11 +247,9 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public ICommand UpdatePowerServiceCommand { get; set; }
         public ICommand UpdatePowerParameterCommand { get; set; }
 
-        public PowerInputViewModel(IPowerInputModel model)
+        public PowerInputViewModel(MainViewModel viewModel)
         {
-            _model = model;
-
-
+            ParentViewModel = viewModel;
             PowerTypes = new ObservableCollection<PowerType>(PowerType.GetAll<PowerType>());
             PowerSources = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
             SelectedPowerSource = PowerType.SourceEnum.All;

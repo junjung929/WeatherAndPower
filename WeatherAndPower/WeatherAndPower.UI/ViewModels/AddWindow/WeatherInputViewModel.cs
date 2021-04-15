@@ -12,18 +12,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
     public class WeatherInputViewModel : InputViewModelBase
     {
-        private IWeatherInputModel _model;
-        public IWeatherInputModel Model
-        {
-            get { return _model; }
-            private set
-            {
-                if(_model != value)
-                {
-                    _model = value;
-                }
-            }
-        }
+        MainViewModel ParentViewModel { get; set; }
 
         public WeatherType.ParameterEnum SelectedParameterType { get; set; }
 
@@ -95,15 +84,15 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         public void OnUpdateSelectedMedians()
         {
-            Console.WriteLine("Medians " + SelectedMedian);
+            Console.WriteLine("Medians " + SelectedMedians);
         }
         public ICommand UpdateWeatherParameterCommand { get; set; }
         public ICommand UpdateWeatherTypeCommand { get; set; }
         public ICommand UpdateMedianCommand { get; set; }
 
-        public WeatherInputViewModel(IWeatherInputModel model)
+        public WeatherInputViewModel(MainViewModel viewModel)
         {
-            _model = model;
+            ParentViewModel = viewModel;
             UpdateWeatherTypes();
             //WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
             //UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);

@@ -11,10 +11,10 @@ namespace WeatherAndPower.UI.Commands
 {
     public class AddPlotCommand : ICommand
     {
-        private AddWindowViewModel _viewModel;
+        private MainViewModel _viewModel;
         private PlaceholderViewModel _placeholderViewModel;
 
-        public AddPlotCommand(AddWindowViewModel viewModel, PlaceholderViewModel placeholderViewModel)
+        public AddPlotCommand(MainViewModel viewModel, PlaceholderViewModel placeholderViewModel)
         {
             _viewModel = viewModel;
             _sidebarViewModel = sidebarViewModel;
@@ -29,14 +29,14 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            //if (_viewModel.DataType.Equals(AddWindowViewModel.DataTypeEnum.Power))
-            //{
-            //    AddPowerGraph((System.Windows.Window)parameter);
-            //}
-            //else
-            //{
-            //    AddWeatherGraph((System.Windows.Window)parameter);
-            //}
+            if (_viewModel.DataType.Equals(MainViewModel.DataTypeEnum.Power))
+            {
+                AddPowerGraph((System.Windows.Window)parameter);
+            }
+            else
+            {
+                AddWeatherGraph((System.Windows.Window)parameter);
+            }
         }
 
         private void AddPowerGraph(System.Windows.Window window)

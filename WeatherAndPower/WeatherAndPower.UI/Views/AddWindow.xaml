@@ -88,7 +88,7 @@
         </Border>
 
         <StackPanel Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddGraphCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
+            <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>
     </Grid>
