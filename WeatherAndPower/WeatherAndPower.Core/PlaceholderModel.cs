@@ -105,6 +105,15 @@ namespace WeatherAndPower.Core
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)
         {
+            // If user choses bot to proceed with a large dataset
+            if (TimeHandler.DataTooBig(startTime, endTime, powerType.Interval))
+            {
+                return;
+            }
+
+            startTime = TimeHandler.ConvertToLocalTime(startTime);
+            endTime = TimeHandler.ConvertToLocalTime(endTime);
+
             var series_task = Task.Run(() => Fingrid.Get(powerType, startTime, endTime));
 
             try
@@ -123,50 +132,35 @@ namespace WeatherAndPower.Core
                 }
                 throw new Exception("Cannot add data to plot");
             }
-
-
         }
-
-        public void FMIAction()
-        {
-
-            //FMI.Place = _CityName;
-            FMI.Parameters = _DataName;
-            FMI.StartTime = "2021-04-20T09:00:00Z";
-            FMI.EndTime = "2021-04-20T21:00:00Z";
-
-            //string query = FMI.BuildQuery("observations::weather");
-            string query = FMI.BuildQuery("forecast::hirlam::surface::point");
-            string request = FMI.BuildRequest(query);
-            Console.WriteLine(request);
-
-            var series_list_task = Task.Run(() => FMI.GetData(request));
-
-            try
-            {
-                series_list_task.Wait();
-                var series_list = series_list_task.Result;
-                //DataPlot.AddPlot(series_list[0]);
-            }
-            catch (AggregateException ae)
-            {
-                Console.WriteLine("FMIAction failed:");
-                foreach (var ex in ae.InnerExceptions)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw new Exception(ex.Message);
-                }
-            }
-        }
-
 
 
         public void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
         {
             FMI.Place = cityName;
             FMI.Parameters = parameters;
-            FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            //FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            //FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+
+            if (TimeHandler.ForecastTooFar(startTime))
+            {
+                return;
+            }
+
+            FMI.StartTime = TimeHandler.ConvertToLocalTime(startTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+            FMI.EndTime = TimeHandler.ConvertToLocalTime(endTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+            FMI.Timestep = "10";
+
+            int.TryParse(FMI.Timestep, out int timestep);
+
+            if (TimeHandler.DataTooBig(startTime, endTime, timestep))
+            {
+                return;
+            }
+
+
             string query;
 
             if (parameterType == WeatherType.ParameterEnum.Forecast)
@@ -181,7 +175,6 @@ namespace WeatherAndPower.Core
             Console.WriteLine(request);
 
             var series_list_task = Task.Run(() => FMI.GetData(request));
-
             try
             {
                 series_list_task.Wait();
@@ -191,6 +184,7 @@ namespace WeatherAndPower.Core
                     series.Name = plotName;
                     DataPlot.Data.Add(series);
                 }
+
             }
             catch (AggregateException ae)
             {
@@ -202,6 +196,7 @@ namespace WeatherAndPower.Core
                 }
             }
         }
+
 
         public PlaceholderModel(DataPlotModel dataPlot, IWindowFactory windowFactory)
         {

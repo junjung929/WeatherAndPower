@@ -33,7 +33,7 @@ namespace WeatherAndPower.Contracts
             Format = DataFormat.Humidity,
             ParameterType = ParameterEnum.Observation
         };
-        public static WeatherType PrecipitationObserv = new WeatherType(4, "rhr_1h")
+        public static WeatherType PrecipitationObserv = new WeatherType(4, "r_1h")
         {
             Description = "Precipitation amount",
             Format = DataFormat.Precipitation,
@@ -65,12 +65,14 @@ namespace WeatherAndPower.Contracts
             Format = DataFormat.Humidity,
             ParameterType = ParameterEnum.Forecast
         };
+        /*
         public static WeatherType Precipitation1hForecast = new WeatherType(9, "Precipitation1h")
         {
             Description = "Houlry Precipitation",
             Format = DataFormat.Precipitation,
             ParameterType = ParameterEnum.Forecast
         };
+        */
         public static WeatherType PrecipitationAmountForecast = new WeatherType(10, "PrecipitationAmount")
         {
             Description = "Precipitation Amount",
