@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WeatherAndPower.UI.ValueConverters;
 
 namespace WeatherAndPower.UI
 {
@@ -23,6 +25,11 @@ namespace WeatherAndPower.UI
 		private void onMouseLeave(object sender, MouseEventArgs e)
 		{
 			PolylineStyle = _DefaultStyle;
+		}
+
+		private void onMouseDown(object sender, MouseButtonEventArgs e)
+		{
+			((Contracts.IDataSeries)DataContext).IsSelected = true;
 		}
 
 		private Tuple<Color, Color> gradientFromColor(Color color)
@@ -68,10 +75,20 @@ namespace WeatherAndPower.UI
 			}
 		}
 
+		private void bindDataContext(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			var visibilityBinding = new Binding("IsVisible");
+			visibilityBinding.Source = e.NewValue;
+			visibilityBinding.Converter = new BoolToVisibilityConverter();
+			this.SetBinding(CustomLineSeries.VisibilityProperty, visibilityBinding);
+		}
+
 		public CustomLineSeries()
 		{
 			this.MouseEnter += onMouseEnter;
 			this.MouseLeave += onMouseLeave;
+			this.MouseDown += onMouseDown;
+			DataContextChanged += bindDataContext;
 
 			Style lineStyle = new Style(typeof(Polyline));
 			lineStyle.Setters.Add(new Setter(Polyline.StrokeThicknessProperty, 2.0));

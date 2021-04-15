@@ -14,8 +14,8 @@ namespace WeatherAndPower.Core
 	public class DataPlotModel : AbstractModel, IDataPlotModel
 	{
 		public ICustomChart Chart { get; set; }
-		public ObservableCollection<DataSeries> Data { get; }
-			= new ObservableCollection<DataSeries>();
+		public ObservableCollection<IDataSeries> Data { get; }
+			= new ObservableCollection<IDataSeries>();
 
 		private List<DateTime> _CreateTimeSeries(DateTime from, DateTime to, int count)
 		{

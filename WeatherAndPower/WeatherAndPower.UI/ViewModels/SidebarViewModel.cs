@@ -13,11 +13,13 @@ namespace WeatherAndPower.UI
     {
         public ISidebarModel Model { get; private set; }
 
-        public ObservableCollection<DataSeries> Data { 
+        public ObservableCollection<IDataSeries> Data { 
             get {
                 return Model.Data;
             }
         }
+
+        public IDataSeries SelectedSeries { get; set; }
 
         public RelayCommand ClearGraphCommand => new RelayCommand(() => Model.ClearGraph());
         public RelayCommand OpenDataCommand => new RelayCommand(() => Model.OpenData("test.json"));

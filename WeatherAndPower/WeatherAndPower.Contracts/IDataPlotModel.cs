@@ -9,7 +9,7 @@ namespace WeatherAndPower.Contracts
 {
 	public interface IDataPlotModel
 	{
-		ObservableCollection<DataSeries> Data { get; }
+		ObservableCollection<IDataSeries> Data { get; }
 
 		void Clear();
 

@@ -9,7 +9,7 @@ namespace WeatherAndPower.Contracts
 {
 	public interface ISidebarModel
 	{
-		ObservableCollection<DataSeries> Data { get; }
+		ObservableCollection<IDataSeries> Data { get; }
 		void ClearGraph();
 		void OpenData(string path);
 		void SaveData(string path, params int[] ids);

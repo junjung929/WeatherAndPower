@@ -17,6 +17,8 @@ namespace WeatherAndPower.Data
         private static string DEFAULT_FORMAT = "xml";
         private static string DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
+        public static IDataSeriesFactory DataSeriesFactory { get; set; }
+
         public static Dictionary<string, string> contentTypes = new Dictionary<string, string>()
         {
             { "csv","text/csv" },
@@ -87,7 +89,7 @@ namespace WeatherAndPower.Data
         /// <param name="endTime">Ending of date time range</param>
         /// <param name="format">Return data format csv | json | xml</param>
         /// // TODO: return value to Contracts
-        public static async Task<DataSeries> Get(PowerType powerType, DateTime startTime, DateTime endTime, string format = null)
+        public static async Task<IDataSeries> Get(PowerType powerType, DateTime startTime, DateTime endTime, string format = null)
         {
             if (format == null)
             {
@@ -118,7 +120,7 @@ namespace WeatherAndPower.Data
 
             if (format == "xml")
             {
-                DataSeries dataseries = ParseXMLToDataSeries(powerType.Id, body);
+                IDataSeries dataseries = ParseXMLToDataSeries(powerType.Id, body);
                 return dataseries;
             }
             else
@@ -201,7 +203,7 @@ namespace WeatherAndPower.Data
         /// </summary>
         /// <param name="XMLString"></param>
         /// <returns>DataSeries with power type and series of information</returns>
-        private static DataSeries ParseXMLToDataSeries(int variableId, string XMLString)
+        private static IDataSeries ParseXMLToDataSeries(int variableId, string XMLString)
         {
             List<Tuple<DateTime, IData>> powerSeries = new List<Tuple<DateTime, IData>>();
             var doc = new XmlDocument();
@@ -222,7 +224,7 @@ namespace WeatherAndPower.Data
                     powerSeries.Add(plotPoint);
                 }
             }
-            return new DataSeries("", DataFormat.Power, powerSeries);
+            return DataSeriesFactory.CreateDataSeries("", DataFormat.Power, powerSeries);
         }
     }
 }

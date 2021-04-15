@@ -30,7 +30,7 @@ namespace WeatherAndPower.Core
                 }
             }
         }
-		public ObservableCollection<DataSeries> Data
+		public ObservableCollection<IDataSeries> Data
 		{
 			get {
 				return DataPlot.Data;
@@ -61,7 +61,64 @@ namespace WeatherAndPower.Core
 
 		public void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
 		{
-			throw new NotImplementedException();
+            FMI.Place = cityName;
+            FMI.Parameters = parameters;
+            //FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            //FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+
+            if (TimeHandler.ForecastTooFar(startTime))
+            {
+                return;
+            }
+
+            FMI.StartTime = TimeHandler.ConvertToLocalTime(startTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+            FMI.EndTime = TimeHandler.ConvertToLocalTime(endTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+            FMI.Timestep = "10";
+
+            int.TryParse(FMI.Timestep, out int timestep);
+
+            if (TimeHandler.DataTooBig(startTime, endTime, timestep))
+            {
+                return;
+            }
+
+
+            string query;
+
+            if (parameterType == WeatherType.ParameterEnum.Forecast)
+            {
+                query = FMI.BuildQuery("forecast::hirlam::surface::point");
+            }
+            else
+            {
+                query = FMI.BuildQuery("observations::weather");
+            }
+            string request = FMI.BuildRequest(query);
+            Console.WriteLine(request);
+
+            var series_list_task = Task.Run(() => FMI.GetData(request));
+            try
+            {
+                series_list_task.Wait();
+                var series_list = series_list_task.Result;
+                foreach (var series in series_list)
+                {
+                    series.Name = plotName;
+                    DataPlot.Data.Add(series);
+                }
+
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
+                }
+            }
 		}
 
 		public void ClearGraph()

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WeatherAndPower.Contracts;
 
-namespace WeatherAndPower.Contracts
+namespace WeatherAndPower.Core
 {
-	public class DataSeries
+	public class DataSeries : AbstractModel, IDataSeries
 	{
 		private static int identificationCounter = 1;
 
@@ -19,9 +20,26 @@ namespace WeatherAndPower.Contracts
 
 		public byte[] Color { get; set; } = { 0, 0, 0 };
 
-		public bool IsSelected { get; set; } = false;
+		private bool _IsSelected = false;
+		public bool IsSelected
+		{
+			get {
+				return _IsSelected;
+			}
+			set {
+				_IsSelected = value;
+				NotifyPropertyChanged("IsSelected");
+			}
+		}
 
-		public bool IsVisible { get; set; } = true;
+		private bool _IsVisible = true;
+		public bool IsVisible {
+			get { return _IsVisible; }
+			set {
+				_IsVisible = value;
+				NotifyPropertyChanged("IsVisible");
+			}
+		}
 
 		public bool IsComparable { get; private set; } = false;
 

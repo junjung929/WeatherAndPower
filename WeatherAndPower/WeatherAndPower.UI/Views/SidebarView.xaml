@@ -63,8 +63,13 @@
 		<Button Command="{ Binding OpenDataCommand }" Content="Open" Grid.Row="0" Grid.Column="1"/>
 		<Button Command="{ Binding SaveDataCommand }" Content="Save" Grid.Row="0" Grid.Column="2"/>
 
-		<ListBox ItemsSource="{ Binding Data }" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-			<ListBox.ItemTemplate>
+		<ListView ItemsSource="{ Binding Data }" SelectedItem="{Binding SelectedSeries, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+			<ListView.Resources>
+				<Style TargetType="{x:Type ListViewItem}">
+					<Setter Property="IsSelected" Value="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.IsSelected, Mode=TwoWay}"/>
+				</Style>
+			</ListView.Resources>
+			<ListView.ItemTemplate>
 				<DataTemplate>
 					<Grid>
 						<Grid.ColumnDefinitions>
@@ -72,12 +77,12 @@
 							<ColumnDefinition Width="1*"/>
 						</Grid.ColumnDefinitions>
 
-						<CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"/>
+						<CheckBox IsChecked="{Binding IsVisible}" Grid.Column="0"/>
 						<TextBlock Text="{Binding Name}" Grid.Column="1"/>
 					</Grid>
 				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+			</ListView.ItemTemplate>
+		</ListView>
 
 		<Button Command="{ Binding AddDataCommand }" Content="Add" Grid.Row="2" Grid.Column="0"/>
 		<Button Command="{ Binding CompareDataCommand }" Content="Pie" Grid.Row="2" Grid.Column="1"/>

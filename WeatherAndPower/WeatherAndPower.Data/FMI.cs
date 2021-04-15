@@ -7,11 +7,14 @@ using System.Xml;
 using WeatherAndPower.Contracts;
 using System.Windows.Forms;
 using static WeatherAndPower.Contracts.Globals;
+using System.Globalization;
 
 namespace WeatherAndPower.Data
 {
 	public class FMI : BaseHttpClient
 	{
+
+		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		public static string Place { get; set; }
 		public static string Query { get; set; }
@@ -137,7 +140,7 @@ namespace WeatherAndPower.Data
 			return request;
 		}
 
-		public static async Task<List<DataSeries>> GetData(string url)
+		public static async Task<List<IDataSeries>> GetData(string url)
 		{
 			var httpResponse = await _client.GetAsync(url);
 			var bytes = await httpResponse.Content.ReadAsByteArrayAsync();
@@ -172,7 +175,7 @@ namespace WeatherAndPower.Data
 			}
 
 			var result_nodes = doc.SelectNodes("//om:result", mng);
-			List<DataSeries> plots = new List<DataSeries>();
+			List<IDataSeries> plots = new List<IDataSeries>();
 
 			// These flags make sure that warning message about missing graphs/values is shown only once
 			bool already_shown_graphs = false;
@@ -190,7 +193,7 @@ namespace WeatherAndPower.Data
 				DataFormat format = GetFormat(typeformat);
 
 
-				var plot = new DataSeries(Place, format, series);
+				var plot = DataSeriesFactory.CreateDataSeries(Place, format, series);
 
 				// VALUETIMEPAIR				
 				var PairLst = result.SelectNodes(".//wml2:MeasurementTVP", mng);
@@ -198,8 +201,7 @@ namespace WeatherAndPower.Data
 				foreach (XmlNode TimeValuePair in PairLst)
 				{
 					DateTime time = Convert.ToDateTime(TimeValuePair.SelectSingleNode(".//wml2:time", mng).InnerText);
-					double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, out double value);
-
+                    double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, NumberStyles.Any, CultureInfo.InvariantCulture, out double value);
 					if (Double.IsNaN(value))
 					{
 						// If the first one is NaN then the whole set is faulty

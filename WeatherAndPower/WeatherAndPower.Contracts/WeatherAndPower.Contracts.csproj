@@ -74,7 +74,7 @@
     <Compile Include="ByteColorJsonConverter.cs" />
     <Compile Include="Cloudiness.cs" />
     <Compile Include="DataPoint.cs" />
-    <Compile Include="DataSeries.cs" />
+    <Compile Include="IDataSeries.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Humidity.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="IData.cs" />
     <Compile Include="IDataJsonConverter.cs" />
     <Compile Include="IDataPlotModel.cs" />
+    <Compile Include="IDataSeriesFactory.cs" />
     <Compile Include="IPieModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
     <Compile Include="ISidebarModel.cs" />

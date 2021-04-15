@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.Core;
+using WeatherAndPower.Data;
 using WeatherAndPower.UI;
 
 namespace WeatherAndPower
@@ -43,6 +44,10 @@ namespace WeatherAndPower
 			dataPlotView.DataContext = dataPlotViewModel;
 
 			var windowFactory = new PieFactory();
+			var dataSeriesFactory = new DataSeriesFactory();
+
+			FMI.DataSeriesFactory = dataSeriesFactory;
+			Fingrid.DataSeriesFactory = dataSeriesFactory;
 
 			var sidebarModel = new SidebarModel(dataPlotModel, windowFactory);
 			var sidebarViewModel = new SidebarViewModel(sidebarModel);

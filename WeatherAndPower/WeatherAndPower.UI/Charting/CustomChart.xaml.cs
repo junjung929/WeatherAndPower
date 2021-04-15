@@ -33,12 +33,12 @@ namespace WeatherAndPower.UI
 	{
 		private DataFormat _Formats = 0;
 
-		public IEnumerable<DataSeries> BindableSeries
+		public IEnumerable<IDataSeries> BindableSeries
 		{
-			get { return (IEnumerable<DataSeries>)GetValue(BindableSeriesProperty); }
+			get { return (IEnumerable<IDataSeries>)GetValue(BindableSeriesProperty); }
 			set {
-				if (value is ObservableCollection<DataSeries>) {
-					((ObservableCollection<DataSeries>)value).CollectionChanged += SeriesChanged;
+				if (value is ObservableCollection<IDataSeries>) {
+					((ObservableCollection<IDataSeries>)value).CollectionChanged += SeriesChanged;
 				}
 				SetValue(BindableSeriesProperty, value);
 			}
@@ -46,7 +46,7 @@ namespace WeatherAndPower.UI
 		public static readonly DependencyProperty BindableSeriesProperty =
 			DependencyProperty.Register(
 				"BindableSeries",
-				typeof(IEnumerable<DataSeries>),
+				typeof(IEnumerable<IDataSeries>),
 				typeof(CustomChart),
 				new FrameworkPropertyMetadata(null,
 					FrameworkPropertyMetadataOptions.AffectsRender,
@@ -55,8 +55,8 @@ namespace WeatherAndPower.UI
 
 		private static void OnSeriesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			if (e.NewValue is ObservableCollection<DataSeries>) {
-				((ObservableCollection<DataSeries>)e.NewValue).CollectionChanged += ((CustomChart)d).SeriesChanged;
+			if (e.NewValue is ObservableCollection<IDataSeries>) {
+				((ObservableCollection<IDataSeries>)e.NewValue).CollectionChanged += ((CustomChart)d).SeriesChanged;
 			}
 		}
 
@@ -83,6 +83,8 @@ namespace WeatherAndPower.UI
 			NotifyPropertyChanged("ShowPowerAxis");
 			NotifyPropertyChanged("ShowCloudinessAxis");
 			NotifyPropertyChanged("ShowWindAxis");
+			NotifyPropertyChanged("ShowHumidityAxis");
+			NotifyPropertyChanged("ShowPrecipitationAxis");
 		}
 
 		public bool ShowTemperatureAxis
@@ -103,6 +105,15 @@ namespace WeatherAndPower.UI
 		public bool ShowWindAxis
 		{
 			get { return (_Formats & DataFormat.Wind) != 0; }
+		}
+		public bool ShowHumidityAxis
+		{
+			get { return (_Formats & DataFormat.Humidity) != 0; }
+		}
+
+		public bool ShowPrecipitationAxis
+		{
+			get { return (_Formats & DataFormat.Precipitation) != 0; }
 		}
 
 		#endregion
@@ -185,7 +196,8 @@ namespace WeatherAndPower.UI
 			InitializeComponent();
 		}
 
-		private void Plot(DataSeries data) {
+
+		private void Plot(IDataSeries data) {
 			var series = new CustomLineSeries();
 			series.DataContext = data;
 			var nth = (data.Series.Count / Globals.MaximumDataPoints) + 1;
@@ -201,7 +213,26 @@ namespace WeatherAndPower.UI
 
 			series.LineColor = Color.FromRgb(data.Color[0], data.Color[1], data.Color[2]);
 
+			series.IsVisibleChanged += OnSeriesVisibilityChanged;
+
 			Series.Add(series);
+		}
+
+		private void OnSeriesVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			var series = (IDataSeries)((CustomLineSeries)sender).DataContext;
+			if ((bool)e.NewValue) {
+				_Formats |= series.Format;
+			} else {
+				_Formats &= ~series.Format;
+				foreach (IDataSeries s in BindableSeries) {
+					if (s.Format == series.Format && s.IsVisible) {
+						_Formats |= series.Format;
+						break;
+					}
+				}
+			}
+			RefreshAxisVisibilities();
 		}
 
 		private void Clear()
@@ -212,11 +243,10 @@ namespace WeatherAndPower.UI
 		private void Remove(int id)
 		{
 			try {
-				var item = base.Series.First(i => ((i as LineSeries).DataContext as DataSeries).Id == id);
+				var item = base.Series.First(i => ((i as LineSeries).DataContext as IDataSeries).Id == id);
 				Series.Remove(item);
 			} catch (InvalidOperationException) { }
 		}
-
 
 		private void SeriesChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -224,9 +254,9 @@ namespace WeatherAndPower.UI
 				e.Action == NotifyCollectionChangedAction.Replace) {
 				_Formats = 0;
 				for (int i = 0; i < e.OldItems.Count; i++) {
-					Remove(((DataSeries)e.OldItems[i]).Id);
+					Remove(((IDataSeries)e.OldItems[i]).Id);
 				}
-				var coll = (IEnumerable<DataSeries>)sender;
+				var coll = (IEnumerable<IDataSeries>)sender;
 				for (int i = 0; i < coll.Count(); i++) {
 					_Formats |= coll.ElementAt(i).Format;
 				}
@@ -234,15 +264,15 @@ namespace WeatherAndPower.UI
 			if (e.Action == NotifyCollectionChangedAction.Add ||
 				e.Action == NotifyCollectionChangedAction.Replace) {
 				for (int i = 0; i < e.NewItems.Count; i++) {
-					Plot((DataSeries)e.NewItems[i]);
-					_Formats |= ((DataSeries)e.NewItems[i]).Format;
+					Plot((IDataSeries)e.NewItems[i]);
+					_Formats |= ((IDataSeries)e.NewItems[i]).Format;
 				}
 			}
 			if (e.Action == NotifyCollectionChangedAction.Reset) {
 				Clear();
 				_Formats = 0;
-				if (((ObservableCollection<DataSeries>)sender).Count > 0) {
-					foreach (var item in ((ObservableCollection<DataSeries>)sender)) {
+				if (((ObservableCollection<IDataSeries>)sender).Count > 0) {
+					foreach (var item in ((ObservableCollection<IDataSeries>)sender)) {
 						Plot(item);
 						_Formats |= item.Format;
 					}

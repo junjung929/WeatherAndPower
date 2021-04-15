@@ -106,5 +106,21 @@
 												  Converter={StaticResource BoolToVisibilityConverter}}"
 							 Tag="{x:Static contracts:DataFormat.Wind}"
 							 Title="Wind (m/s)"/>
+
+		<charting:LinearAxis Name="PrecipitationAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowPrecipitationAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Precipitation}"
+							 Title="Rain (mm)"/>
+
+		<charting:LinearAxis Name="HumidityAxis"
+							 Orientation="Y"
+						     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:CustomChart}},
+												  Path=ShowHumidityAxis,
+												  Converter={StaticResource BoolToVisibilityConverter}}"
+							 Tag="{x:Static contracts:DataFormat.Humidity}"
+							 Title="Humidity (%)"/>
 	</charting:Chart.Axes>
 </charting:Chart>

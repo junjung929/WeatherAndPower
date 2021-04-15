@@ -33,7 +33,7 @@ namespace WeatherAndPower.UI
 
 		//private DataFormat _Formats = 0;
 
-		public ObservableCollection<DataSeries> Data 
+		public ObservableCollection<IDataSeries> Data 
 		{
 			get { return Model.Data; }
 		}
@@ -60,7 +60,7 @@ namespace WeatherAndPower.UI
 
 		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
-			var id = ((sender as CustomLineSeries).DataContext as DataSeries).Id;
+			var id = ((sender as CustomLineSeries).DataContext as IDataSeries).Id;
 			Model.SaveChartJson("test.json", id);
 		}
 	}

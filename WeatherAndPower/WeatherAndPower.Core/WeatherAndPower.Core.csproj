@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="AbstractModel.cs" />
     <Compile Include="DataPlotModel.cs" />
+    <Compile Include="DataSeries.cs" />
+    <Compile Include="DataSeriesFactory.cs" />
     <Compile Include="PieModel.cs" />
     <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

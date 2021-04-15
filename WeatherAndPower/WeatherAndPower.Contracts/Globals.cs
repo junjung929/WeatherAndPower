@@ -17,8 +17,8 @@ namespace WeatherAndPower.Contracts
         Power = 0x2,
         Cloudiness = 0x4,
         Wind = 0x8,
-        Humidity = 0x16,
-        Precipitation = 0x32
+        Humidity = 0x10,
+        Precipitation = 0x20
     }
 
     public struct Interval
