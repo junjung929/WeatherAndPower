@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,23 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
+using static WeatherAndPower.Contracts.IAddWindowModel;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class AddWindowViewModel : ViewModelBase
     {
-        public enum DataTypeEnum
+        private IAddWindowModel _model;
+        public IAddWindowModel Model
         {
-            Power = 0x01,
-            Weather = 0x02
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
         }
 
         private InputViewModelBase _selectedViewModel;
@@ -31,10 +40,19 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
-
-        public ICommand UpdateViewCommand { get; set; }
-        public ICommand AddPlotCommand { get; set; }
-
+        private void UpdateSelectedViewModel(IAddWindowModel.DataTypeEnum dataType)
+        {
+            if (dataType == IAddWindowModel.DataTypeEnum.Power)
+            {
+                var powerModel = Model.CreateNewPowerInputModel();
+                SelectedViewModel = new PowerInputViewModel(powerModel);
+            }
+            else
+            {
+                var weatherModel = Model.CreateNewWeatherInputModel();
+                SelectedViewModel = new WeatherInputViewModel(weatherModel);
+            }
+        }
 
         public InputViewModelBase SelectedViewModel
         {
@@ -46,17 +64,27 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
-        public Array DataTypes
-        {
-            get { return Enum.GetValues(typeof(DataTypeEnum)); }
-        }
+        public ObservableCollection<DataTypeEnum> DataTypes { get; }
+           = new ObservableCollection<DataTypeEnum>(
+               Enum.GetValues(typeof(DataTypeEnum))
+               .Cast<DataTypeEnum>());
+
+        public RelayCommand UpdateViewCommand => new RelayCommand(() => UpdateSelectedViewModel(DataType));
+        public RelayCommand AddGraphCommand => new RelayCommand(() => {
+            if (DataType == IAddWindowModel.DataTypeEnum.Power)
+            {
+            }
+            else
+            {
+
+            }
+        });
 
         public string PlotName { get; set; }
-        public AddWindowViewModel(PlaceholderViewModel viewModel)
+        public AddWindowViewModel(IAddWindowModel model)
         {
-            UpdateViewCommand = new UpdateViewCommand(this);
-            AddPlotCommand = new AddPlotCommand(this, viewModel);
-            UpdateViewCommand.Execute(DataType);
+            _model = model;
+            UpdateSelectedViewModel(DataType);
         }
     }
 }

@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddWindow\IAddWindowModel.cs" />
     <Compile Include="AddWindow\IDateTimeInputModel.cs" />
     <Compile Include="AddWindow\IPowerInputModel.cs" />
     <Compile Include="AddWindow\IWeatherInputModel.cs" />
