@@ -18,6 +18,11 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         {
 
         }
+
+        public virtual void CreateDateTimeViewModel()
+        {
+
+        }
         public InputViewModelBase()
         {
         }
