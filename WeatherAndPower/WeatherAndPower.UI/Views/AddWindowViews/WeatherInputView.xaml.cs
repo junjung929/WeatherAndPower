@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WeatherAndPower.UI.Views.AddWindowViews
+namespace WeatherAndPower.UI
 {
     /// <summary>
     /// Interaction logic for WeatherInputView.xaml

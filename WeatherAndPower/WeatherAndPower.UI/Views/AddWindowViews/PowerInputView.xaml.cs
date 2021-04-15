@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WeatherAndPower.Contracts;
 
-namespace WeatherAndPower.UI.Views.AddWindowViews
+namespace WeatherAndPower.UI
 {
     /// <summary>
     /// Interaction logic for PowerInputView.xaml

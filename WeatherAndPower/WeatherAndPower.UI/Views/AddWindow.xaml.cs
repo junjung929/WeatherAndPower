@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.UI.ViewModels.AddWindow;
+using WeatherAndPower.UI;
 
-namespace WeatherAndPower.UI.Views
+namespace WeatherAndPower.UI
 {
     /// <summary>
     /// Interaction logic for AddWindow.xaml
@@ -24,7 +24,6 @@ namespace WeatherAndPower.UI.Views
         public AddWindow(PlaceholderViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new AddWindowViewModel(viewModel);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

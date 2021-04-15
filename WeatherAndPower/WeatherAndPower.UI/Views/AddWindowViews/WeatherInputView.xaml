@@ -1,12 +1,9 @@
-﻿<UserControl x:Class="WeatherAndPower.UI.Views.AddWindowViews.WeatherInputView"
+﻿<UserControl x:Class="WeatherAndPower.UI.WeatherInputView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
-             xmlns:local="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
-             xmlns:converters="clr-namespace:WeatherAndPower.UI.ValueConverters"
-             xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
+             xmlns:local="clr-namespace:WeatherAndPower.UI"
              mc:Ignorable="d" 
              d:DesignWidth="800" Height="Auto">
     <UserControl.Resources>
@@ -183,7 +180,7 @@
         </Border>
 
         <Border  Grid.Row="4" Grid.ColumnSpan="3">
-            <views:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
+            <local:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
         </Border>
     </Grid>
 

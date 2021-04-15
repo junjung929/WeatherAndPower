@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.UI.ViewModels.AddWindow;
+using WeatherAndPower.UI;
 
 namespace WeatherAndPower.UI.Commands
 {
     public class UpdateViewCommand : ICommand
     {
-        private MainViewModel _viewModel { get; set; }
+        private AddWindowViewModel _viewModel { get; set; }
 
-        public UpdateViewCommand(MainViewModel viewModel)
+        public UpdateViewCommand(AddWindowViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -27,16 +27,14 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter.ToString() == MainViewModel.DataTypeEnum.Power.ToString())
-            {
-                _viewModel.SelectedViewModel = new PowerInputViewModel(_viewModel);
-            }
-            else
-            {
-                _viewModel.SelectedViewModel = new WeatherInputViewModel(_viewModel);
-            }
-            _viewModel.SelectedViewModel.DateTimeViewModel = new DateTimeViewModel(_viewModel.SelectedViewModel);
-            _viewModel.SelectedViewModel.UpdateDateTimeMinMax();
+            //if (parameter.ToString() == AddWindowViewModel.DataTypeEnum.Power.ToString())
+            //{
+            //    _viewModel.SelectedViewModel = new PowerInputViewModel(null);
+            //}
+            //else
+            //{
+            //    _viewModel.SelectedViewModel = new WeatherInputViewModel(null);
+            //}
         }
     }
 }
