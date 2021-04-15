@@ -5,13 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
+using static WeatherAndPower.Contracts.IDateTimeInputModel;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class DateTimeViewModel : ViewModelBase
     {
-        private InputViewModelBase _viewModel;
+        private IDateTimeInputModel _model;
+        public IDateTimeInputModel Model
+        {
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
+        }
+        public List<DateTimeRange> DateTimeRanges { get; set; }
+        private DateTimeRange _dateTimeRange { get; set; }
+        public DateTimeRange DateTimeRange
+        {
+            get { return _dateTimeRange; }
+            set { _dateTimeRange = value; NotifyPropertyChanged("DateTimeRange"); }
+        }
 
         private bool _isStartTimePickerEnabled = true;
         private bool _isEndTimePickerEnabled = true;
@@ -44,8 +64,6 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             {
                 _startTime = value;
                 NotifyPropertyChanged("StartTime");
-                NotifyDateTimeChanged("StartTime");
-
             }
         }
 
@@ -56,7 +74,6 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             {
                 _endTime = value;
                 NotifyPropertyChanged("EndTime");
-                NotifyDateTimeChanged("EndTime");
             }
         }
         public DateTime DefaultDateTimeMin { get; private set; } = DateTime.Today.AddYears(-2);
@@ -81,14 +98,6 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             DateTimeMax = DefaultDateTimeMax;
         }
 
-
-        public void NotifyDateTimeChanged(string dateTime)
-        {
-            _viewModel.OnDateTimeUpdated(dateTime);
-
-        }
-
-        public ICommand UpdateDateTimeCommand { get; set; }
 
         /// <summary>
         /// Check whether datetime is valid
@@ -142,10 +151,41 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             if (min != DateTimeMin) DateTimeMin = min;
             if (max != DateTimeMax) DateTimeMax = max;
         }
-        public DateTimeViewModel(InputViewModelBase viewModel)
+
+        public RelayCommand UpdateDateTimeCommand => new RelayCommand(() =>
         {
-            _viewModel = viewModel;
-            UpdateDateTimeCommand = new UpdateDateTimeCommand(this);
+            var (startTime, endTime) = Model.GetNewDateTimeRange(DateTimeRange);
+            if (IsStartTimePickerEnabled)
+            {
+                var isValid = CheckDateTimeValid(startTime);
+                if (isValid < 0)
+                {
+                    startTime = DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    startTime = DateTimeMax;
+                }
+                StartTime = startTime;
+            }
+            if (IsEndTimePickerEnabled)
+            {
+                var isValid = CheckDateTimeValid(endTime);
+                if (isValid < 0)
+                {
+                    endTime = DateTimeMin;
+                }
+                else if (isValid > 0)
+                {
+                    endTime = DateTimeMax;
+                }
+                EndTime = endTime;
+            }
+        });
+        public DateTimeViewModel(IDateTimeInputModel model)
+        {
+            _model = model;
+            DateTimeRanges = _model.DateTimeRanges;
             SetDateTimeMinMaxToDefault();
         }
     }
