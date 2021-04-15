@@ -161,6 +161,10 @@ namespace WeatherAndPower.Core
 		{
 			DataPlot.SaveChartImage(path);
 		}
+        public IAddWindowModel CreateNewAddWindow()
+        {
+            return new AddWindowModel(DataPlot);
+        }
 
 		public SidebarModel(DataPlotModel dataPlot, IWindowFactory windowFactory)
 		{

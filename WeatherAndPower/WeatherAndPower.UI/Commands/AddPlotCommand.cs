@@ -12,9 +12,9 @@ namespace WeatherAndPower.UI.Commands
     public class AddPlotCommand : ICommand
     {
         private AddWindowViewModel _viewModel;
-        private PlaceholderViewModel _placeholderViewModel;
+        private SidebarViewModel _sidebarViewModel;
 
-        public AddPlotCommand(AddWindowViewModel viewModel, PlaceholderViewModel placeholderViewModel)
+        public AddPlotCommand(AddWindowViewModel viewModel, SidebarViewModel sidebarViewModel)
         {
             _viewModel = viewModel;
             _sidebarViewModel = sidebarViewModel;

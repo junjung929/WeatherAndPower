@@ -80,7 +80,6 @@
     <Compile Include="DataSeries.cs" />
     <Compile Include="DataSeriesFactory.cs" />
     <Compile Include="PieModel.cs" />
-    <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SidebarModel.cs" />
   </ItemGroup>

@@ -10,9 +10,9 @@ namespace WeatherAndPower.UI.Commands
 {
     class OpenAddWindowCommand : ICommand
     {
-        private PlaceholderViewModel viewModel;
+        private SidebarViewModel viewModel;
 
-        public OpenAddWindowCommand(PlaceholderViewModel viewModel)
+        public OpenAddWindowCommand(SidebarViewModel viewModel)
         {
             this.viewModel = viewModel;
         }

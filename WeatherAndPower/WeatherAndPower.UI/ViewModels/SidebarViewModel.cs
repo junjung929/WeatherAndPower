@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.UI.Views;
 
 namespace WeatherAndPower.UI
 {
@@ -27,7 +26,11 @@ namespace WeatherAndPower.UI
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
         public RelayCommand AddDataCommand => new RelayCommand(() =>
         {
-            var addWindow = new AddWindow(this);
+            var addWindowModel = Model.CreateNewAddWindow();
+            var addWindowViewModel = new AddWindowViewModel(addWindowModel);
+            AddWindow addWindow = new AddWindow();
+            addWindow.DataContext = addWindowViewModel;
+            addWindowViewModel.AddWindow = addWindow;
             addWindow.Show();
         });
         public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
