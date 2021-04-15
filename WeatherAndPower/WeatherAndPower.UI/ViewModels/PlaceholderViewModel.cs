@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
+using WeatherAndPower.UI.ViewModels.AddWindow;
 using WeatherAndPower.UI.Views;
 
 namespace WeatherAndPower.UI
@@ -57,12 +58,19 @@ namespace WeatherAndPower.UI
             Model.AddWeatherGraphAction(cityName, parameters, startTime, endTime, plotName, parameterType);
         }
 
-        public ICommand OpenAddWindowCommand { get; set; }
+        public RelayCommand OpenAddWindowCommand => new RelayCommand(() =>
+        {
+            var addWindowModel = Model.CreateNewAddWindow();
+            var addWindowViewModel = new AddWindowViewModel(addWindowModel);
+            var addWindow = new AddWindow();
+            addWindow.DataContext = addWindowViewModel;
+            addWindow.Show();
+
+        });
 
         public PlaceholderViewModel(IPlaceholderModel model)
         {
             Model = model;
-            OpenAddWindowCommand = new OpenAddWindowCommand(this);
         }
     }
 }
