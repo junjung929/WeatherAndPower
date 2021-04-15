@@ -24,7 +24,7 @@ namespace WeatherAndPower.UI.Views
         public AddWindow(PlaceholderViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new MainViewModel(viewModel);
+            DataContext = new AddWindowViewModel(viewModel);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -32,9 +32,9 @@ namespace WeatherAndPower.UI.Views
             Close();
         }
 
-        public MainViewModel ViewModel
+        public AddWindowViewModel ViewModel
         {
-            get { return (MainViewModel) DataContext; }
+            get { return (AddWindowViewModel) DataContext; }
         }
     }
 }
