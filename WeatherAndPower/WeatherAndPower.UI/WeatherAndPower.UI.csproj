@@ -90,6 +90,7 @@
     <Compile Include="ViewModels\DataPlotViewModel.cs" />
     <Compile Include="ViewModels\PieViewModel.cs" />
     <Compile Include="ViewModels\PlaceholderViewModel.cs" />
+    <Compile Include="ViewModels\SidebarViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AddWindow.xaml.cs">
       <DependentUpon>AddWindow.xaml</DependentUpon>
@@ -111,6 +112,9 @@
     </Compile>
     <Compile Include="Views\AddWindowViews\PowerInputView.xaml.cs">
       <DependentUpon>PowerInputView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SidebarView.xaml.cs">
+      <DependentUpon>SidebarView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddWindowViews\PowerInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SidebarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

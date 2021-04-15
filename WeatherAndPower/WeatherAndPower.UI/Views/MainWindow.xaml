@@ -7,10 +7,18 @@
              mc:Ignorable="d" Height="600" Width="800">
     <Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="3*"/>
 			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 		<local:DataPlotView x:Name="DataPlot" Grid.Column="0"/>
-		<local:PlaceholderView x:Name="PlaceholderModule" Grid.Column="1"/>
+						<GridSplitter Grid.Column="1"
+									  Width ="4" 
+									  Margin="0,2"
+									  Background="LightGray"
+									  HorizontalAlignment="Stretch"
+									  ResizeBehavior="PreviousAndNext"
+									  Focusable="False"/>
+		<local:SidebarView x:Name="PlaceholderModule" Grid.Column="2"/>
 	</Grid>
 </Window>

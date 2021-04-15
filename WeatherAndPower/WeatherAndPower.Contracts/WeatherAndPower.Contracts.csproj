@@ -82,6 +82,7 @@
     <Compile Include="IDataPlotModel.cs" />
     <Compile Include="IPieModel.cs" />
     <Compile Include="IPlaceholderModel.cs" />
+    <Compile Include="ISidebarModel.cs" />
     <Compile Include="IWindowFactory.cs" />
     <Compile Include="Power.cs" />
     <Compile Include="PowerType.cs" />

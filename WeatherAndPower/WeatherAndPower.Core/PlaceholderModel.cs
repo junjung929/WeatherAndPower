@@ -94,11 +94,13 @@ namespace WeatherAndPower.Core
                 return (d.Format == DataFormat.Power && d.Maximum > point && d.Minimum < point);
             }).Select(d => d.GetDataPoint(point));
 
-            var model = new PieModel();
-            foreach (var d in data) {
-                model.Data.Add(d);
+            if (data.Count() > 0) {
+				var model = new PieModel();
+				foreach (var d in data) {
+					model.Data.Add(d);
+				}
+				WindowFactory.CreateWindow(model);
 			}
-            WindowFactory.CreateWindow(model);
 		}
 
         public void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string PlotName)

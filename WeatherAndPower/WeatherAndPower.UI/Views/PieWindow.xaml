@@ -8,7 +8,6 @@
         mc:Ignorable="d"
         Title="PieWindow" Height="450" Width="800">
     <Grid>
-		<Label Content="Pie" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 		<charting:Chart>
 			<charting:Chart.Series>
 				<charting:PieSeries ItemsSource="{Binding Data}"

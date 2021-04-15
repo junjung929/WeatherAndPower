@@ -19,6 +19,12 @@ namespace WeatherAndPower.Contracts
 
 		public byte[] Color { get; set; } = { 0, 0, 0 };
 
+		public bool IsSelected { get; set; } = false;
+
+		public bool IsVisible { get; set; } = true;
+
+		public bool IsComparable { get; private set; } = false;
+
 		public DataFormat Format { get; set; }
 
 		public List<Tuple<DateTime, IData>> Series { get; set; }
