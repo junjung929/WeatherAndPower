@@ -75,6 +75,7 @@
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="Commands\AddPlotCommand.cs" />
     <Compile Include="Commands\OpenAddWindowCommand.cs" />
+    <Compile Include="Commands\UpdateDateTimeCommand.cs" />
     <Compile Include="Commands\UpdateSelectedParameterCommand.cs" />
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="RelayCommand.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="ValueConverters\EpochToDateConverter.cs" />
     <Compile Include="ValueConverters\EpochToDateMultiConverter.cs" />
     <Compile Include="ValueConverters\EpochToSpanConverter.cs" />
+    <Compile Include="ViewModels\AddWindow\DateTimeViewModel.cs" />
+    <Compile Include="ViewModels\AddWindow\InputViewModelBase.cs" />
     <Compile Include="ViewModels\AddWindow\MainViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\PowerInputViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\WeatherInputViewModel.cs" />
@@ -94,6 +97,9 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AddWindow.xaml.cs">
       <DependentUpon>AddWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddWindowViews\DateTimeInputView.xaml.cs">
+      <DependentUpon>DateTimeInputView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddWindowViews\WeatherInputView.xaml.cs">
       <DependentUpon>WeatherInputView.xaml</DependentUpon>
@@ -127,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddWindowViews\DateTimeInputView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

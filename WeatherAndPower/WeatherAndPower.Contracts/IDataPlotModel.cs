@@ -13,7 +13,7 @@ namespace WeatherAndPower.Contracts
 
 		void Clear();
 
-		void Remove(string name);
+		void Remove(int id);
 
 		bool SaveChartImage(string path);
 

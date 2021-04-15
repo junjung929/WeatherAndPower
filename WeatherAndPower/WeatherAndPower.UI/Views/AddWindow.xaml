@@ -10,6 +10,7 @@
         mc:Ignorable="d"
         x:Name="AddWindowName"
         SizeToContent="Height"
+        MinHeight="500"
         Title="AddWindow" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:PowerInputViewModel}">
@@ -46,8 +47,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
@@ -79,31 +79,15 @@
             <ContentControl Content="{Binding SelectedViewModel}" />
         </Border>
 
+        
         <Border Grid.Row="3" Grid.Column="0">
-            <Label Content="Start Time :"   />
+            <Label Content="Plot Name :" />
         </Border>
         <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker  HorizontalAlignment="Stretch" x:Name="StartTimeText" VerticalAlignment="Top"
-                                Value="{Binding StartTime}" TextAlignment="Left" Padding="5" />
+            <TextBox x:Name="PlotName" Text="{Binding PlotName}"  Padding="5" />
         </Border>
 
-        <Border Grid.Row="4" Grid.Column="0">
-            <Label Content="End Time :" Grid.Row="4" Grid.Column="0" />
-        </Border>
-        <Border Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
-            <toolkit:DateTimePicker HorizontalAlignment="Stretch" x:Name="EndTimeText" VerticalAlignment="Top"
-                                Grid.Row="4" Grid.Column="1" TextAlignment="Left"
-                                Value="{Binding EndTime}" Padding="5" />
-        </Border>
-
-        <Border Grid.Row="5" Grid.Column="0">
-            <Label Content="Plot Name :" Grid.Row="5" Grid.Column="0" />
-        </Border>
-        <Border Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2">
-            <TextBox Grid.Row="5" Grid.Column="1" x:Name="PlotName" Text="{Binding PlotName}"  Padding="5" />
-        </Border>
-
-        <StackPanel Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+        <StackPanel Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="Add Graph" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Command="{Binding AddPlotCommand}" CommandParameter="{Binding ElementName=AddWindowName}" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="3,10" Padding="10,5" Click="Cancel_Click" />
         </StackPanel>

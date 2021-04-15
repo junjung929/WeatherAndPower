@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             Weather = 0x02
         }
 
-        private ViewModelBase _selectedViewModel;
+        private InputViewModelBase _selectedViewModel;
         private DataTypeEnum _dataType = (DataTypeEnum)0x01;
 
         public DataTypeEnum DataType
@@ -30,11 +31,12 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             }
         }
 
+
         public ICommand UpdateViewCommand { get; set; }
         public ICommand AddPlotCommand { get; set; }
 
 
-        public ViewModelBase SelectedViewModel
+        public InputViewModelBase SelectedViewModel
         {
             get { return _selectedViewModel; }
             set
@@ -49,22 +51,8 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             get { return Enum.GetValues(typeof(DataTypeEnum)); }
         }
 
-        private DateTime _startTime = DateTime.Now;
-        private DateTime _endTime = DateTime.Now;
-
-        public DateTime StartTime
-        {
-            get { return _startTime; }
-            set { _startTime = value; NotifyPropertyChanged("StartTime"); }
-        }
-
-        public DateTime EndTime
-        {
-            get { return _endTime; }
-            set { _endTime = value; NotifyPropertyChanged("EndTime"); }
-        }
         public string PlotName { get; set; }
-        public MainViewModel(PlaceholderViewModel viewModel)
+        public MainViewModel(SidebarViewModel viewModel)
         {
             UpdateViewCommand = new UpdateViewCommand(this);
             AddPlotCommand = new AddPlotCommand(this, viewModel);

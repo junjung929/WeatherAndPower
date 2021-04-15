@@ -44,10 +44,10 @@ namespace WeatherAndPower
 
 			var windowFactory = new PieFactory();
 
-			var placeholderModel = new PlaceholderModel(dataPlotModel, windowFactory);
-			var placeholderViewModel = new PlaceholderViewModel(placeholderModel);
-			var placeholderView = ((FrameworkElement)MainWindow.FindName("PlaceholderModule"));
-			placeholderView.DataContext = placeholderViewModel;
+			var sidebarModel = new SidebarModel(dataPlotModel, windowFactory);
+			var sidebarViewModel = new SidebarViewModel(sidebarModel);
+			var sidebarView = ((FrameworkElement)MainWindow.FindName("Sidebar"));
+			sidebarView.DataContext = sidebarViewModel;
 
 			MainWindow.Show();
 		}

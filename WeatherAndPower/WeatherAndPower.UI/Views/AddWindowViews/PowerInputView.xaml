@@ -3,29 +3,155 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:WeatherAndPower.UI.Views.AddWindowViews"
              xmlns:local="clr-namespace:WeatherAndPower.UI.Views"
              xmlns:viewmodel="clr-namespace:WeatherAndPower.UI.ViewModels.AddWindow"
              mc:Ignorable="d" d:DesignWidth="800" Height="Auto" VerticalAlignment="Center">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="PowerTypeList" Source="{Binding Path=PowerTypes}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="ParameterType" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+        <!--<viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>-->
+    </UserControl.Resources>
     <Grid Margin="0" VerticalAlignment="Center">
+        <Grid.Resources >
+            <Style TargetType="Border" >
+                <Setter Property="Padding" Value="0,0,0,10" />
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.Column="0">
+            <Label Content="Power Source :" />
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding PowerSources}"
+                 SelectedItem="{Binding SelectedPowerSource}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0"
+                >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton 
+                            Command="{Binding DataContext.UpdatePowerSourceCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding}"   
+                                     IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                     
+                                  />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding PowerServices}"
+                 SelectedItem="{Binding SelectedPowerService}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton 
+                            Command="{Binding DataContext.UpdatePowerServiceCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding}"   
+                                     IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Border Grid.Row="2" Grid.Column="1">
+            <ListBox
+                 ItemsSource="{Binding PowerParameters}"
+                 SelectedItem="{Binding SelectedPowerParameter}"
+                 BorderBrush="Transparent"
+                 BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton 
+                            Command="{Binding DataContext.UpdatePowerParameterCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Content="{Binding}"   
+                                     IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <Border  Grid.Row="3" Grid.ColumnSpan="3">
+            <views:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
+        </Border>
+        <Border Grid.Row="4" Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding IsRealTime}"
+                          IsEnabled="False" 
+                          />
+                <TextBlock Text=" Get information in real time" />
+            </StackPanel>
+        </Border>
+        <Label
+            Grid.Row="5" Grid.Column="0" Content="Time Interval" />
 
-        <Label Content="Category :" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-        <ComboBox Grid.Row="0" Grid.Column="1" 
-                  ItemsSource="{Binding Path=PowerTypes}" 
-                  SelectedItem="{Binding Path=SPowerType}" 
-                  DisplayMemberPath="Name" 
-                  VerticalAlignment="Center" 
-                  Padding="5" />
-
-
+        <ListBox
+            Grid.Row="5" Grid.Column="1"
+            ItemsSource="{Binding Intervals}"
+            SelectedItem="{Binding SelectedInterval}"
+            BorderBrush="Transparent"
+            BorderThickness="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton 
+                        Content="{Binding}"   
+                        IsEnabled="{Binding IsEnabled}"
+                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                />
+                    <!--Command="{Binding DataContext.UpdatePowerParameterCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"-->
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
-    <UserControl.Resources>
-        <viewmodel:PowerInputViewModel x:Key="vm"></viewmodel:PowerInputViewModel>
-    </UserControl.Resources>
+
 </UserControl>

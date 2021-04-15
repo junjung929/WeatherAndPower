@@ -21,7 +21,7 @@ namespace WeatherAndPower.UI.Views
     /// </summary>
     public partial class AddWindow : Window
     {
-        public AddWindow(PlaceholderViewModel viewModel)
+        public AddWindow(SidebarViewModel viewModel)
         {
             InitializeComponent();
             DataContext = new MainViewModel(viewModel);

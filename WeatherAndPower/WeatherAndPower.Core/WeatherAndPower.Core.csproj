@@ -76,6 +76,7 @@
     <Compile Include="PieModel.cs" />
     <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SidebarModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WeatherAndPower.Contracts\WeatherAndPower.Contracts.csproj">

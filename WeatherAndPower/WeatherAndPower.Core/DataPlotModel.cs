@@ -54,10 +54,10 @@ namespace WeatherAndPower.Core
 			Data.Clear();
 		}
 
-		public void Remove(string name)
+		public void Remove(int id)
 		{
-			while (Data.Where(i => i.Name == name).Count() > 0) {
-				var item = Data.First(i => i.Name == name);
+			while (Data.Where(i => i.Id == id).Count() > 0) {
+				var item = Data.First(i => i.Id == id);
 				Data.Remove(item);
 			}
 		}

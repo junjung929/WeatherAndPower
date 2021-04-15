@@ -59,7 +59,7 @@ namespace WeatherAndPower.Core
 
         public void PlaceholderAction3()
         {
-            DataPlot.Remove(DataName);
+            //DataPlot.Remove(DataName);
         }
 
         public void PlaceholderAction5()

@@ -12,12 +12,12 @@ namespace WeatherAndPower.UI.Commands
     public class AddPlotCommand : ICommand
     {
         private MainViewModel _viewModel;
-        private PlaceholderViewModel _placeholderViewModel;
+        private SidebarViewModel _sidebarViewModel;
 
-        public AddPlotCommand(MainViewModel viewModel, PlaceholderViewModel placeholderViewModel)
+        public AddPlotCommand(MainViewModel viewModel, SidebarViewModel sidebarViewModel)
         {
             _viewModel = viewModel;
-            _placeholderViewModel = placeholderViewModel;
+            _sidebarViewModel = sidebarViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -42,7 +42,7 @@ namespace WeatherAndPower.UI.Commands
         private void AddPowerGraph(System.Windows.Window window)
         {
             var powerViewModel = (PowerInputViewModel)_viewModel.SelectedViewModel;
-
+            Console.WriteLine(powerViewModel.SPowerType);
             if (powerViewModel.SPowerType == null)
             {
                 System.Windows.MessageBox.Show("Please choose the category");
@@ -54,7 +54,9 @@ namespace WeatherAndPower.UI.Commands
 
             try
             {
-                _placeholderViewModel.AddPowerGraphCommand(powerViewModel.SPowerType, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName);
+                var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
+                var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
+                _sidebarViewModel.AddPowerGraphCommand(powerViewModel.SPowerType, startTime, endTime, _viewModel.PlotName);
                 window.Close();
             }
             catch (Exception)
@@ -68,18 +70,29 @@ namespace WeatherAndPower.UI.Commands
             var weatherViewModel = (WeatherInputViewModel)_viewModel.SelectedViewModel;
             string parameters = String.Join(",", weatherViewModel.SelectedParameters);
 
+            var parameterTypes = weatherViewModel.SelectedParameters.ToList().Select(x => x.ParameterType).Distinct();
 
-            // Checks date times and plot name are valid
-            if (!CommonInputValidator()) return;
+            if (!parameterTypes.Contains(WeatherType.ParameterEnum.Forecast)
+                && !parameterTypes.Contains(WeatherType.ParameterEnum.Observation))
+            {
+                System.Windows.MessageBox.Show("Please choose at least one parameter from either Observation or Forecast");
+                return;
+            }
 
             if (weatherViewModel.CityName == null || weatherViewModel.CityName == "")
             {
                 System.Windows.MessageBox.Show("Please give a name of cities in Finland");
                 return;
             }
+
+            // Checks date times and plot name are valid
+            if (!CommonInputValidator()) return;
+           
             try
             {
-                _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, _viewModel.StartTime, _viewModel.EndTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
+                var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
+                var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
+                _sidebarViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, startTime, endTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
                 window.Close();
             }
             catch (Exception e)
@@ -96,8 +109,10 @@ namespace WeatherAndPower.UI.Commands
 
         private Boolean IsTimeValid()
         {
-            if (_viewModel.StartTime.Equals(_viewModel.EndTime)
-                    || DateTime.Compare(_viewModel.StartTime, _viewModel.EndTime) > 0)
+            var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
+            var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
+            if (startTime.Equals(endTime)
+                    || DateTime.Compare(startTime, endTime) > 0)
             {
                 System.Windows.MessageBox.Show("Please choose valid time range");
                 return false;
