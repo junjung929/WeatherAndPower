@@ -30,7 +30,8 @@ namespace WeatherAndPower.UI
         public DateTimeRange DateTimeRange
         {
             get { return _dateTimeRange; }
-            set { _dateTimeRange = value; NotifyPropertyChanged("DateTimeRange"); }
+            set { _dateTimeRange = value;
+                NotifyPropertyChanged("DateTimeRange"); }
         }
 
         private bool _isStartTimePickerEnabled = true;
