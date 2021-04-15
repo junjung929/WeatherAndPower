@@ -22,6 +22,9 @@ namespace WeatherAndPower.Contracts
 
 		bool LoadChart(string path);
 
+		IAddWindowModel CreateNewAddWindow();
+
+
 		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string plotName);
 
 		void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType);
