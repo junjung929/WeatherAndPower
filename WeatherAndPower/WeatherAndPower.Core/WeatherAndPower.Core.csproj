@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractModel.cs" />
+    <Compile Include="AddWindow\DateTimeInputModel.cs" />
+    <Compile Include="AddWindow\PowerInputModel.cs" />
     <Compile Include="DataPlotModel.cs" />
     <Compile Include="PlaceholderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

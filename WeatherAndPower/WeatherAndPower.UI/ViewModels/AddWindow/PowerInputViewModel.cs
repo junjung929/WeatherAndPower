@@ -7,12 +7,25 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
+using WeatherAndPower.UI.ViewModels.AddWindow;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class PowerInputViewModel : InputViewModelBase
     {
-        MainViewModel ParentViewModel { get; set; }
+        private IPowerInputModel _model;
+
+        public IPowerInputModel Model
+        {
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
+        }
 
         private bool _isRealTime { get; set; } = false;
         public bool IsRealTime
@@ -128,19 +141,13 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         private void UpdatePowerServices()
         {
-            var selectableTypes = PowerTypes.ToList().FindAll(powerType => powerType.Source == SelectedPowerSource);
-            var selectableServices = selectableTypes.Select(selectableType => selectableType.Service).Distinct();
-            PowerServices = new ObservableCollection<PowerType.ServiceEnum>(selectableServices);
+            PowerServices = new ObservableCollection<PowerType.ServiceEnum>(Model.GetUpdatedPowerServices(SelectedPowerSource));
             SelectedPowerService = PowerServices.First();
         }
 
         private void UpdatePowerParameters()
         {
-            var selectableTypes = PowerTypes.ToList().FindAll(powerType =>
-            powerType.Source == SelectedPowerSource
-            && powerType.Service == SelectedPowerService);
-            var selectableParameters = selectableTypes.Select(selectableType => selectableType.ParameterType).Distinct();
-            PowerParameters = new ObservableCollection<PowerType.ParameterEnum>(selectableParameters);
+            PowerParameters = new ObservableCollection<PowerType.ParameterEnum>(Model.GetUpdatedPowerParameters(SelectedPowerSource, SelectedPowerService));
             SelectedPowerParameter = PowerParameters.First();
         }
 
@@ -151,23 +158,12 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public void UpdateSelectedPowerType()
         {
 
-            SPowerType = PowerTypes.ToList().Find(powerType =>
-                powerType.Source == SelectedPowerSource
-                && powerType.Service == SelectedPowerService
-                && powerType.ParameterType == SelectedPowerParameter);
-
+            SPowerType = Model.GetUpdatedPowerType(SelectedPowerSource, SelectedPowerService, SelectedPowerParameter);
             Console.WriteLine(SPowerType);
         }
         public void UpdateRealTime()
         {
-            if (SelectedPowerParameter == PowerType.ParameterEnum.RealTime)
-            {
-                IsRealTime = true;
-            }
-            else
-            {
-                IsRealTime = false;
-            }
+            IsRealTime = Model.CheckIsRealTimeParameter(SelectedPowerParameter);
         }
 
         public override void UpdateDateTimeMinMax()
@@ -193,20 +189,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
             if (minInterval != _minInterval)
             {
-                _minInterval = minInterval;
-                var intervals = new ObservableCollection<Interval>();
-                Intervals.ToList().ForEach(interval =>
-                {
-                    if (interval.Value < minInterval)
-                    {
-                        intervals.Add(new Interval(interval.Value) { IsEnabled = false });
-                    }
-                    else
-                    {
-                        intervals.Add(new Interval(interval.Value));
-                    }
-                });
-                Intervals = intervals;
+                Intervals = new ObservableCollection<Interval>(Model.GetUpdatedIntervals(minInterval));
                 SelectedInterval = SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
             }
         }
@@ -216,7 +199,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public void OnUpdateSelectedPowerSource()
         {
             Console.WriteLine("Power source " + SelectedPowerSource);
-            UpdatePowerServices();
+            UpdateSelectedPowerType();
             UpdatePowerParameters();
             UpdateRealTime();
             UpdateSelectedPowerType();
@@ -243,14 +226,21 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             UpdateIntervals();
         }
 
+        public override void CreateDateTimeViewModel()
+        {
+            var dateTimeInputModel = Model.CreateDateTimeInputModel();
+            DateTimeViewModel = new DateTimeViewModel(dateTimeInputModel);
+            UpdateDateTimeMinMax();
+        }
+
         public ICommand UpdatePowerSourceCommand { get; set; }
         public ICommand UpdatePowerServiceCommand { get; set; }
         public ICommand UpdatePowerParameterCommand { get; set; }
 
-        public PowerInputViewModel(MainViewModel viewModel)
+        public PowerInputViewModel(IPowerInputModel model)
         {
-            ParentViewModel = viewModel;
-            PowerTypes = new ObservableCollection<PowerType>(PowerType.GetAll<PowerType>());
+            _model = model;
+            PowerTypes = new ObservableCollection<PowerType>(model.PowerTypes);
             PowerSources = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
             SelectedPowerSource = PowerType.SourceEnum.All;
             UpdatePowerServices();
@@ -258,6 +248,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
             UpdateRealTime();
             UpdateSelectedPowerType();
             UpdateIntervals();
+            CreateDateTimeViewModel();
 
             UpdatePowerSourceCommand = new RelayCommand(
                 () => OnUpdateSelectedPowerSource());

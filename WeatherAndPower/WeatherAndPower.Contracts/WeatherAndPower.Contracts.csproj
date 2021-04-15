@@ -71,6 +71,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddWindow\IDateTimeInputModel.cs" />
+    <Compile Include="AddWindow\IPowerInputModel.cs" />
     <Compile Include="ByteColorJsonConverter.cs" />
     <Compile Include="DataSeries.cs" />
     <Compile Include="Enumeration.cs" />
