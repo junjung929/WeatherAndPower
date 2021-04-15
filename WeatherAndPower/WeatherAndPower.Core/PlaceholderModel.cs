@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.Contracts.AddWindow;
 using WeatherAndPower.Data;
 
 namespace WeatherAndPower.Core
@@ -193,11 +192,6 @@ namespace WeatherAndPower.Core
                     throw new Exception(ex.Message);
                 }
             }
-        }
-
-        public IAddWindowModel CreateNewAddWindow()
-        {
-            return new AddWindow.AddWindowModel();
         }
 
         public PlaceholderModel(DataPlotModel dataPlot)

@@ -83,7 +83,7 @@
     <Compile Include="ValueConverters\EpochToSpanConverter.cs" />
     <Compile Include="ViewModels\AddWindow\DateTimeViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\InputViewModelBase.cs" />
-    <Compile Include="ViewModels\AddWindow\AddWindowViewModel.cs" />
+    <Compile Include="ViewModels\AddWindow\MainViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\PowerInputViewModel.cs" />
     <Compile Include="ViewModels\AddWindow\WeatherInputViewModel.cs" />
     <Compile Include="ViewModels\DataPlotViewModel.cs" />

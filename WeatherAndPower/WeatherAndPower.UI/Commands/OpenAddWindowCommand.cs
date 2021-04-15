@@ -26,8 +26,8 @@ namespace WeatherAndPower.UI.Commands
 
         public void Execute(object parameter)
         {
-            //var addWindow = new AddWindow(viewModel);
-            //addWindow.Show();
+            var addWindow = new AddWindow(viewModel);
+            addWindow.Show();
         }
     }
 }
