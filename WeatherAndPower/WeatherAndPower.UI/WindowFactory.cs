@@ -16,5 +16,14 @@ namespace WeatherAndPower.UI
 			window.DataContext = PieViewModel;
 			window.Show();
 		}
+
+		public void CreateWindow(IAddWindowModel model)
+		{
+			var AddViewModel = new AddWindowViewModel(model);
+			var window = new AddWindow();
+			window.DataContext = AddViewModel;
+			AddViewModel.AddWindow = window;
+			window.Show();
+		}
 	}
 }

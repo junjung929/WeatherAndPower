@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
-using WeatherAndPower.UI.Commands;
 using static WeatherAndPower.Contracts.IAddWindowModel;
 
 namespace WeatherAndPower.UI

@@ -9,5 +9,7 @@ namespace WeatherAndPower.Contracts
 	public interface IWindowFactory
 	{
 		void CreateWindow(IPieModel model);
+
+		void CreateWindow(IAddWindowModel model);
 	}
 }

@@ -13,9 +13,11 @@ namespace WeatherAndPower.Contracts
 		void ClearGraph();
 		void OpenData(string path);
 		void SaveData(string path, params int[] ids);
+		void SaveSelectedData(string path);
 		void SaveDataImage(string path);
 		void CompareData();
-		void RemoveData(int id);
+		void AddData();
+		void RemoveSelectedData();
 		void AddPowerDataToPlotAction(PowerType powerType, DateTime startTime, DateTime endTime, string plotName);
 		void AddWeatherGraphAction(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType);
 		IAddWindowModel CreateNewAddWindow();

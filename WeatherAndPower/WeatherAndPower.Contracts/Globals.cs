@@ -7,8 +7,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-using Test = System.Collections.Generic.List<System.Tuple<double, double>>;
-
 namespace WeatherAndPower.Contracts
 {
     public enum DataFormat

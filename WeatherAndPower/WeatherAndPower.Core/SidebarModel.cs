@@ -142,14 +142,30 @@ namespace WeatherAndPower.Core
 			}
 		}
 
+        public void AddData()
+		{
+            WindowFactory.CreateWindow(new AddWindowModel(DataPlot));
+		}
+
 		public void OpenData(string path)
 		{
 			DataPlot.LoadChartJson(path);
 		}
 
-		public void RemoveData(int id)
+		public void RemoveSelectedData()
 		{
-			DataPlot.Remove(id);
+            var ids = DataPlot.Data.Where(e => e.IsSelected).Select(e => e.Id).ToArray();
+            foreach (var id in ids) {
+                DataPlot.Remove(id);
+			}
+		}
+
+        public void SaveSelectedData(string path)
+		{
+            var ids = DataPlot.Data.Where(e => e.IsSelected).Select(e => e.Id).ToArray();
+            if (ids.Count() > 0) {
+                DataPlot.SaveChartJson(path, ids);
+			}
 		}
 
 		public void SaveData(string path, params int[] ids)

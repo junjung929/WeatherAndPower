@@ -22,19 +22,11 @@ namespace WeatherAndPower.UI
 
         public RelayCommand ClearGraphCommand => new RelayCommand(() => Model.ClearGraph());
         public RelayCommand OpenDataCommand => new RelayCommand(() => Model.OpenData("test.json"));
-        public RelayCommand SaveDataCommand => new RelayCommand(() => Model.SaveData("test.json"));
+        public RelayCommand SaveDataCommand => new RelayCommand(() => Model.SaveSelectedData("test.json"));
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
-        public RelayCommand AddDataCommand => new RelayCommand(() =>
-        {
-            var addWindowModel = Model.CreateNewAddWindow();
-            var addWindowViewModel = new AddWindowViewModel(addWindowModel);
-            AddWindow addWindow = new AddWindow();
-            addWindow.DataContext = addWindowViewModel;
-            addWindowViewModel.AddWindow = addWindow;
-            addWindow.Show();
-        });
+        public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
         public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
-        public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveData(0));
+        public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveSelectedData());
 
         public void AddPowerGraphCommand(PowerType powerType, DateTime startTime, DateTime endTime, string plotName)
         {
