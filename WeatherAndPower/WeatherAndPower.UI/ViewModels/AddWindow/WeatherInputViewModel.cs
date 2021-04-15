@@ -84,7 +84,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         public void OnUpdateSelectedMedians()
         {
-            Console.WriteLine("Medians " + SelectedMedians);
+            Console.WriteLine("Medians " + SelectedMedian);
         }
         public ICommand UpdateWeatherParameterCommand { get; set; }
         public ICommand UpdateWeatherTypeCommand { get; set; }
