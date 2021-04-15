@@ -12,12 +12,12 @@ namespace WeatherAndPower.UI.Commands
     public class AddPlotCommand : ICommand
     {
         private MainViewModel _viewModel;
-        private PlaceholderViewModel _placeholderViewModel;
+        private SidebarViewModel _sidebarViewModel;
 
-        public AddPlotCommand(MainViewModel viewModel, PlaceholderViewModel placeholderViewModel)
+        public AddPlotCommand(MainViewModel viewModel, SidebarViewModel sidebarViewModel)
         {
             _viewModel = viewModel;
-            _placeholderViewModel = placeholderViewModel;
+            _sidebarViewModel = sidebarViewModel;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -56,7 +56,7 @@ namespace WeatherAndPower.UI.Commands
             {
                 var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
                 var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
-                _placeholderViewModel.AddPowerGraphCommand(powerViewModel.SPowerType, startTime, endTime, _viewModel.PlotName);
+                _sidebarViewModel.AddPowerGraphCommand(powerViewModel.SPowerType, startTime, endTime, _viewModel.PlotName);
                 window.Close();
             }
             catch (Exception)
@@ -92,7 +92,7 @@ namespace WeatherAndPower.UI.Commands
             {
                 var startTime = _viewModel.SelectedViewModel.DateTimeViewModel.StartTime;
                 var endTime = _viewModel.SelectedViewModel.DateTimeViewModel.EndTime;
-                _placeholderViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, startTime, endTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
+                _sidebarViewModel.AddWeatherGraphCommand(weatherViewModel.CityName, parameters, startTime, endTime, _viewModel.PlotName, weatherViewModel.SelectedParameterType);
                 window.Close();
             }
             catch (Exception e)

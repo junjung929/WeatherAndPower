@@ -80,7 +80,7 @@
 		</ListBox>
 
 		<Button Command="{ Binding AddDataCommand }" Content="Add" Grid.Row="2" Grid.Column="0"/>
-		<Button Command="{ Binding PieDataCommand }" Content="Pie" Grid.Row="2" Grid.Column="1"/>
+		<Button Command="{ Binding CompareDataCommand }" Content="Pie" Grid.Row="2" Grid.Column="1"/>
 		<Button Command="{ Binding RemoveDataCommand }" Content="Remove" Grid.Row="2" Grid.Column="2"/>
 	</Grid>
 </UserControl>

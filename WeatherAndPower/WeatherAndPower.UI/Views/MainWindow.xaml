@@ -19,6 +19,6 @@
 									  HorizontalAlignment="Stretch"
 									  ResizeBehavior="PreviousAndNext"
 									  Focusable="False"/>
-		<local:SidebarView x:Name="PlaceholderModule" Grid.Column="2"/>
+		<local:SidebarView x:Name="Sidebar" Grid.Column="2"/>
 	</Grid>
 </Window>

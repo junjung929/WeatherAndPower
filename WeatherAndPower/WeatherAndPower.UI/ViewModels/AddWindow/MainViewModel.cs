@@ -52,7 +52,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         }
 
         public string PlotName { get; set; }
-        public MainViewModel(PlaceholderViewModel viewModel)
+        public MainViewModel(SidebarViewModel viewModel)
         {
             UpdateViewCommand = new UpdateViewCommand(this);
             AddPlotCommand = new AddPlotCommand(this, viewModel);
