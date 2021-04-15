@@ -13,16 +13,20 @@ namespace WeatherAndPower.Contracts
             public string Name { get; set; } 
             public string Description { get; set; }
             public string Value { get; set; }
+            public bool IsEnabled { get; set; }
 
             public DateTimeRange(string name, string? description, string value)
             {
                 Name = name;
                 Description = description;
                 Value = value;
+                IsEnabled = true;
             }
         }
 
         List<DateTimeRange> DateTimeRanges { get; set; }
         Tuple<DateTime, DateTime> GetNewDateTimeRange(DateTimeRange dateTimeRange);
+
+        void EnableDateTimeRange(DateTimeRange dateTimeRange, bool isEnabled);
     }
 }

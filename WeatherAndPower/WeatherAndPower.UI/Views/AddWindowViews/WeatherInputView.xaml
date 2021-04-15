@@ -32,8 +32,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <Border Grid.Row="0" Grid.Column="0">
-            <Label Content="Power Source :" />
+            <Label Content="Parameters:" />
         </Border>
         <Border Grid.Row="0" Grid.Column="1">
             <ListBox
@@ -64,10 +65,12 @@
         </Border>
         <Border Grid.Row="1" Grid.Column="1">
             <ListBox
-                 ItemsSource="{Binding WeatherTypes}"
-                 SelectedItem="{Binding SelectedWeatherType}"
-                 BorderBrush="Transparent"
-                 BorderThickness="0">
+                x:Name="WeatherTypeListBox"
+                ItemsSource="{Binding WeatherTypes}"
+                SelectionMode="Multiple"
+                BorderBrush="Transparent"
+                SelectionChanged="WeatherTypeListBox_SelectionChanged"
+                BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel />
@@ -79,7 +82,9 @@
                             Command="{Binding DataContext.UpdateWeatherTypeCommand, 
                                 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding Description}"   
-                                    
+                                IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
                                 />
                         <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
@@ -88,10 +93,16 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
+        <Border Grid.Row="2" Grid.Column="0">
+            <Label Content="Medians :" />
+        </Border>
         <Border Grid.Row="2" Grid.Column="1">
             <ListBox
-                 ItemsSource="{Binding Medians}"
-                 BorderBrush="Transparent"
+                x:Name="MedianListBox"
+                ItemsSource="{Binding Medians}"
+                SelectionMode="Multiple"
+                BorderBrush="Transparent"
+                SelectionChanged="MedianListBox_SelectionChanged"
                  BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -104,7 +115,9 @@
                             Command="{Binding DataContext.UpdateMedianCommand, 
                                 RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding Description}"   
-                                    
+                            IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                AncestorType={x:Type ListBoxItem}}, 
+                                Path=IsSelected}"
                                 />
                         <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
@@ -113,75 +126,51 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <!--<Border Grid.Row="0"  Grid.Column="0">
-            <Label Content="Parameters :" VerticalAlignment="Top" x:Name="DataTypePanel" />
-        </Border>
-        <Border Grid.Row="0"  Grid.Column="1" Grid.ColumnSpan="2">
-            <StackPanel>
-                <ListBox
-                x:Name="ParameterList"
-                ItemsSource="{Binding Source={StaticResource WeatherTypeList}}"
-                SelectionChanged="ParameterList_SelectionChanged"
-                MaxHeight="150"
-                >
-                    <ListBox.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.Panel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </GroupStyle.Panel>
-                            <GroupStyle.ContainerStyle>
-                                <Style TargetType="{x:Type GroupItem}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate>
-                                                <Expander
-                                                    Padding="0,3"                                           
-                                                    BorderThickness="0"
-                                                    IsExpanded="True">
-                                                    <Expander.Header>
-                                                            <TextBlock Text="{Binding Name, StringFormat={}Choose Parameters for {0}}" />
-                                                    </Expander.Header>
-                                                    <ItemsPresenter/>
-                                                </Expander>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </GroupStyle.ContainerStyle>
-                        </GroupStyle>
-                    </ListBox.GroupStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="ParameterCheckBox" 
-                                            IsChecked="False"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                            Command="{Binding DataContext.UpdateSelectedParameterCommand,
-                                                    RelativeSource={RelativeSource FindAncestor,
-                                                     AncestorType={x:Type UserControl}}}"
-                                          Grid.Column="0"/>
-                                <TextBlock Text="{Binding Description, StringFormat={} {0}}"                                         />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <TextBlock Foreground="Red">Choose one or more parameters of either Observation or Forecast</TextBlock>
-                <TextBlock Foreground="Red">Median parameters are obtional</TextBlock>
-            </StackPanel>
-        </Border>-->
 
         <Border  Grid.Row="3" Grid.Column="0">
             <Label   Content="City :" />
         </Border>
         <Border  Grid.Row="3" Grid.Column="1">
-            <TextBox  x:Name="CityName" Text="{Binding CityName}"  Padding="5" />
+            <ComboBox
+                ItemsSource="{Binding Cities}"
+                SelectedItem="{Binding SelectedCity}"
+                >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Mode=OneWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Border>
 
         <Border  Grid.Row="4" Grid.ColumnSpan="3">
             <local:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
         </Border>
+        <Label
+            Grid.Row="5" Grid.Column="0" Content="Time Interval" />
+        <ListBox
+            Grid.Row="5" Grid.Column="1"
+            ItemsSource="{Binding Intervals}"
+            SelectedItem="{Binding SelectedInterval}"
+            BorderBrush="Transparent"
+            BorderThickness="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton 
+                        Content="{Binding}"   
+                        IsEnabled="{Binding IsEnabled}"
+                        IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
+                            AncestorType={x:Type ListBoxItem}}, 
+                            Path=IsSelected}"
+                                />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 
 </UserControl>

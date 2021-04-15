@@ -30,6 +30,11 @@ namespace WeatherAndPower.Core
 
         public List<DateTimeRange> DateTimeRanges { get; set; } = new List<DateTimeRange>();
 
+        public void EnableDateTimeRange(DateTimeRange dateTimeRange, bool isEnabled)
+        {
+            dateTimeRange.IsEnabled = isEnabled;
+        }
+
         public Tuple<DateTime, DateTime> GetNewDateTimeRange(DateTimeRange dateTimeRange)
         {
             string dateTimeRangeString = dateTimeRange.Value;

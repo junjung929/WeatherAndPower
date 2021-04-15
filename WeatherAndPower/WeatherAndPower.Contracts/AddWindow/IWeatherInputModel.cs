@@ -8,6 +8,12 @@ namespace WeatherAndPower.Contracts
 {
     public interface IWeatherInputModel
     {
+        enum ECity
+        {
+            Helsinki = 0x01,
+            Tampere = 0x02
+        }
+
         List<WeatherType> WeatherTypes { get; }
         List<Interval> Intervals { get; }
 

@@ -109,17 +109,8 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private ObservableCollection<Interval> _intervals { get; set; } = new ObservableCollection<Interval>()
-        {
-            new Interval(3),
-            new Interval(30),
-            new Interval(60),
-            new Interval(360),
-            new Interval(720),
-            new Interval(1440),
-            new Interval(1440*7),
-            new Interval(1440*30),
-        };
+        private ObservableCollection<Interval> _intervals { get; set; }
+       
 
         public ObservableCollection<Interval> Intervals
         {
@@ -167,12 +158,12 @@ namespace WeatherAndPower.UI
                 SelectedPowerParameter == PowerType.ParameterEnum.Observation)
             {
                 DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
+               
             }
             else
             {
                 DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
                     DateTimeViewModel.DefaultDateTimeMax);
-
             }
         }
 
@@ -236,6 +227,7 @@ namespace WeatherAndPower.UI
         public PowerInputViewModel(IPowerInputModel model)
         {
             _model = model;
+            CreateDateTimeViewModel();
             PowerTypes = new ObservableCollection<PowerType>(model.PowerTypes);
             PowerSources = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
             SelectedPowerSource = PowerType.SourceEnum.All;
@@ -244,7 +236,6 @@ namespace WeatherAndPower.UI
             UpdateRealTime();
             UpdateSelectedPowerType();
             UpdateIntervals();
-            CreateDateTimeViewModel();
 
             UpdatePowerSourceCommand = new RelayCommand(
                 () => OnUpdateSelectedPowerSource());
