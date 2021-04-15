@@ -21,7 +21,7 @@ namespace WeatherAndPower.UI
     /// </summary>
     public partial class AddWindow : Window
     {
-        public AddWindow(PlaceholderViewModel viewModel)
+        public AddWindow()
         {
             InitializeComponent();
         }

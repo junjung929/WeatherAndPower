@@ -40,9 +40,9 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private void UpdateSelectedViewModel(IAddWindowModel.DataTypeEnum dataType)
+        private void UpdateSelectedViewModel(DataTypeEnum dataType)
         {
-            if (dataType == IAddWindowModel.DataTypeEnum.Power)
+            if (dataType == DataTypeEnum.Power)
             {
                 var powerModel = Model.CreateNewPowerInputModel();
                 SelectedViewModel = new PowerInputViewModel(powerModel);
@@ -71,7 +71,7 @@ namespace WeatherAndPower.UI
 
         public RelayCommand UpdateViewCommand => new RelayCommand(() => UpdateSelectedViewModel(DataType));
         public RelayCommand AddGraphCommand => new RelayCommand(() => {
-            if (DataType == IAddWindowModel.DataTypeEnum.Power)
+            if (DataType == DataTypeEnum.Power)
             {
             }
             else

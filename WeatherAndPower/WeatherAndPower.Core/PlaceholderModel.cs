@@ -80,14 +80,14 @@ namespace WeatherAndPower.Core
         }
 
         public bool SaveChartImage(string path)
-		{
-			return DataPlot.SaveChartImage(path);
-		}
+        {
+            return DataPlot.SaveChartImage(path);
+        }
 
         public bool SaveChart(string path, params int[] ids)
-		{
+        {
             return DataPlot.SaveChartJson(path, ids);
-		}
+        }
 
         public bool LoadChart(string path)
         {
@@ -192,6 +192,11 @@ namespace WeatherAndPower.Core
                     throw new Exception(ex.Message);
                 }
             }
+        }
+
+        public IAddWindowModel CreateNewAddWindow()
+        {
+            return new AddWindowModel();
         }
 
         public PlaceholderModel(DataPlotModel dataPlot)
