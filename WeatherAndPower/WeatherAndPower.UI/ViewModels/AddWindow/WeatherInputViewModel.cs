@@ -7,12 +7,24 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.UI.Commands;
+using WeatherAndPower.UI.ViewModels.AddWindow;
 
-namespace WeatherAndPower.UI.ViewModels.AddWindow
+namespace WeatherAndPower.UI
 {
     public class WeatherInputViewModel : InputViewModelBase
     {
-        MainViewModel ParentViewModel { get; set; }
+        private IWeatherInputModel _model;
+        public IWeatherInputModel Model
+        {
+            get { return _model; }
+            private set
+            {
+                if (_model != value)
+                {
+                    _model = value;
+                }
+            }
+        }
 
         public WeatherType.ParameterEnum SelectedParameterType { get; set; }
 
@@ -66,9 +78,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
 
         public void UpdateWeatherTypes()
         {
-            var selectableTypes = WeatherType.GetAll<WeatherType>().ToList().FindAll(weatherType =>
-            weatherType.ParameterType == SelectedParameter);
-            WeatherTypes = new ObservableCollection<WeatherType>(selectableTypes);
+            WeatherTypes = new ObservableCollection<WeatherType>(Model.GetUpdatedWeatherTypes(SelectedParameter));
         }
         //public ICommand UpdateSelectedParameterCommand { get; set; }
 
@@ -90,9 +100,9 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         public ICommand UpdateWeatherTypeCommand { get; set; }
         public ICommand UpdateMedianCommand { get; set; }
 
-        public WeatherInputViewModel(MainViewModel viewModel)
+        public WeatherInputViewModel(IWeatherInputModel model)
         {
-            ParentViewModel = viewModel;
+            _model = model;
             UpdateWeatherTypes();
             //WeatherTypes = new ObservableCollection<WeatherType>(WeatherType.GetAll<WeatherType>());
             //UpdateSelectedParameterCommand = new UpdateSelectedParameterCommand(this);
