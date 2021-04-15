@@ -14,7 +14,7 @@ namespace WeatherAndPower.UI
         public RelayCommand ClearGraphCommand => new RelayCommand(() => Model.ClearGraph());
         public RelayCommand OpenDataCommand => new RelayCommand(() => Model.OpenData("test.json"));
         public RelayCommand SaveDataCommand => new RelayCommand(() => Model.SaveData("test.json"));
-        public RelayCommand AddDataCommand => new RelayCommand(() => );
+        public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
         public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
         public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveData());
 	}
