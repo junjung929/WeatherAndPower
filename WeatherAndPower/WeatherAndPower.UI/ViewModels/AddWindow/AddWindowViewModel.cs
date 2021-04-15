@@ -10,7 +10,7 @@ using WeatherAndPower.UI.Commands;
 
 namespace WeatherAndPower.UI.ViewModels.AddWindow
 {
-    public class MainViewModel : ViewModelBase
+    public class AddWindowViewModel : ViewModelBase
     {
         public enum DataTypeEnum
         {
@@ -52,7 +52,7 @@ namespace WeatherAndPower.UI.ViewModels.AddWindow
         }
 
         public string PlotName { get; set; }
-        public MainViewModel(PlaceholderViewModel viewModel)
+        public AddWindowViewModel(PlaceholderViewModel viewModel)
         {
             UpdateViewCommand = new UpdateViewCommand(this);
             AddPlotCommand = new AddPlotCommand(this, viewModel);
