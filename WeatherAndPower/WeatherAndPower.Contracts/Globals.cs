@@ -48,8 +48,30 @@ namespace WeatherAndPower.Contracts
         Pie
 	}
 
+    public struct TypeFormat
+    {
+        public DataFormat Format;
+        public Type Datatype;
+
+        public TypeFormat(DataFormat form, Type type)
+        {
+            Format = form;
+            Datatype = type;
+        }
+    };
+
+
     public class Globals
     {
+        public static TypeFormat TempStruct = new TypeFormat(DataFormat.Temperature, typeof(Temperature));
+        public static TypeFormat WindStruct = new TypeFormat(DataFormat.Wind, typeof(Wind));
+        public static TypeFormat HumidityStruct = new TypeFormat(DataFormat.Humidity, typeof(Humidity));
+        public static TypeFormat CloudinessStruct = new TypeFormat(DataFormat.Cloudiness, typeof(Cloudiness));
+        public static TypeFormat PrecipitationStruct = new TypeFormat(DataFormat.Precipitation, typeof(Precipitation));
+
+        public static List<TypeFormat> pair_structs = new List<TypeFormat> { TempStruct, WindStruct, HumidityStruct, CloudinessStruct, PrecipitationStruct };
+
+
         public static Random rand = new Random();
 
         // Maximum data points to draw on graph per line
@@ -76,22 +98,50 @@ namespace WeatherAndPower.Contracts
 
         public static Type GetTypeFromDataFormat(DataFormat format)
         {
-            switch (format)
-            {
+            /*
+            switch(format) {
                 case DataFormat.Temperature:
                     return typeof(Temperature);
                 case DataFormat.Power:
                     return typeof(Power);
                 case DataFormat.Cloudiness:
-                    return typeof(WeatherType);
-
+                    return typeof(Cloudiness);
+                case DataFormat.Humidity:
+                    return typeof(Humidity);
+                case DataFormat.Wind:
+                    return typeof(WindSpeed);
+                case DataFormat.Precipitation:
+                    return typeof(Precipitation);
                 default:
                     return typeof(IData);
+			}
+            */
+
+            // This does the same as above without repetitiveness
+            foreach (var pair in pair_structs)
+            {
+                if (pair.Format == format)
+                {
+                    return pair.Datatype;
+                }
             }
+            if (format == DataFormat.Power)
+            {
+                return typeof(Power);
+            }
+            else
+            {
+                return typeof(IData);
+            }
+
         }
+
 
         public static DataFormat GetDataFormatOfData(IData data)
         {
+            // making this dynamic introduces too many problems and is not recommended
+            // but I don't want to spend too much time on this :)
+
             if (data is Temperature)
             {
                 return DataFormat.Temperature;
@@ -100,23 +150,61 @@ namespace WeatherAndPower.Contracts
             {
                 return DataFormat.Power;
             }
+            else if (data is Cloudiness)
+            {
+                return DataFormat.Cloudiness;
+            }
+            else if (data is Wind)
+            {
+                return DataFormat.Wind;
+            }
+            else if (data is Humidity)
+            {
+                return DataFormat.Humidity;
+            }
+            else if (data is Precipitation)
+            {
+                return DataFormat.Precipitation;
+
+            }
             else
             {
                 throw new Exception("Unrecognized dataformat");
             }
         }
 
+
         public static IData GetIDataFromDataFormat(DataFormat format, double value)
         {
-            switch (format)
-            {
+            /*
+            switch(format) {
                 case DataFormat.Temperature:
                     return new Temperature(value);
                 case DataFormat.Power:
                     return new Power(value);
                 default:
                     throw new Exception("Unrecognized DataFormat");
+			}
+            */
+            if (format == DataFormat.Power)
+            {
+                return new Power(value);
             }
+            else
+            {
+                foreach (var pair in pair_structs)
+                {
+                    if (format == pair.Format)
+                    {
+                        var type = pair.Datatype;
+                        dynamic data = Activator.CreateInstance(type, value);
+                        return data;
+                    }
+                }
+            }
+            throw new Exception("Urecognized DataFormat!");
+
+
         }
 
     }
