@@ -59,53 +59,80 @@
                                     TimeFormatString="HH:mm:ss"/>
         </Border>
         <Border Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-            <UniformGrid Rows="2" Columns="7">
-                <UniformGrid.Resources>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Padding" Value="0,3"/>
-                        <Setter Property="Command" Value="{Binding UpdateDateTimeCommand}" />
-                        <Setter Property="CommandParameter" Value="{Binding Path=Name, RelativeSource={RelativeSource Self}}" />
-                    </Style>
-                </UniformGrid.Resources>
-                <Button Content="Past Year" 
+            <ListBox ItemsSource="{Binding DateTimeRanges}"
+                     SelectedItem="{Binding DateTimeRange}"
+                     BorderBrush="Transparent">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Name}"
+                                ToolTip="{Binding Description}"
+                                Command="{Binding DataContext.UpdateDateTimeCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+        <!--<UniformGrid Rows="2" Columns="7">
+            <UniformGrid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Padding" Value="0,3"/>
+                    <Setter Property="Command" Value="{Binding UpdateDateTimeCommand}" />
+                    <Setter Property="CommandParameter" Value="{Binding Path=Name, RelativeSource={RelativeSource Self}}" />
+                </Style>
+            </UniformGrid.Resources>
+            <Button Content="Past Year" 
                         ToolTip="Past 365 days preceding today" 
                         Name="pyear"
                         />
-                <Button Content="Past Month"
+            <Button Content="Past Month"
                         ToolTip="Past 30 days preceding today" 
                         Name="pmonth" />
-                <Button Content="Past Week"
+            <Button Content="Past Week"
                         ToolTip="Past 7 days preceding today" 
                         Name="pweek" />
-                <Button Content="Past 24h"
+            <Button Content="Past 24h"
                         ToolTip="Past 24 hours from now" 
-                        Name="p24h" />
-                <Button Content="Next 24h"
+                        Name="p24h"
+                        />
+            <Button Content="Next 24h"
                         ToolTip="Next 24 hours from now" 
-                        Name="n24h" />
-                <Button Content="Next 7d"
+                        Name="n24h" 
+                        />
+            <Button Content="Next 7d"
                         ToolTip="Next 7 days from now" 
-                        Name="n7d" />
-                <Button Content="Next 30d"
+                        Name="n7d"
+                        />
+            <Button Content="Next 30d"
                         ToolTip="Next 30 days from now" 
-                        Name="n30d" />
-                <Button Content="Last Year"
+                        Name="n30d" 
+                        />
+            <Button Content="Last Year"
                         ToolTip="Previous calendar year" 
-                        Name="lyear" />
-                <Button Content="Last Month"
+                        Name="lyear" 
+                        />
+            <Button Content="Last Month"
                         ToolTip="Previous calendar month" 
-                        Name="lmonth" />
-                <Button Content="Yesterday"
-                        Name="yesterday" />
-                <Button Content="Today"
+                        Name="lmonth" 
+                        />
+            <Button Content="Yesterday"
+                        Name="yesterday"
+                        />
+            <Button Content="Today"
                         Name="today" />
-                <Button Content="Tomorrow"
-                        Name="tomorrow" />
-                <Button Content="This Month"
-                        Name="tmonth" />
-                <Button Content="This Year"
+            <Button Content="Tomorrow"
+                        Name="tomorrow" 
+                        />
+            <Button Content="This Month"
+                        Name="tmonth" 
+/>
+            <Button Content="This Year"
                         Name="tyear" />
-            </UniformGrid>
-        </Border>
+        </UniformGrid>-->
     </Grid>
 </UserControl>
