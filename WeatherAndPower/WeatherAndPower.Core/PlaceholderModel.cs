@@ -196,7 +196,7 @@ namespace WeatherAndPower.Core
 
         public IAddWindowModel CreateNewAddWindow()
         {
-            return new AddWindowModel();
+            return new AddWindowModel(DataPlot);
         }
 
         public PlaceholderModel(DataPlotModel dataPlot)

@@ -14,6 +14,8 @@ namespace WeatherAndPower.UI
 {
     public class AddWindowViewModel : ViewModelBase
     {
+        public AddWindow AddWindow { get; set; }
+
         private IAddWindowModel _model;
         public IAddWindowModel Model
         {
@@ -73,12 +75,23 @@ namespace WeatherAndPower.UI
         public RelayCommand AddGraphCommand => new RelayCommand(() => {
             if (DataType == DataTypeEnum.Power)
             {
-            }
+                var powerViewModel = (PowerInputViewModel) SelectedViewModel;
+                var dateTimeViewModel = powerViewModel.DateTimeViewModel;
+                try
+                {
+                    Model.AddPowerGraphAction(powerViewModel.SPowerType, dateTimeViewModel.StartTime, dateTimeViewModel.EndTime, PlotName);
+                    AddWindow.Close();
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show(e.Message);
+                }
+            }   
             else
             {
-
             }
         });
+
 
         public string PlotName { get; set; }
         public AddWindowViewModel(IAddWindowModel model)

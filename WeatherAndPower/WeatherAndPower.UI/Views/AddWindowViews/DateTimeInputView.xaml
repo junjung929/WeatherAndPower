@@ -80,7 +80,9 @@
                
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button 
+                        <ToggleButton
+                            IsChecked="{Binding IsSelected, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}} }"
                             Padding="5,3"
                             Content="{Binding Name}"
                             ToolTip="{Binding Description}"

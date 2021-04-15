@@ -62,6 +62,7 @@ namespace WeatherAndPower.UI
             var addWindowViewModel = new AddWindowViewModel(addWindowModel);
             AddWindow addWindow = new AddWindow();
             addWindow.DataContext = addWindowViewModel;
+            addWindowViewModel.AddWindow = addWindow;
             addWindow.Show();
         });
 
