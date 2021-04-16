@@ -7,7 +7,7 @@ using System.Xml;
 using WeatherAndPower.Contracts;
 using System.Windows.Forms;
 using static WeatherAndPower.Contracts.Globals;
-
+using System.Globalization;
 
 namespace WeatherAndPower.Data
 {
@@ -163,7 +163,7 @@ namespace WeatherAndPower.Data
 				foreach (XmlNode TimeValuePair in PairLst)
 				{
 					DateTime time = Convert.ToDateTime(TimeValuePair.SelectSingleNode(".//wml2:time", mng).InnerText);
-					double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, out double value);
+					double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, NumberStyles.Any, CultureInfo.InvariantCulture, out double value);
 
 					if (Double.IsNaN(value))
 					{
