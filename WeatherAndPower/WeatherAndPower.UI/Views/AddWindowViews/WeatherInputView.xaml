@@ -79,16 +79,13 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox 
-                            Command="{Binding DataContext.UpdateWeatherTypeCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding Description}"   
                                 IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
                             Path=IsSelected}"
                                 />
-                        <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
-                            AncestorType={x:Type ListBoxItem}}, 
-                            Path=IsSelected}"-->
+                        <!-- Command="{Binding DataContext.UpdateWeatherTypeCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"-->
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -103,7 +100,7 @@
                 SelectionMode="Multiple"
                 BorderBrush="Transparent"
                 SelectionChanged="MedianListBox_SelectionChanged"
-                 BorderThickness="0">
+                BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel />
@@ -112,16 +109,13 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox 
-                            Command="{Binding DataContext.UpdateMedianCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding Description}"   
                             IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                                 AncestorType={x:Type ListBoxItem}}, 
                                 Path=IsSelected}"
                                 />
-                        <!--IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
-                            AncestorType={x:Type ListBoxItem}}, 
-                            Path=IsSelected}"-->
+                        <!--Command="{Binding DataContext.UpdateMedianCommand, 
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"-->
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -146,6 +140,7 @@
         <Border  Grid.Row="4" Grid.ColumnSpan="3">
             <local:DateTimeInputView DataContext="{Binding DateTimeViewModel}" />
         </Border>
+        
         <Label
             Grid.Row="5" Grid.Column="0" Content="Time Interval" />
         <ListBox

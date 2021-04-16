@@ -25,8 +25,6 @@ namespace WeatherAndPower.UI
             }
         }
 
-        public WeatherType.ParameterEnum SelectedParameterType { get; set; }
-
         private ECity _SelectedCity { get; set; } = (ECity)0x01;
         public ECity SelectedCity
         {
@@ -44,7 +42,12 @@ namespace WeatherAndPower.UI
         public WeatherType.ParameterEnum SelectedParameter
         {
             get { return _selectedParameter; }
-            set { _selectedParameter = value; NotifyPropertyChanged("SelectedParameter"); }
+            set
+            {
+                _selectedParameter = value;
+                NotifyPropertyChanged("SelectedParameter");
+                OnUpdateSelectedWeatherParameter();
+            }
         }
 
         private ObservableCollection<WeatherType> _weatherTypes { get; set; }
@@ -98,9 +101,11 @@ namespace WeatherAndPower.UI
         {
             if (SelectedParameter == WeatherType.ParameterEnum.Observation)
             {
-                Medians.Add(WeatherType.AveTempMedian);
-                Medians.Add(WeatherType.MinTempMedian);
-                Medians.Add(WeatherType.MaxTempMedian);
+                Medians = new ObservableCollection<WeatherType>(){
+                    WeatherType.AveTempMedian,
+                    WeatherType.MinTempMedian,
+                    WeatherType.MaxTempMedian
+                };
                 MedianVisibility = Visibility.Visible;
             }
             else
