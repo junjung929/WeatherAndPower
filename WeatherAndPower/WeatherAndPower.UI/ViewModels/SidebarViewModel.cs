@@ -29,7 +29,7 @@ namespace WeatherAndPower.UI
         {
             try
             {
-            Model.SaveSelectedData("test.json");
+                Model.SaveSelectedData("test.json");
             }
             catch (Exception e)
             {
@@ -38,7 +38,11 @@ namespace WeatherAndPower.UI
         });
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
         public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
-        public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
+        public RelayCommand CompareDataCommand => new RelayCommand(() =>
+        {
+            MessageBox.Show("Select a time line in the graph for pie chart to compare");
+            Model.CompareData();
+        });
         public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveSelectedData());
 
         public void AddPowerGraphCommand(PowerType powerType, DateTime startTime, DateTime endTime, string plotName)
