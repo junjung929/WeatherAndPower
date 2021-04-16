@@ -16,7 +16,10 @@ namespace WeatherAndPower.Contracts
         Cloudiness = 0x4,
         Wind = 0x8,
         Humidity = 0x10,
-        Precipitation = 0x20
+        Precipitation = 0x20,
+        AvgTemp = 0x40,
+        MaxTemp = 0x80,
+        MinTemp = 0x100
     }
 
     public struct Interval
@@ -67,7 +70,7 @@ namespace WeatherAndPower.Contracts
         public static TypeFormat CloudinessStruct = new TypeFormat(DataFormat.Cloudiness, typeof(Cloudiness));
         public static TypeFormat PrecipitationStruct = new TypeFormat(DataFormat.Precipitation, typeof(Precipitation));
 
-        public static List<TypeFormat> pair_structs = new List<TypeFormat> { TempStruct, WindStruct, HumidityStruct, CloudinessStruct, PrecipitationStruct };
+        public static List<TypeFormat> pair_structs = new List<TypeFormat> { TempStruct, WindStruct, HumidityStruct, CloudinessStruct, PrecipitationStruct};
 
 
         public static Random rand = new Random();
@@ -96,26 +99,6 @@ namespace WeatherAndPower.Contracts
 
         public static Type GetTypeFromDataFormat(DataFormat format)
         {
-            /*
-            switch(format) {
-                case DataFormat.Temperature:
-                    return typeof(Temperature);
-                case DataFormat.Power:
-                    return typeof(Power);
-                case DataFormat.Cloudiness:
-                    return typeof(Cloudiness);
-                case DataFormat.Humidity:
-                    return typeof(Humidity);
-                case DataFormat.Wind:
-                    return typeof(WindSpeed);
-                case DataFormat.Precipitation:
-                    return typeof(Precipitation);
-                default:
-                    return typeof(IData);
-			}
-            */
-
-            // This does the same as above without repetitiveness
             foreach (var pair in pair_structs)
             {
                 if (pair.Format == format)
@@ -138,7 +121,7 @@ namespace WeatherAndPower.Contracts
         public static DataFormat GetDataFormatOfData(IData data)
         {
             // making this dynamic introduces too many problems and is not recommended
-            // but I don't want to spend too much time on this :)
+            // and I don't want to spend too much time on this :)
 
             if (data is Temperature)
             {
@@ -163,7 +146,6 @@ namespace WeatherAndPower.Contracts
             else if (data is Precipitation)
             {
                 return DataFormat.Precipitation;
-
             }
             else
             {
@@ -174,16 +156,6 @@ namespace WeatherAndPower.Contracts
 
         public static IData GetIDataFromDataFormat(DataFormat format, double value)
         {
-            /*
-            switch(format) {
-                case DataFormat.Temperature:
-                    return new Temperature(value);
-                case DataFormat.Power:
-                    return new Power(value);
-                default:
-                    throw new Exception("Unrecognized DataFormat");
-			}
-            */
             if (format == DataFormat.Power)
             {
                 return new Power(value);
