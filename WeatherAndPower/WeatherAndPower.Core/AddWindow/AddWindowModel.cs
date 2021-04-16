@@ -79,7 +79,29 @@ namespace WeatherAndPower.Core
             {
                 throw new Exception("Please give a name of cities in Finland");
             }
+            Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
+            try
+            {
+                IsTimeValid(startTime, endTime);
+                IsPlotNameValid(graphName);
+                combined_graphs = FMI.GetAllData(startTime, endTime, interval, graphName, cityName, parameters, parameterType);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
+                }
+            }
+            foreach (var graph in combined_graphs)
+            {
+                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
+                DataPlot.Data.Add(graph.Value);
+            }
 
+            /*
             List<Tuple<DateTime, DateTime>> timepairs = TimeHandler.SplitFMIRequest(startTime, endTime);
 
             if (TimeHandler.ForecastTooFar(startTime)) { return; }
@@ -115,7 +137,7 @@ namespace WeatherAndPower.Core
                     string request = FMI.BuildRequest(query);
                     Console.WriteLine(request);
 
-                    var series_list_task = Task.Run(() => FMI.GetData(request));
+                    var series_list_task = Task.Run(() => FMI.GetSingleData(request));
                     try
                     {
                         series_list_task.Wait();
@@ -146,6 +168,7 @@ namespace WeatherAndPower.Core
                 graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
                 DataPlot.Data.Add(graph.Value);
             }
+            */
         }
 
         public IPowerInputModel CreateNewPowerInputModel()
