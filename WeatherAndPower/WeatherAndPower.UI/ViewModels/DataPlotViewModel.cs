@@ -11,6 +11,7 @@ using WeatherAndPower.Contracts;
 using System.Windows.Media;
 using DataFormat = WeatherAndPower.Contracts.DataFormat;
 using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace WeatherAndPower.UI
 {
@@ -62,6 +63,11 @@ namespace WeatherAndPower.UI
 		{
 			var series = (sender as CustomLineSeries).DataContext as IDataSeries;
 			var id = series.Id;
+			if (!Keyboard.IsKeyDown(Key.LeftCtrl)) {
+				foreach (var plot in Data) {
+					plot.IsSelected = false;
+				}
+			}
 			series.IsSelected = true;
 			//Model.SaveChartJson("test.json", id);
 		}
