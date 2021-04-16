@@ -43,7 +43,17 @@ namespace WeatherAndPower.UI
             MessageBox.Show("Select a time line in the graph for pie chart to compare");
             Model.CompareData();
         });
-        public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveSelectedData());
+        public RelayCommand RemoveDataCommand => new RelayCommand(() =>
+        {
+            try
+            {
+                Model.RemoveSelectedData();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        });
 
         public SidebarViewModel(ISidebarModel model)
         {
