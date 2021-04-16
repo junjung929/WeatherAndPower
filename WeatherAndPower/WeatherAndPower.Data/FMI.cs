@@ -23,27 +23,18 @@ namespace WeatherAndPower.Data
 		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		// Useful parameter explanations
-		Dictionary<string, string> OBSERVATION_PARAMS = new Dictionary<string, string>()
+		private static readonly Dictionary<string, string> PARAMETERS = new Dictionary<string, string>()
 		{
 			{"t2m","Air Temperature"},// Celsius
 			{"ws_10min","Wind speed"},// m/s
 			{"rh", "Relative humidity"}, // %
 			{"r_1h","Precipitation amount"}, // mm
 			{"n_man", "Cloud amount" }, //  1/8
-			{"wawa", "Present weather (auto)"} // I dunno what that means
-		};
-
-		Dictionary<string, string> FORECAST_PARAMS = new Dictionary<string, string>()
-		{
 			{"Temperature", "Air Temperature" }, // Celsius
 			{"WindSpeedMS", "Wind speed" }, // m/s 
 			{"Humidity", "Relative humidity"}, // %
-			{"Precipitation1h", "Hourly precipitation"}, // mm
 			{"PrecipitationAmount", "Precipitation Amount" }, // mm
-			{ "TotalCloudCover", "Cloudiness"}, // %			
-		};
-		Dictionary<string, string> MEDIAN_PARAMS = new Dictionary<string, string>()
-		{
+			{ "TotalCloudCover", "Cloudiness"},// % 
 			{"TA_PT1H_AVG", "Average temperature"},
 			{ "TA_PT1H_MAX", "Max temperature"},
 			{ "TA_PT1H_MIN","Min temperature" }
@@ -53,9 +44,9 @@ namespace WeatherAndPower.Data
 		{
 			{"t2m", TempStruct},
 			{"Temperature", TempStruct},
-			{"TA_PT1H_AVG", AvgTempStruct},
-			{"TA_PT1H_MAX", MaxTempStruct},
-			{"TA_PT1H_MIN", MinTempStruct},
+			{"TA_PT1H_AVG", TempStruct},
+			{"TA_PT1H_MAX", TempStruct},
+			{"TA_PT1H_MIN", TempStruct},
 			{"ws_10min", WindStruct},
 			{"WindSpeedMS", WindStruct},
 			{"rh", HumidityStruct},
@@ -141,18 +132,22 @@ namespace WeatherAndPower.Data
 			bool already_shown_values = false;
 
 			// List of formats to display which graphs are missing
-			List<DataFormat> missing_graphs = new List<DataFormat>();
-			List<DataFormat> found_graphs = new List<DataFormat>();
+			List<string> missing_graphs = new List<string>();
+			List<string> found_graphs = new List<string>();
 
 			foreach (XmlNode result in result_nodes)
 			{
-
+				// Creating the series and setting all the necessary data to plot
 				List<Tuple<DateTime, IData>> series = new List<Tuple<DateTime, IData>>();
 				TypeFormat typeformat = GetTypeFormat(result, mng);
 				DataFormat format = GetFormat(typeformat);
 
+				// Sorting plots by associated parameter description
+				string plot_parameter = GetParameter(result, mng);
+				string plot_name = PARAMETERS[plot_parameter];
 
-				var plot = DataSeriesFactory.CreateDataSeries(format.ToString(), format, series); ;
+				// With the above setting we can create an instance of DataSeries
+				var plot = DataSeriesFactory.CreateDataSeries(plot_name, format, series); ;
 
 				// VALUETIMEPAIR				
 				var PairLst = result.SelectNodes(".//wml2:MeasurementTVP", mng);
@@ -188,16 +183,16 @@ namespace WeatherAndPower.Data
 				}
 				if (all_NaN)
 				{
-					if (!missing_graphs.Contains(format))
+					if (!missing_graphs.Contains(plot_name))
 					{
-						missing_graphs.Add(format);
+						missing_graphs.Add(plot_name);
 					}
 				}
 				else
 				{
-					if (!found_graphs.Contains(format))
+					if (!found_graphs.Contains(plot_name))
 					{
-						found_graphs.Add(format);
+						found_graphs.Add(plot_name);
 					}
 					plots.Add(plot);
 				}
@@ -275,7 +270,7 @@ namespace WeatherAndPower.Data
 
 		}
 
-		public static void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
+		private static void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
 		{
 			if (dict.ContainsKey(plot.Name))
 			{
@@ -305,11 +300,17 @@ namespace WeatherAndPower.Data
 		/// <returns> Struct relevant to the parameter</returns>
 		private static TypeFormat GetTypeFormat(XmlNode node, XmlNamespaceManager mng)
 		{
+			string parameter = GetParameter(node, mng);
+			TypeFormat typeformat = FORMAT_PARAMS[parameter];
+			return typeformat;
+		}
+
+		private static string GetParameter(XmlNode node, XmlNamespaceManager mng)
+        {
 			var param_id = node.SelectSingleNode(".//wml2:MeasurementTimeseries", mng);
 			string attribute = param_id.Attributes["gml:id"].Value;
 			string parameter = attribute.Split('-').Last();
-			TypeFormat typeformat = FORMAT_PARAMS[parameter];
-			return typeformat;
+			return parameter;
 		}
 
 		private static DataFormat GetFormat(TypeFormat typeformat)
@@ -325,7 +326,7 @@ namespace WeatherAndPower.Data
 		}
 
 		// Displays a warning if there are missing graphs
-		private static void TellAboutGraphs(List<DataFormat> missing_graphs, List<DataFormat> found_graphs)
+		private static void TellAboutGraphs(List<string> missing_graphs, List<string> found_graphs)
 		{
 			string miss_graphs = AddDivs(missing_graphs);
 			string disp_graphs = "";
@@ -339,7 +340,7 @@ namespace WeatherAndPower.Data
 		}
 
 		// Makes missing graphs message more readable
-		private static string AddDivs(List<DataFormat> graphs)
+		private static string AddDivs(List<string> graphs)
 		{
 			string listed_graphs = "";
 			string div;

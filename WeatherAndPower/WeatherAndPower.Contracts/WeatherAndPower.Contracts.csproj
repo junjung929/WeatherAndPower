@@ -75,7 +75,6 @@
     <Compile Include="AddWindow\IDateTimeInputModel.cs" />
     <Compile Include="AddWindow\IPowerInputModel.cs" />
     <Compile Include="AddWindow\IWeatherInputModel.cs" />
-    <Compile Include="AvgTemp.cs" />
     <Compile Include="ByteColorJsonConverter.cs" />
     <Compile Include="Cloudiness.cs" />
     <Compile Include="DataPoint.cs" />
@@ -92,8 +91,6 @@
     <Compile Include="IPlaceholderModel.cs" />
     <Compile Include="ISidebarModel.cs" />
     <Compile Include="IWindowFactory.cs" />
-    <Compile Include="MaxTemp.cs" />
-    <Compile Include="MinTemp.cs" />
     <Compile Include="Power.cs" />
     <Compile Include="PowerType.cs" />
     <Compile Include="Precipitation.cs" />

@@ -69,11 +69,8 @@ namespace WeatherAndPower.Contracts
         public static TypeFormat HumidityStruct = new TypeFormat(DataFormat.Humidity, typeof(Humidity));
         public static TypeFormat CloudinessStruct = new TypeFormat(DataFormat.Cloudiness, typeof(Cloudiness));
         public static TypeFormat PrecipitationStruct = new TypeFormat(DataFormat.Precipitation, typeof(Precipitation));
-        public static TypeFormat AvgTempStruct = new TypeFormat(DataFormat.AvgTemp, typeof(AvgTemp));
-        public static TypeFormat MinTempStruct = new TypeFormat(DataFormat.MinTemp, typeof(MinTemp));
-        public static TypeFormat MaxTempStruct = new TypeFormat(DataFormat.MaxTemp, typeof(MaxTemp));
 
-        public static List<TypeFormat> pair_structs = new List<TypeFormat> { TempStruct, WindStruct, HumidityStruct, CloudinessStruct, PrecipitationStruct, AvgTempStruct, MaxTempStruct, MinTempStruct };
+        public static List<TypeFormat> pair_structs = new List<TypeFormat> { TempStruct, WindStruct, HumidityStruct, CloudinessStruct, PrecipitationStruct};
 
 
         public static Random rand = new Random();
@@ -149,18 +146,6 @@ namespace WeatherAndPower.Contracts
             else if (data is Precipitation)
             {
                 return DataFormat.Precipitation;
-            }
-            else if (data is AvgTemp)
-            {
-                return DataFormat.AvgTemp;
-            }
-            else if (data is MaxTemp)
-            {
-                return DataFormat.MaxTemp;
-            }
-            else if (data is MinTemp)
-            {
-                return DataFormat.MinTemp;
             }
             else
             {
