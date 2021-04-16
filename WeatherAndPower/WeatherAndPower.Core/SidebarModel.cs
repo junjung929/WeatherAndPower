@@ -98,7 +98,7 @@ namespace WeatherAndPower.Core
             string request = FMI.BuildRequest(query);
             Console.WriteLine(request);
 
-            var series_list_task = Task.Run(() => FMI.GetData(request));
+            var series_list_task = Task.Run(() => FMI.GetSingleData(request));
             try
             {
                 series_list_task.Wait();
