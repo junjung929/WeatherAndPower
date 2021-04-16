@@ -28,10 +28,18 @@ namespace WeatherAndPower.Core
 
         public void AddPowerGraphAction(PowerType powerType, DateTime startTime, DateTime endTime, string graphName)
         {
+
             if (powerType == null)
             {
                 throw new Exception("Please choose the category");
             }
+            if (TimeHandler.DataTooBig(startTime, endTime, powerType.Interval))
+            {
+                return;
+            }
+            startTime = TimeHandler.ConvertToLocalTime(startTime);
+            endTime = TimeHandler.ConvertToLocalTime(endTime);
+
             try
             {
                 IsTimeValid(startTime, endTime);
@@ -68,17 +76,24 @@ namespace WeatherAndPower.Core
             if (cityName == null || cityName == "")
             {
                 throw new Exception("Please give a name of cities in Finland");
-            }
+            }           
+
             try
             {
                 IsTimeValid(startTime, endTime);
                 IsPlotNameValid(graphName);
+                if (TimeHandler.ForecastTooFar(startTime)) { return; }
+                
 
                 FMI.Place = cityName;
                 FMI.Parameters = parameters;
-                FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-
+                //FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                //FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                FMI.StartTime = TimeHandler.ConvertToLocalTime(startTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                FMI.EndTime = TimeHandler.ConvertToLocalTime(endTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                string step = interval.ToString();
+                FMI.Timestep = step;
+                if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return; }
                 string query;
                 if (parameterType == WeatherType.ParameterEnum.Forecast)
                 {

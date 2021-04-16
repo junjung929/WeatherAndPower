@@ -7,29 +7,25 @@ using System.Xml;
 using WeatherAndPower.Contracts;
 using System.Windows.Forms;
 using static WeatherAndPower.Contracts.Globals;
-using System.Globalization;
+
 
 namespace WeatherAndPower.Data
 {
 	public class FMI : BaseHttpClient
 	{
 
-		public static IDataSeriesFactory DataSeriesFactory { get; set; }
-
 		public static string Place { get; set; }
 		public static string Query { get; set; }
 		public static string Parameters { get; set; }
 		public static string StartTime { get; set; }
 		public static string EndTime { get; set; }
-		public static string Timestep { get; set; } = "60"; // Default value
-
-
-
+		public static string Timestep { get; set ; } = "60"; // Default value
+		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		// Useful parameter explanations
 		Dictionary<string, string> OBSERVATION_PARAMS = new Dictionary<string, string>()
 		{
-			{"t2m","Air Temperature"},// Celsius		"temperature" alternative
+			{"t2m","Air Temperature"},// Celsius
 			{"ws_10min","Wind speed"},// m/s
 			{"rh", "Relative humidity"}, // %
 			{"r_1h","Precipitation amount"}, // mm
@@ -52,26 +48,6 @@ namespace WeatherAndPower.Data
 			{ "TA_PT1H_MAX", "Max temperature"},
 			{ "TA_PT1H_MIN","Min temperature" }
 		};
-		/*
-		public struct TypeFormat
-		{
-			public DataFormat Format;
-			public Type Datatype;
-
-			public TypeFormat(DataFormat form, Type type)
-			{
-				Format = form;
-				Datatype = type;
-			}
-		};
-
-		public static TypeFormat TempStruct = new TypeFormat(DataFormat.Temperature, typeof(Temperature));
-		public static TypeFormat WindStruct = new TypeFormat(DataFormat.Wind, typeof(WindSpeed));
-		public static TypeFormat HumidityStruct = new TypeFormat(DataFormat.Humidity, typeof(Humidity));
-		public static TypeFormat CloudinessStruct = new TypeFormat(DataFormat.Cloudiness, typeof(Cloudiness));
-		public static TypeFormat PrecipitationStruct = new TypeFormat(DataFormat.Precipitation, typeof(Precipitation));
-
-		*/
 
 		public static readonly Dictionary<string, TypeFormat> FORMAT_PARAMS = new Dictionary<string, TypeFormat>()
 		{
@@ -92,27 +68,12 @@ namespace WeatherAndPower.Data
 		};
 
 
-
-		static string SERVER_URL = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&";
+		static readonly string SERVER_URL = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&";
 
 		// MINIMUM REQUIRMENTS QUERIES
 		//	fmi::observations::weather::simple	
-		//	fmi::observations::weather::hourly::simple			AVERAGE comes from hourly
 		//	fmi::forecast::hirlam::surface::point::simple
 
-		/// <summary>
-		/// Looks pretty bad, sorry
-		/// </summary>
-		/// <param name="mode"> 
-		///		either observations::weather
-		///		or forecast::hirlam::surface::point
-		/// </param>
-		/// <param name="format">
-		///		simple
-		///		timevaluepair
-		///		multipointcoverage
-		/// </param>
-		/// <returns></returns>
 		public static string BuildQuery(string mode)
 		{
 			string query = "fmi";
@@ -126,7 +87,6 @@ namespace WeatherAndPower.Data
 		public static string BuildRequest(string query)
 		{
 			var options = new Dictionary<string, string>();
-			// Default timestep 60 minutes
 			options.Add("timestep", Timestep);
 			options.Add("storedquery_id", query);
 			options.Add("place", Place);
@@ -170,7 +130,7 @@ namespace WeatherAndPower.Data
 				string num_of_datasets = Root.Attributes["numberMatched"].Value;
 				if (num_of_datasets == "0")
 				{
-					throw new Exception("None of selected datatypes is available for this area!");
+					throw new Exception("None of the selected datatypes is available for this area!");
 				}
 			}
 
@@ -178,7 +138,6 @@ namespace WeatherAndPower.Data
 			List<IDataSeries> plots = new List<IDataSeries>();
 
 			// These flags make sure that warning message about missing graphs/values is shown only once
-			bool already_shown_graphs = false;
 			bool already_shown_values = false;
 
 			// List of formats to display which graphs are missing
@@ -198,43 +157,46 @@ namespace WeatherAndPower.Data
 				// VALUETIMEPAIR				
 				var PairLst = result.SelectNodes(".//wml2:MeasurementTVP", mng);
 
+				// Flag checks if there are non-NaN values, this is a very lazy solution but it works
+				bool all_NaN = true;
+
 				foreach (XmlNode TimeValuePair in PairLst)
 				{
 					DateTime time = Convert.ToDateTime(TimeValuePair.SelectSingleNode(".//wml2:time", mng).InnerText);
-                    double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, NumberStyles.Any, CultureInfo.InvariantCulture, out double value);
+					double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, out double value);
+
 					if (Double.IsNaN(value))
 					{
-						// If the first one is NaN then the whole set is faulty
-						if (!series.Any())
+						if (!already_shown_values)
 						{
-							already_shown_graphs = true;
-							missing_graphs.Add(format);
-							break;
+							// This message is shown only once
+							MessageBox.Show("Some of the reuqested values are missing!");
+							already_shown_values = true;
 						}
-						else
-						{
-							if (!already_shown_values && !already_shown_graphs)
-							{
-								MessageBox.Show("Some of the reuqested values are missing!");
-								already_shown_values = true;
-							}
-							continue;
-						}
-
+						continue;
 					}
+
+					// If this is reached then at least 1 value isn't NaN
+					all_NaN = false;
 
 					// Getting the correct weather class, i.e. Temperature, Humidity etc based on parameter
 					dynamic data = GetType(typeformat, value);
-
 					Tuple<DateTime, IData> plotPoint = new Tuple<DateTime, IData>(time, data);
 					series.Add(plotPoint);
-
-					//Console.WriteLine(time);
-					//Console.WriteLine(value);
 				}
-				if (!missing_graphs.Contains(format))
+				if (all_NaN)
 				{
-					found_graphs.Add(format);
+					if (!missing_graphs.Contains(format))
+					{
+						missing_graphs.Add(format);
+					}
+				}
+				else
+				{
+					if (!found_graphs.Contains(format))
+					{
+						found_graphs.Add(format);
+					}
 					plots.Add(plot);
 				}
 			}
@@ -262,16 +224,13 @@ namespace WeatherAndPower.Data
 		/// <summary>
 		/// Returns the format - type struct based on parameter
 		/// </summary>
-		/// <param name="node"></param>
-		/// <param name="mng"></param>
-		/// <returns></returns>
+		/// <returns> Struct relevant to the parameter</returns>
 		private static TypeFormat GetTypeFormat(XmlNode node, XmlNamespaceManager mng)
 		{
 			var param_id = node.SelectSingleNode(".//wml2:MeasurementTimeseries", mng);
 			string attribute = param_id.Attributes["gml:id"].Value;
 			string parameter = attribute.Split('-').Last();
 			TypeFormat typeformat = FORMAT_PARAMS[parameter];
-			Console.WriteLine(typeformat.Format);
 			return typeformat;
 		}
 
@@ -287,6 +246,7 @@ namespace WeatherAndPower.Data
 			return data;
 		}
 
+		// Displays a warning if there are missing graphs
 		private static void TellAboutGraphs(List<DataFormat> missing_graphs, List<DataFormat> found_graphs)
 		{
 			string miss_graphs = AddDivs(missing_graphs);
@@ -300,6 +260,7 @@ namespace WeatherAndPower.Data
 			MessageBox.Show($"Requested {miss_graphs} data is missing for this area. {disp_graphs}");
 		}
 
+		// Makes missing graphs message more readable
 		private static string AddDivs(List<DataFormat> graphs)
 		{
 			string listed_graphs = "";
@@ -326,5 +287,3 @@ namespace WeatherAndPower.Data
 
 	}
 }
-
-

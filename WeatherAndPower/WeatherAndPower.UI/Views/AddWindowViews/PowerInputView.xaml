@@ -131,6 +131,11 @@
             SelectedItem="{Binding SelectedInterval}"
             BorderBrush="Transparent"
             BorderThickness="0">
+			<ListBox.Resources>
+				<Style TargetType="{x:Type ListBoxItem}">
+					<Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+				</Style>
+			</ListBox.Resources>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -140,7 +145,7 @@
                 <DataTemplate>
                     <RadioButton 
                         Content="{Binding}"   
-                        IsEnabled="{Binding IsEnabled}"
+                        IsEnabled="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsEnabled}"
                         IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
                             Path=IsSelected}"
