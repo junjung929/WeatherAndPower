@@ -45,15 +45,6 @@ namespace WeatherAndPower.UI
         });
         public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveSelectedData());
 
-        public void AddPowerGraphCommand(PowerType powerType, DateTime startTime, DateTime endTime, string plotName)
-        {
-            Model.AddPowerDataToPlotAction(powerType, startTime, endTime, plotName);
-        }
-        public void AddWeatherGraphCommand(string cityName, string parameters, DateTime startTime, DateTime endTime, string plotName, WeatherType.ParameterEnum parameterType)
-        {
-            Model.AddWeatherGraphAction(cityName, parameters, startTime, endTime, plotName, parameterType);
-        }
-
         public SidebarViewModel(ISidebarModel model)
         {
             Model = model;
