@@ -23,18 +23,27 @@ namespace WeatherAndPower.Data
 		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		// Useful parameter explanations
-		private static readonly Dictionary<string, string> PARAMETERS = new Dictionary<string, string>()
+		Dictionary<string, string> OBSERVATION_PARAMS = new Dictionary<string, string>()
 		{
 			{"t2m","Air Temperature"},// Celsius
 			{"ws_10min","Wind speed"},// m/s
 			{"rh", "Relative humidity"}, // %
 			{"r_1h","Precipitation amount"}, // mm
 			{"n_man", "Cloud amount" }, //  1/8
+			{"wawa", "Present weather (auto)"} // I dunno what that means
+		};
+
+		Dictionary<string, string> FORECAST_PARAMS = new Dictionary<string, string>()
+		{
 			{"Temperature", "Air Temperature" }, // Celsius
 			{"WindSpeedMS", "Wind speed" }, // m/s 
 			{"Humidity", "Relative humidity"}, // %
+			{"Precipitation1h", "Hourly precipitation"}, // mm
 			{"PrecipitationAmount", "Precipitation Amount" }, // mm
-			{ "TotalCloudCover", "Cloudiness"},// % 
+			{ "TotalCloudCover", "Cloudiness"}, // %			
+		};
+		Dictionary<string, string> MEDIAN_PARAMS = new Dictionary<string, string>()
+		{
 			{"TA_PT1H_AVG", "Average temperature"},
 			{ "TA_PT1H_MAX", "Max temperature"},
 			{ "TA_PT1H_MIN","Min temperature" }
@@ -91,7 +100,7 @@ namespace WeatherAndPower.Data
 			return request;
 		}
 
-		public static async Task<List<IDataSeries>> GetSingleData(string url)
+		public static async Task<List<IDataSeries>> GetData(string url)
 		{
 			var httpResponse = await _client.GetAsync(url);
 			var bytes = await httpResponse.Content.ReadAsByteArrayAsync();
@@ -132,22 +141,18 @@ namespace WeatherAndPower.Data
 			bool already_shown_values = false;
 
 			// List of formats to display which graphs are missing
-			List<string> missing_graphs = new List<string>();
-			List<string> found_graphs = new List<string>();
+			List<DataFormat> missing_graphs = new List<DataFormat>();
+			List<DataFormat> found_graphs = new List<DataFormat>();
 
 			foreach (XmlNode result in result_nodes)
 			{
-				// Creating the series and setting all the necessary data to plot
+
 				List<Tuple<DateTime, IData>> series = new List<Tuple<DateTime, IData>>();
 				TypeFormat typeformat = GetTypeFormat(result, mng);
 				DataFormat format = GetFormat(typeformat);
 
-				// Sorting plots by associated parameter description
-				string plot_parameter = GetParameter(result, mng);
-				string plot_name = PARAMETERS[plot_parameter];
 
-				// With the above setting we can create an instance of DataSeries
-				var plot = DataSeriesFactory.CreateDataSeries(plot_name, format, series); ;
+				var plot = DataSeriesFactory.CreateDataSeries(format.ToString(), format, series); ;
 
 				// VALUETIMEPAIR				
 				var PairLst = result.SelectNodes(".//wml2:MeasurementTVP", mng);
@@ -183,16 +188,16 @@ namespace WeatherAndPower.Data
 				}
 				if (all_NaN)
 				{
-					if (!missing_graphs.Contains(plot_name))
+					if (!missing_graphs.Contains(format))
 					{
-						missing_graphs.Add(plot_name);
+						missing_graphs.Add(format);
 					}
 				}
 				else
 				{
-					if (!found_graphs.Contains(plot_name))
+					if (!found_graphs.Contains(format))
 					{
-						found_graphs.Add(plot_name);
+						found_graphs.Add(format);
 					}
 					plots.Add(plot);
 				}
@@ -205,64 +210,6 @@ namespace WeatherAndPower.Data
 			}
 
 			return plots;
-		}
-
-		public static Dictionary<string, IDataSeries> GetAllData(DateTime startTime, DateTime endTime, int interval,
-			string graphName, string cityName, string parameters, WeatherType.ParameterEnum parameterType)
-        {
-			// This dict is returned
-			Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
-			if (TimeHandler.ForecastTooFar(startTime)) { return combined_graphs; }
-
-			string step = interval.ToString();
-			Timestep = step;
-			if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return combined_graphs; }
-
-			List<Tuple<DateTime, DateTime>> timepairs = TimeHandler.SplitFMIRequest(startTime, endTime);
-			foreach (var timepair in timepairs)
-			{
-				StartTime = TimeHandler.ConvertToLocalTime(timepair.Item1).ToString("yyyy-MM-ddTHH:mm:ssZ");
-				EndTime = TimeHandler.ConvertToLocalTime(timepair.Item2).ToString("yyyy-MM-ddTHH:mm:ssZ");
-
-				Place = cityName;
-				Parameters = parameters;
-
-				string query;
-				if (parameterType == WeatherType.ParameterEnum.Forecast)
-				{
-					query = BuildQuery("forecast::hirlam::surface::point");
-				}
-				else
-				{
-					query = BuildQuery("observations::weather");
-				}
-				string request = BuildRequest(query);
-				Console.WriteLine(request);
-
-				var series_list_task = Task.Run(() => GetSingleData(request));
-				series_list_task.Wait();
-				var series_list = series_list_task.Result;
-
-				foreach (var series in series_list)
-				{
-					AddToDict(ref combined_graphs, series);
-				}
-			}
-			return combined_graphs;
-
-		}
-
-		private static void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
-		{
-			if (dict.ContainsKey(plot.Name))
-			{
-				var series = dict[plot.Name];
-				series.Series.AddRange(plot.Series);
-			}
-			else
-			{
-				dict.Add(plot.Name, plot);
-			}
 		}
 
 		private static XmlNamespaceManager CreateManager(XmlDocument doc)
@@ -282,17 +229,11 @@ namespace WeatherAndPower.Data
 		/// <returns> Struct relevant to the parameter</returns>
 		private static TypeFormat GetTypeFormat(XmlNode node, XmlNamespaceManager mng)
 		{
-			string parameter = GetParameter(node, mng);
-			TypeFormat typeformat = FORMAT_PARAMS[parameter];
-			return typeformat;
-		}
-
-		private static string GetParameter(XmlNode node, XmlNamespaceManager mng)
-        {
 			var param_id = node.SelectSingleNode(".//wml2:MeasurementTimeseries", mng);
 			string attribute = param_id.Attributes["gml:id"].Value;
 			string parameter = attribute.Split('-').Last();
-			return parameter;
+			TypeFormat typeformat = FORMAT_PARAMS[parameter];
+			return typeformat;
 		}
 
 		private static DataFormat GetFormat(TypeFormat typeformat)
@@ -308,7 +249,7 @@ namespace WeatherAndPower.Data
 		}
 
 		// Displays a warning if there are missing graphs
-		private static void TellAboutGraphs(List<string> missing_graphs, List<string> found_graphs)
+		private static void TellAboutGraphs(List<DataFormat> missing_graphs, List<DataFormat> found_graphs)
 		{
 			string miss_graphs = AddDivs(missing_graphs);
 			string disp_graphs = "";
@@ -322,7 +263,7 @@ namespace WeatherAndPower.Data
 		}
 
 		// Makes missing graphs message more readable
-		private static string AddDivs(List<string> graphs)
+		private static string AddDivs(List<DataFormat> graphs)
 		{
 			string listed_graphs = "";
 			string div;
