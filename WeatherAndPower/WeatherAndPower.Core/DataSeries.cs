@@ -18,7 +18,7 @@ namespace WeatherAndPower.Core
 
 		public string Name { get; set; }
 
-		private byte[] _Color;
+		private byte[] _Color = new byte[3];
 		public byte[] Color
 		{
 			get {
