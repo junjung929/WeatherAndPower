@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI
@@ -12,8 +13,10 @@ namespace WeatherAndPower.UI
     {
         public ISidebarModel Model { get; private set; }
 
-        public ObservableCollection<IDataSeries> Data { 
-            get {
+        public ObservableCollection<IDataSeries> Data
+        {
+            get
+            {
                 return Model.Data;
             }
         }
@@ -22,7 +25,17 @@ namespace WeatherAndPower.UI
 
         public RelayCommand ClearGraphCommand => new RelayCommand(() => Model.ClearGraph());
         public RelayCommand OpenDataCommand => new RelayCommand(() => Model.OpenData("test.json"));
-        public RelayCommand SaveDataCommand => new RelayCommand(() => Model.SaveSelectedData("test.json"));
+        public RelayCommand SaveDataCommand => new RelayCommand(() =>
+        {
+            try
+            {
+            Model.SaveSelectedData("test.json");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        });
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
         public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
         public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
@@ -37,8 +50,9 @@ namespace WeatherAndPower.UI
             Model.AddWeatherGraphAction(cityName, parameters, startTime, endTime, plotName, parameterType);
         }
 
-        public SidebarViewModel(ISidebarModel model) {
+        public SidebarViewModel(ISidebarModel model)
+        {
             Model = model;
         }
-	}
+    }
 }

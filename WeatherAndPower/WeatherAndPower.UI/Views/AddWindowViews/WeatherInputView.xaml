@@ -93,10 +93,10 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <Border Grid.Row="2" Grid.Column="0">
-            <Label Content="Medians :" />
+        <Border Grid.Row="2" Grid.Column="0" Visibility="{Binding MedianVisibility}" >
+            <Label Content="Medians :"/>
         </Border>
-        <Border Grid.Row="2" Grid.Column="1">
+        <Border Grid.Row="2" Grid.Column="1" Visibility="{Binding MedianVisibility}" >
             <ListBox
                 x:Name="MedianListBox"
                 ItemsSource="{Binding Medians}"

@@ -165,7 +165,11 @@ namespace WeatherAndPower.Core
             var ids = DataPlot.Data.Where(e => e.IsSelected).Select(e => e.Id).ToArray();
             if (ids.Count() > 0) {
                 DataPlot.SaveChartJson(path, ids);
-			}
+            }
+            else
+            {
+                throw new Exception("Please select at least one graph to save");
+            }
 		}
 
 		public void SaveData(string path, params int[] ids)

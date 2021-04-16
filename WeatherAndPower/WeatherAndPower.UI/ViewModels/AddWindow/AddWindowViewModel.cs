@@ -93,9 +93,9 @@ namespace WeatherAndPower.UI
                 {
                     var weatherViewModel = (WeatherInputViewModel)SelectedViewModel;
                     var dateTimeViewModel = weatherViewModel.DateTimeViewModel;
-                    if (weatherViewModel.SelectedWeatherTypes.Count < 1)
+                    if (weatherViewModel.SelectedWeatherTypes.Count < 1 && weatherViewModel.SelectedMedians.Count < 1)
                     {
-                        throw new Exception("Please choose at least one weather type");
+                        throw new Exception("Please choose at least one weather type or one median parameter");
                     }
                     string parameters = String.Join(",", weatherViewModel.SelectedWeatherTypes.Concat(weatherViewModel.SelectedMedians));
                     Console.WriteLine("Params " + parameters);
