@@ -168,7 +168,7 @@ namespace WeatherAndPower.Core
             }
             else
             {
-                throw new Exception("Please select at least one graph to save");
+                throw new Exception("Please select at least one data from the list");
             }
 		}
 
