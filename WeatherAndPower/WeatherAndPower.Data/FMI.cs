@@ -19,7 +19,7 @@ namespace WeatherAndPower.Data
 		public static string Parameters { get; set; }
 		public static string StartTime { get; set; }
 		public static string EndTime { get; set; }
-		public static string Timestep { get; set; }// = "60"; // Default value
+		public static string Timestep { get; set; }
 		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		// Useful parameter explanations
@@ -91,7 +91,7 @@ namespace WeatherAndPower.Data
 			return request;
 		}
 
-		public static async Task<List<IDataSeries>> GetSingleData(string url)
+		public static async Task<List<IDataSeries>> GetSingleData(string url, bool is_first_chunk = false)
 		{
 			var httpResponse = await _client.GetAsync(url);
 			var bytes = await httpResponse.Content.ReadAsByteArrayAsync();
@@ -128,9 +128,6 @@ namespace WeatherAndPower.Data
 			var result_nodes = doc.SelectNodes("//om:result", mng);
 			List<IDataSeries> plots = new List<IDataSeries>();
 
-			// These flags make sure that warning message about missing graphs/values is shown only once
-			bool already_shown_values = false;
-
 			// List of formats to display which graphs are missing
 			List<string> missing_graphs = new List<string>();
 			List<string> found_graphs = new List<string>();
@@ -162,14 +159,6 @@ namespace WeatherAndPower.Data
 
 					if (Double.IsNaN(value))
 					{	
-						/*
-						if (!already_shown_values)
-						{
-							// This message is shown only once
-							MessageBox.Show("Some of the reuqested values are missing!");
-							already_shown_values = true;
-						}
-						*/
 						continue;
 					}
 
@@ -199,7 +188,7 @@ namespace WeatherAndPower.Data
 			}
 
 			// Showing the user which graphs are missing (if any)
-			if (missing_graphs.Any())
+			if (missing_graphs.Any() && is_first_chunk)
 			{
 				TellAboutGraphs(missing_graphs, found_graphs);
 			}
@@ -239,7 +228,14 @@ namespace WeatherAndPower.Data
 				string request = BuildRequest(query);
 				Console.WriteLine(request);
 
-				var series_list_task = Task.Run(() => GetSingleData(request));
+				// This flag makes sure that the missing graphs warning is shown only once
+				bool is_first = false;
+				if(timepairs.First() == timepair)
+                {
+					is_first = true;
+                }
+
+				var series_list_task = Task.Run(() => GetSingleData(request, is_first));
 				series_list_task.Wait();
 				var series_list = series_list_task.Result;
 
