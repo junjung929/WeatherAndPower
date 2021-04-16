@@ -29,13 +29,20 @@ namespace WeatherAndPower.UI
         private void WeatherTypeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewModel = (WeatherInputViewModel)DataContext;
-            viewModel.SelectedWeatherTypes = WeatherTypeListBox.SelectedItems.OfType<WeatherType>().ToList();
+            if (viewModel != null)
+            {
+                viewModel.SelectedWeatherTypes = WeatherTypeListBox.SelectedItems.OfType<WeatherType>().ToList();
+            }
         }
 
         private void MedianListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewModel = (WeatherInputViewModel)DataContext;
-            viewModel.SelectedMedians = MedianListBox.SelectedItems.OfType<WeatherType>().ToList();
+            if (viewModel != null)
+            {
+                viewModel.SelectedMedians = MedianListBox.SelectedItems.OfType<WeatherType>().ToList();
+            }
+
         }
     }
 }
