@@ -223,47 +223,29 @@ namespace WeatherAndPower.Data
 			{
 				StartTime = TimeHandler.ConvertToLocalTime(timepair.Item1).ToString("yyyy-MM-ddTHH:mm:ssZ");
 				EndTime = TimeHandler.ConvertToLocalTime(timepair.Item2).ToString("yyyy-MM-ddTHH:mm:ssZ");
-				try
+
+				Place = cityName;
+				Parameters = parameters;
+
+				string query;
+				if (parameterType == WeatherType.ParameterEnum.Forecast)
 				{
-					Place = cityName;
-					Parameters = parameters;
-
-					string query;
-					if (parameterType == WeatherType.ParameterEnum.Forecast)
-					{
-						query = BuildQuery("forecast::hirlam::surface::point");
-					}
-					else
-					{
-						query = BuildQuery("observations::weather");
-					}
-
-					string request = BuildRequest(query);
-					Console.WriteLine(request);
-
-					var series_list_task = Task.Run(() => GetSingleData(request));
-					try
-					{
-						series_list_task.Wait();
-						var series_list = series_list_task.Result;
-						foreach (var series in series_list)
-						{
-							AddToDict(ref combined_graphs, series);
-						}
-					}
-					catch (AggregateException ae)
-					{
-						Console.WriteLine("FMIAction failed:");
-						foreach (var ex in ae.InnerExceptions)
-						{
-							Console.WriteLine(ex.Message);
-							throw new Exception(ex.Message);
-						}
-					}
+					query = BuildQuery("forecast::hirlam::surface::point");
 				}
-				catch (Exception e)
+				else
 				{
-					throw e;
+					query = BuildQuery("observations::weather");
+				}
+				string request = BuildRequest(query);
+				Console.WriteLine(request);
+
+				var series_list_task = Task.Run(() => GetSingleData(request));
+				series_list_task.Wait();
+				var series_list = series_list_task.Result;
+
+				foreach (var series in series_list)
+				{
+					AddToDict(ref combined_graphs, series);
 				}
 			}
 			return combined_graphs;
