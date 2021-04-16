@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WeatherAndPower.Contracts;
 
@@ -7,7 +8,7 @@ namespace WeatherAndPower.Core
 {
     public class PowerInputModel : AbstractModel, IPowerInputModel
     {
-        public List<PowerType> PowerTypes { get; } = new List<PowerType>(PowerType.GetAll<PowerType>());
+        public ObservableCollection<PowerType> PowerTypes { get; } = new ObservableCollection<PowerType>(PowerType.GetAll<PowerType>());
 
         public List<Interval> Intervals { get; } = new List<Interval>()
         {
