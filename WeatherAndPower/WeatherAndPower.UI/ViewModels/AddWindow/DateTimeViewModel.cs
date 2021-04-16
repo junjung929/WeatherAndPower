@@ -48,10 +48,10 @@ namespace WeatherAndPower.UI
         private DateTime _startTime = DateTime.Now;
         public DateTime StartTime
         {
-            get { return _startTime; }
+            get { return Model.StartTime; }
             set
             {
-                _startTime = value;
+                Model.StartTime = value;
                 NotifyPropertyChanged("StartTime");
             }
         }
@@ -60,10 +60,10 @@ namespace WeatherAndPower.UI
 
         public DateTime EndTime
         {
-            get { return _endTime; }
+            get { return Model.EndTime; }
             set
             {
-                _endTime = value;
+                Model.EndTime = value;
                 NotifyPropertyChanged("EndTime");
             }
         }
