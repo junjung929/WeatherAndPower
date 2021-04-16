@@ -50,7 +50,7 @@ namespace WeatherAndPower.Core
                 {
                     series_task.Wait();
                     var series = series_task.Result;
-                    series.Name = graphName;
+                    series.Name = graphName + " (" + powerType.Source + ")";
                     DataPlot.Data.Add(series);
                 }
                 catch (AggregateException e)
@@ -71,19 +71,20 @@ namespace WeatherAndPower.Core
 
         }
 
-        public void AddWeatherGraph(string cityName, string parameters, DateTime startTime, DateTime endTime, string graphName, WeatherType.ParameterEnum parameterType, int interval)
+        public void AddWeatherGraph(string cityName, string parameters, DateTime startTime, DateTime endTime,
+            string graphName, WeatherType.ParameterEnum parameterType, int interval)
         {
             if (cityName == null || cityName == "")
             {
                 throw new Exception("Please give a name of cities in Finland");
-            }           
+            }
 
             try
             {
                 IsTimeValid(startTime, endTime);
                 IsPlotNameValid(graphName);
                 if (TimeHandler.ForecastTooFar(startTime)) { return; }
-                
+
 
                 FMI.Place = cityName;
                 FMI.Parameters = parameters;
@@ -114,7 +115,7 @@ namespace WeatherAndPower.Core
                     var series_list = series_list_task.Result;
                     foreach (var series in series_list)
                     {
-                        series.Name = graphName;
+                        series.Name = graphName + " (" + series.Name + ")";
                         DataPlot.Data.Add(series);
                     }
                 }

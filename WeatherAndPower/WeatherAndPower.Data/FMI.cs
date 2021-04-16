@@ -152,7 +152,7 @@ namespace WeatherAndPower.Data
 				DataFormat format = GetFormat(typeformat);
 
 
-				var plot = DataSeriesFactory.CreateDataSeries(Place, format, series);
+				var plot = DataSeriesFactory.CreateDataSeries(format.ToString(), format, series); ;
 
 				// VALUETIMEPAIR				
 				var PairLst = result.SelectNodes(".//wml2:MeasurementTVP", mng);
