@@ -164,12 +164,12 @@ namespace WeatherAndPower.UI
             if (SelectedPowerParameter == PowerType.ParameterEnum.RealTime ||
                 SelectedPowerParameter == PowerType.ParameterEnum.Observation)
             {
-                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
 
             }
             else
             {
-                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
                     DateTimeViewModel.DefaultDateTimeMax);
             }
         }
@@ -193,21 +193,17 @@ namespace WeatherAndPower.UI
         {
             Console.WriteLine("Power source " + SelectedPowerSource);
             UpdatePowerServices();
-            UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
+            //UpdatePowerParameters();
+            //UpdateRealTime();
+            //UpdateSelectedPowerType();
+            //UpdateDateTimeMinMax();
+            //UpdateIntervals();
         }
 
         public void OnUpdateSelectedPowerService()
         {
             Console.WriteLine("Power service " + SelectedPowerSource);
             UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
         }
 
         public void OnUpdateSelectedPowerParameter()
@@ -223,7 +219,6 @@ namespace WeatherAndPower.UI
         {
             var dateTimeInputModel = Model.CreateDateTimeInputModel();
             DateTimeViewModel = new DateTimeViewModel(dateTimeInputModel);
-            UpdateDateTimeMinMax();
         }
 
         public ICommand UpdatePowerSourceCommand { get; set; }
@@ -237,12 +232,6 @@ namespace WeatherAndPower.UI
             PowerTypes = new ObservableCollection<PowerType>(model.PowerTypes);
             PowerSources = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
             SelectedPowerSource = PowerType.SourceEnum.All;
-            UpdatePowerServices();
-            UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
 
             UpdatePowerSourceCommand = new RelayCommand(
                 () => OnUpdateSelectedPowerSource());

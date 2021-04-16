@@ -51,10 +51,7 @@ namespace WeatherAndPower.Core
 
         public List<PowerType.ParameterEnum> GetUpdatedPowerParameters(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService)
         {
-            Console.WriteLine(powerSource.ToString() + powerService.ToString());
             var selectableTypes = PowerTypes.ToList().FindAll(powerType => {
-                Console.WriteLine(powerType.Source.ToString());
-                Console.WriteLine(powerType.Service.ToString());
                 return powerType.Source == powerSource && powerType.Service == powerService;
             }
             );

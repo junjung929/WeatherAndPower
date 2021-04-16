@@ -33,7 +33,7 @@ namespace WeatherAndPower.UI
             var selected = button.Tag as IDateTimeRange;
 
             //((DateTimeViewModel)DataContext).SelectedDateTimeRange = selected;
-            ((DateTimeViewModel)DataContext).Model.UpdateDateTimes(selected);
+            ((DateTimeViewModel)DataContext).UpdateDateTimes(selected);
 
         }
     }
