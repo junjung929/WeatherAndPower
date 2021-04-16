@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WeatherAndPower.Contracts
 {
-	public interface IDataSeries
+	public interface IDataSeries : INotifyPropertyChanged
 	{
 		[JsonIgnore]
 		public int Id { get; set; }

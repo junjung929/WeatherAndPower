@@ -60,8 +60,10 @@ namespace WeatherAndPower.UI
 
 		private void SeriesClicked(object sender, MouseButtonEventArgs e)
 		{
-			var id = ((sender as CustomLineSeries).DataContext as IDataSeries).Id;
-			Model.SaveChartJson("test.json", id);
+			var series = (sender as CustomLineSeries).DataContext as IDataSeries;
+			var id = series.Id;
+			series.IsSelected = true;
+			//Model.SaveChartJson("test.json", id);
 		}
 	}
 }

@@ -9,8 +9,6 @@ namespace WeatherAndPower.Core
 {
 	public abstract class AbstractModel
 	{
-		// NotifyPropertyChanged is needed in order to be notified when a property changes, properties need to fire the event themselfs!
-		// Take a look in how I did it above with Name and State, use snippets in VisualStudio to make the declaration of these a ease and not waist a lot of time...
 		#region INotifyPropertyChanged implementation
 		public event PropertyChangedEventHandler PropertyChanged;
 
