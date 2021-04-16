@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.Data;
+using System.Collections.Generic;
 
 namespace WeatherAndPower.Core
 {
@@ -51,7 +52,6 @@ namespace WeatherAndPower.Core
                     series_task.Wait();
                     var series = series_task.Result;
                     series.Name = graphName + " (" + powerType.Source + ")";
-                    series.IsComparable = powerType.Source != PowerType.SourceEnum.All;
                     DataPlot.Data.Add(series);
                 }
                 catch (AggregateException e)
@@ -101,17 +101,6 @@ namespace WeatherAndPower.Core
                 DataPlot.Data.Add(graph.Value);
             }
         }
-                {
-                    throw e;
-                }
-            }
-            // plotting here
-            foreach(var graph in combined_graphs)
-            {
-                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
-                DataPlot.Data.Add(graph.Value);
-            }
-        }
 
         public IPowerInputModel CreateNewPowerInputModel()
         {
@@ -145,5 +134,19 @@ namespace WeatherAndPower.Core
         {
             DataPlot = dataPlot;
         }
+
+        public void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
+        {
+            if (dict.ContainsKey(plot.Name))
+            {
+                var series = dict[plot.Name];
+                series.Series.AddRange(plot.Series);
+            }
+            else
+            {
+                dict.Add(plot.Name, plot);
+            }
+        }
     }
 }
+
