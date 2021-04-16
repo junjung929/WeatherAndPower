@@ -49,6 +49,7 @@ namespace WeatherAndPower.UI
                 {
                     _SelectedPowerSource = value;
                     NotifyPropertyChanged("SelectedPowerSource");
+                    OnUpdateSelectedPowerSource();
                 }
             }
         }
@@ -72,6 +73,7 @@ namespace WeatherAndPower.UI
             {
                 _SelectedPowerService = value;
                 NotifyPropertyChanged("SelectedPowerService");
+                OnUpdateSelectedPowerService();
             }
         }
 
@@ -94,6 +96,7 @@ namespace WeatherAndPower.UI
             {
                 _SelectedPowerParameter = value;
                 NotifyPropertyChanged("SelectedPowerParameter");
+                OnUpdateSelectedPowerParameter();
             }
         }
 
@@ -110,12 +113,16 @@ namespace WeatherAndPower.UI
         }
 
         private ObservableCollection<Interval> _intervals { get; set; }
-       
+
 
         public ObservableCollection<Interval> Intervals
         {
             get { return _intervals; }
-            set { _intervals = value; NotifyPropertyChanged("Intervals"); }
+            set
+            {
+                _intervals = value;
+                NotifyPropertyChanged("Intervals");
+            }
         }
 
         private Interval _selectedInterval { get; set; }
@@ -158,7 +165,7 @@ namespace WeatherAndPower.UI
                 SelectedPowerParameter == PowerType.ParameterEnum.Observation)
             {
                 DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
-               
+
             }
             else
             {
@@ -170,7 +177,6 @@ namespace WeatherAndPower.UI
         int _minInterval { get; set; } = 3;
         public void UpdateIntervals()
         {
-            Console.WriteLine("interval " + SPowerType.Interval);
             int minInterval = SPowerType.Interval;
 
             if (minInterval != _minInterval)
