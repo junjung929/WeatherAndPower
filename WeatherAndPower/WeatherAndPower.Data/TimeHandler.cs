@@ -53,46 +53,6 @@ namespace WeatherAndPower.Data
             }
         }
 
-        public static List<Tuple<DateTime, DateTime>> SplitFMIRequest(DateTime start, DateTime end)
-        {
-
-            // All my homies hate tuples
-
-            TimeSpan max_span = new TimeSpan(7, 0, 0, 0);
-            TimeSpan query_span = end - start;
-            DateTime temp;
-            List<Tuple<DateTime, DateTime>> split_times = new List<Tuple<DateTime, DateTime>>();
-            if (query_span > max_span)
-            {                
-                while(start < end)
-                {
-                    temp = start;
-                    TimeSpan new_span = end - start;
-                    if(new_span < max_span) 
-                    {
-                        AddTimePair(ref split_times, start, end);
-                        return split_times;
-                    }
-                    else
-                    {
-                        start += max_span;
-                        AddTimePair(ref split_times, temp, start);
-                    }
-                }
-                return split_times;
-            }
-            // If the span is OK to begin with
-            AddTimePair(ref split_times, start, end);
-            return split_times;
-
-        }
-
-        private static void AddTimePair(ref List<Tuple<DateTime, DateTime>> split_times, DateTime start, DateTime end)
-        {
-            Tuple<DateTime, DateTime> timepair = new Tuple<DateTime, DateTime>(start, end);
-            split_times.Add(timepair);
-        }
-
     }
 }
 
