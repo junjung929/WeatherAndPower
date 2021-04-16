@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,16 +29,65 @@ namespace WeatherAndPower.Core
             DateTimeRanges.Add(new DateTimeRange("This Year", null, "tyear"));
         }
 
-        public List<DateTimeRange> DateTimeRanges { get; set; } = new List<DateTimeRange>();
+        public ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; } = new ObservableCollection<IDateTimeRange>();
 
-        public void EnableDateTimeRange(DateTimeRange dateTimeRange, bool isEnabled)
+        public DateTime DefaultDateTimeMin { get; } = DateTime.Today.AddYears(-2);
+        public DateTime DefaultDateTimeMax { get; } = DateTime.Today.AddMonths(2).AddTicks(-1);
+
+        private DateTime _startTime = DateTime.Now;
+        public DateTime StartTime
+        {
+            get { return _startTime; }
+            set
+            {
+                _startTime = value;
+                NotifyPropertyChanged("StartTime");
+            }
+        }
+
+        private DateTime _endTime = DateTime.Now;
+
+        public DateTime EndTime
+        {
+            get { return _endTime; }
+            set
+            {
+                _endTime = value;
+                NotifyPropertyChanged("EndTime");
+            }
+        }
+
+        private DateTime _DateTimeMin { get; set; }
+        public DateTime DateTimeMin
+        {
+            get { return _DateTimeMin; }
+            set
+            {
+                _DateTimeMin = value;
+                NotifyPropertyChanged("DateTimeMin");
+            }
+        }
+
+        private DateTime _DateTimeMax { get; set; }
+        public DateTime DateTimeMax
+        {
+            get { return _DateTimeMax; }
+            set
+            {
+                _DateTimeMax = value;
+                NotifyPropertyChanged("DateTimeMax");
+            }
+        }
+
+        public void EnableDateTimeRange(IDateTimeRange dateTimeRange, bool isEnabled)
         {
             dateTimeRange.IsEnabled = isEnabled;
         }
 
-        public Tuple<DateTime, DateTime> GetNewDateTimeRange(DateTimeRange dateTimeRange)
+        public Tuple<DateTime, DateTime> GetNewDateTimeRange(IDateTimeRange dateTimeRange)
         {
             string dateTimeRangeString = dateTimeRange.Value;
+            Console.WriteLine("range: " + dateTimeRangeString);
             DateTime now = DateTime.Now;
             DateTime today = DateTime.Now.Date;
             DateTime startTime = now;
@@ -120,6 +170,52 @@ namespace WeatherAndPower.Core
             }
 
             return new Tuple<DateTime, DateTime>(startTime, endTime);
+        }
+
+        public void UpdateDateTimeMinMaxToDefault()
+        {
+            DateTimeMin = DefaultDateTimeMin;
+            DateTimeMax = DefaultDateTimeMax;
+        }
+
+        public void UpdateDateTimeMinMax(DateTime min, DateTime max)
+        {
+            // Check if startTime and endtime areout of range between min and max
+            // then adjust value
+            // This must be done before updating minumum and maximum datetime to avoid error
+            StartTime = AdjustDateTime(StartTime, min, max);
+            EndTime = AdjustDateTime(EndTime, min, max);
+
+            // Then update min and max datetime
+            DateTimeMin = min;
+            DateTimeMax = max;
+        }
+
+        private DateTime AdjustDateTime(DateTime dateTime)
+        {
+            return AdjustDateTime(dateTime, DateTimeMin, DateTimeMax);
+        }
+        private DateTime AdjustDateTime(DateTime dateTime, DateTime min, DateTime max)
+        {
+            if (dateTime.CompareTo(min) < 0)
+            {
+                return min;
+            }
+            else if (dateTime.CompareTo(max) > 0)
+            {
+                return max;
+            }
+            return dateTime;
+        }
+
+        public void UpdateDateTimes(IDateTimeRange dateTimeRange)
+        {
+            Console.WriteLine("Selected datetime button " + dateTimeRange);
+            var (startTime, endTime) = GetNewDateTimeRange(dateTimeRange);
+            Console.WriteLine("StartTime " + startTime);
+            Console.WriteLine("endTime " + endTime);
+            StartTime = AdjustDateTime(startTime);
+            EndTime = AdjustDateTime(endTime);
         }
     }
 }

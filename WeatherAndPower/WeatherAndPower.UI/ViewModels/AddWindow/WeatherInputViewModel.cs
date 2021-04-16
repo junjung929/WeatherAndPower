@@ -143,11 +143,11 @@ namespace WeatherAndPower.UI
         {
             if (SelectedParameter == WeatherType.ParameterEnum.Observation)
             {
-                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
+                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
             }
             else
             {
-                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
+                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
                     DateTimeViewModel.DefaultDateTimeMax);
             }
         }
