@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -24,17 +25,27 @@ namespace WeatherAndPower.UI
         public IDataSeries SelectedSeries { get; set; }
 
         public RelayCommand ClearGraphCommand => new RelayCommand(() => Model.ClearGraph());
-        public RelayCommand OpenDataCommand => new RelayCommand(() => Model.OpenData("test.json"));
+        public RelayCommand OpenDataCommand => new RelayCommand(() => {
+            var openDialog = new OpenFileDialog();
+            openDialog.Filter = "JavaScript Object Notation (*.json)|*.json";
+            if (openDialog.ShowDialog() == true) {
+                Model.OpenData(openDialog.FileName);
+			}
+        });
         public RelayCommand SaveDataCommand => new RelayCommand(() =>
         {
-            try
-            {
-            Model.SaveSelectedData("test.json");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+                var saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "JavaScript Object Notation (*.json)|*.json";
+                if (saveDialog.ShowDialog() == true) {
+					try
+					{
+                        Model.SaveSelectedData(saveDialog.FileName);
+					}
+					catch (Exception e)
+					{
+						MessageBox.Show(e.Message);
+					}
+                }
         });
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
         public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
