@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
@@ -55,10 +56,19 @@ namespace WeatherAndPower.UI
 
         public List<WeatherType> SelectedWeatherTypes { get; set; } = new List<WeatherType>();
 
-        public ObservableCollection<WeatherType> Medians { get; set; } = new ObservableCollection<WeatherType>()
+        private Visibility _MedianVisibility { get; set; } = Visibility.Visible;
+        public Visibility MedianVisibility
         {
-            WeatherType.AveTempMedian, WeatherType.MinTempMedian, WeatherType.MaxTempMedian
-        };
+            get { return _MedianVisibility; }
+            set { _MedianVisibility = value; NotifyPropertyChanged("MedianVisibility"); }
+        }
+        public ObservableCollection<WeatherType> _Medians { get; set; } = new ObservableCollection<WeatherType>();
+
+        public ObservableCollection<WeatherType> Medians
+        {
+            get { return _Medians; }
+            set { _Medians = value; NotifyPropertyChanged("Medians"); }
+        }
 
         public List<WeatherType> SelectedMedians { get; set; } = new List<WeatherType>();
 
@@ -83,13 +93,28 @@ namespace WeatherAndPower.UI
         {
             WeatherTypes = new ObservableCollection<WeatherType>(Model.GetUpdatedWeatherTypes(SelectedParameter));
         }
-        //public ICommand UpdateSelectedParameterCommand { get; set; }
 
+        public void UdpateMedians()
+        {
+            if (SelectedParameter == WeatherType.ParameterEnum.Observation)
+            {
+                Medians.Add(WeatherType.AveTempMedian);
+                Medians.Add(WeatherType.MinTempMedian);
+                Medians.Add(WeatherType.MaxTempMedian);
+                MedianVisibility = Visibility.Visible;
+            }
+            else
+            {
+                Medians.Clear();
+                MedianVisibility = Visibility.Collapsed;
+            }
+        }
         public void OnUpdateSelectedWeatherParameter()
         {
             Console.WriteLine("WeatherParameter " + SelectedParameter);
             UpdateDateTimeMinMax();
             UpdateWeatherTypes();
+            UdpateMedians();
         }
         public void OnUpdateSelectedWeatherType()
         {
@@ -138,6 +163,7 @@ namespace WeatherAndPower.UI
             Intervals = new ObservableCollection<Interval>(model.Intervals);
             SelectedInterval = Intervals.ToList().Find(interval => interval.Value == 60);
             UpdateWeatherTypes();
+            UdpateMedians();
             CreateDateTimeViewModel();
         }
     }
