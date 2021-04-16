@@ -165,12 +165,12 @@ namespace WeatherAndPower.UI
             if (SelectedPowerParameter == PowerType.ParameterEnum.RealTime ||
                 SelectedPowerParameter == PowerType.ParameterEnum.Observation)
             {
-                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
 
             }
             else
             {
-                DateTimeViewModel.Model.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
                     DateTimeViewModel.DefaultDateTimeMax);
             }
         }
