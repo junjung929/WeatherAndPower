@@ -10,7 +10,7 @@ namespace WeatherAndPower.Contracts
     {
         string Name { get; set; }
         string Description { get; set; }
-        string Value { get; set; }
+        string Id { get; set; }
         bool IsEnabled { get; set; }
         bool IsSelected { get; set; }
     }

@@ -26,18 +26,22 @@ namespace WeatherAndPower.Core
             set { _Description = value; NotifyPropertyChanged("Description"); }
         }
 
-        private string _Value { get; set; }
-        public string Value
+        private string _Id { get; set; }
+        public string Id
         {
-            get { return _Value; }
-            set { _Value = value; NotifyPropertyChanged("Value"); }
+            get { return _Id; }
+            set { _Id = value; NotifyPropertyChanged("Id"); }
         }
 
         private bool _IsEnabled { get; set; } = true;
         public bool IsEnabled
         {
             get { return _IsEnabled; }
-            set { _IsEnabled = value; NotifyPropertyChanged("IsEnabled"); }
+            set
+            {
+                _IsEnabled = value;
+                NotifyPropertyChanged("IsEnabled");
+            }
         }
 
         private bool _IsSelected { get; set; } = false;
@@ -47,11 +51,11 @@ namespace WeatherAndPower.Core
             set { _IsSelected = value; NotifyPropertyChanged("IsSelected"); }
         }
 
-        public DateTimeRange(string name, string description, string value)
+        public DateTimeRange(string name, string description, string id)
         {
+            Id = id;
             Name = name;
             Description = description;
-            Value = value;
         }
     }
 }
