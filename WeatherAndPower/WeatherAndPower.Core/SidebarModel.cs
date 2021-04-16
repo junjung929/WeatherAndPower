@@ -155,6 +155,10 @@ namespace WeatherAndPower.Core
 		public void RemoveSelectedData()
 		{
             var ids = DataPlot.Data.Where(e => e.IsSelected).Select(e => e.Id).ToArray();
+            if (ids.ToList().Count <1)
+            {
+                throw new Exception("Please select at least one data from the list");
+            }
             foreach (var id in ids) {
                 DataPlot.Remove(id);
 			}
@@ -168,7 +172,7 @@ namespace WeatherAndPower.Core
             }
             else
             {
-                throw new Exception("Please select at least one graph to save");
+                throw new Exception("Please select at least one data from the list");
             }
 		}
 

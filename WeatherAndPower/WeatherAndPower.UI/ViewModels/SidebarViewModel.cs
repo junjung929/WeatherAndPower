@@ -49,8 +49,22 @@ namespace WeatherAndPower.UI
         });
         public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
         public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
-        public RelayCommand CompareDataCommand => new RelayCommand(() => Model.CompareData());
-        public RelayCommand RemoveDataCommand => new RelayCommand(() => Model.RemoveSelectedData());
+        public RelayCommand CompareDataCommand => new RelayCommand(() =>
+        {
+            MessageBox.Show("Select a time line in the graph for pie chart to compare");
+            Model.CompareData();
+        });
+        public RelayCommand RemoveDataCommand => new RelayCommand(() =>
+        {
+            try
+            {
+                Model.RemoveSelectedData();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        });
 
         public SidebarViewModel(ISidebarModel model)
         {
