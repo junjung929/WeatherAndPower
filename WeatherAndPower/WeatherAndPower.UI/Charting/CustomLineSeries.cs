@@ -34,7 +34,7 @@ namespace WeatherAndPower.UI
 
 		private Tuple<Color, Color> gradientFromColor(Color color)
 		{
-			int w = 50; // Gradient width
+			int w = 20; // Gradient width
 			Color col1 = Color.FromRgb(
 				(byte)Math.Min(color.R+w,255),
 				(byte)Math.Min(color.G+w,255),

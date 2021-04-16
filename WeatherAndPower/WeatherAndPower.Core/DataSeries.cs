@@ -18,7 +18,17 @@ namespace WeatherAndPower.Core
 
 		public string Name { get; set; }
 
-		public byte[] Color { get; set; } = { 0, 0, 0 };
+		private byte[] _Color;
+		public byte[] Color
+		{
+			get {
+				return _Color;
+			}
+			set {
+				_Color = value;
+				NotifyPropertyChanged("Color");
+			}
+		}
 
 		private bool _IsSelected = false;
 		public bool IsSelected

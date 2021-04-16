@@ -71,6 +71,7 @@
       <DependentUpon>CustomChart.xaml</DependentUpon>
     </Compile>
     <Compile Include="Charting\CustomLineSeries.cs" />
+    <Compile Include="ValueConverters\BytesToColorConverter.cs" />
     <Compile Include="WindowFactory.cs" />
     <Compile Include="Charting\TimeAxis.cs" />
     <Compile Include="RelayCommand.cs" />
