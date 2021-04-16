@@ -122,8 +122,6 @@ namespace WeatherAndPower.Core
                         var series_list = series_list_task.Result;
                         foreach (var series in series_list)
                         {
-                            //series.Name = graphName + " (" + series.Name + ")";
-                            //DataPlot.Data.Add(series);
                             AddToDict(ref combined_graphs, series);
                         }
                     }
@@ -145,6 +143,7 @@ namespace WeatherAndPower.Core
             // plotting here
             foreach(var graph in combined_graphs)
             {
+                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
                 DataPlot.Data.Add(graph.Value);
             }
         }
