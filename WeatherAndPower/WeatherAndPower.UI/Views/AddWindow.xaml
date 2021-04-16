@@ -50,8 +50,8 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
             <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" >
-                <Button Content="Open Preference" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
-                <Button Content="Save Preference" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
+                <Button Content="Open Preference" IsEnabled="False" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
+                <Button Content="Save Preference" IsEnabled="False" HorizontalAlignment="Right" Margin="3,0" Padding="10,5" />
             </StackPanel>
         </Border>
 
