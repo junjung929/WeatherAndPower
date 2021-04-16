@@ -111,15 +111,13 @@ namespace WeatherAndPower.UI
 
         public override void UpdateDateTimeMinMax()
         {
-            var minTime = DateTime.Now.AddHours(-168);
-            var minHour = minTime.Date.AddHours(minTime.Hour);
             if (SelectedParameter == WeatherType.ParameterEnum.Observation)
             {
-                DateTimeViewModel.UpdateDateTimeMinMax(minHour, DateTime.Now);
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
             }
             else
             {
-                DateTimeViewModel.UpdateDateTimeMinMax(minHour,
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin,
                     DateTimeViewModel.DefaultDateTimeMax);
             }
         }
