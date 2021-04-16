@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.Data;
+using System.Collections.Generic;
 
 namespace WeatherAndPower.Core
 {
@@ -79,60 +80,69 @@ namespace WeatherAndPower.Core
                 throw new Exception("Please give a name of cities in Finland");
             }
 
-            try
+            List<Tuple<DateTime, DateTime>> timepairs = TimeHandler.SplitFMIRequest(startTime, endTime);
+
+            if (TimeHandler.ForecastTooFar(startTime)) { return; }
+
+            string step = interval.ToString();
+            FMI.Timestep = step;
+            if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return; }
+
+            foreach (var timepair in timepairs)
             {
-                IsTimeValid(startTime, endTime);
-                IsPlotNameValid(graphName);
-                if (TimeHandler.ForecastTooFar(startTime)) { return; }
-
-
-                FMI.Place = cityName;
-                FMI.Parameters = parameters;
-                //FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                //FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                FMI.StartTime = TimeHandler.ConvertToLocalTime(startTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
-                FMI.EndTime = TimeHandler.ConvertToLocalTime(endTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
-                string step = interval.ToString();
-                FMI.Timestep = step;
-                if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return; }
-                string query;
-                if (parameterType == WeatherType.ParameterEnum.Forecast)
-                {
-                    query = FMI.BuildQuery("forecast::hirlam::surface::point");
-                }
-                else
-                {
-                    query = FMI.BuildQuery("observations::weather");
-                }
-
-                string request = FMI.BuildRequest(query);
-                Console.WriteLine(request);
-
-                var series_list_task = Task.Run(() => FMI.GetData(request));
+                FMI.StartTime = TimeHandler.ConvertToLocalTime(timepair.Item1).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                FMI.EndTime = TimeHandler.ConvertToLocalTime(timepair.Item2).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                Console.WriteLine(FMI.StartTime);
+                Console.WriteLine(FMI.EndTime);
                 try
                 {
-                    series_list_task.Wait();
-                    var series_list = series_list_task.Result;
-                    foreach (var series in series_list)
-                    {
-                        series.Name = graphName + " (" + series.Name + ")";
-                        DataPlot.Data.Add(series);
-                    }
-                }
-                catch (AggregateException ae)
-                {
-                    Console.WriteLine("FMIAction failed:");
-                    foreach (var ex in ae.InnerExceptions)
-                    {
-                        Console.WriteLine(ex.Message);
-                        throw new Exception(ex.Message);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
+                    IsTimeValid(startTime, endTime);
+                    IsPlotNameValid(graphName);
 
-                throw e;
+                    
+
+                    FMI.Place = cityName;
+                    FMI.Parameters = parameters;                   
+
+                    string query;
+                    if (parameterType == WeatherType.ParameterEnum.Forecast)
+                    {
+                        query = FMI.BuildQuery("forecast::hirlam::surface::point");
+                    }
+                    else
+                    {
+                        query = FMI.BuildQuery("observations::weather");
+                    }
+
+                    string request = FMI.BuildRequest(query);
+                    Console.WriteLine(request);
+
+                    var series_list_task = Task.Run(() => FMI.GetData(request));
+                    try
+                    {
+                        series_list_task.Wait();
+                        var series_list = series_list_task.Result;
+                        foreach (var series in series_list)
+                        {
+                            series.Name = graphName + " (" + series.Name + ")";
+                            DataPlot.Data.Add(series);
+                        }
+                    }
+                    catch (AggregateException ae)
+                    {
+                        Console.WriteLine("FMIAction failed:");
+                        foreach (var ex in ae.InnerExceptions)
+                        {
+                            Console.WriteLine(ex.Message);
+                            throw new Exception(ex.Message);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
             }
         }
 

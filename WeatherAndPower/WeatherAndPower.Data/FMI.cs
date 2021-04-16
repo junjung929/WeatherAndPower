@@ -19,7 +19,7 @@ namespace WeatherAndPower.Data
 		public static string Parameters { get; set; }
 		public static string StartTime { get; set; }
 		public static string EndTime { get; set; }
-		public static string Timestep { get; set ; } = "60"; // Default value
+		public static string Timestep { get; set; }// = "60"; // Default value
 		public static IDataSeriesFactory DataSeriesFactory { get; set; }
 
 		// Useful parameter explanations
