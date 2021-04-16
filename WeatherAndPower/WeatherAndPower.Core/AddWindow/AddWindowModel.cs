@@ -51,6 +51,7 @@ namespace WeatherAndPower.Core
                     series_task.Wait();
                     var series = series_task.Result;
                     series.Name = graphName + " (" + powerType.Source + ")";
+                    series.IsComparable = powerType.Source != PowerType.SourceEnum.All;
                     DataPlot.Data.Add(series);
                 }
                 catch (AggregateException e)

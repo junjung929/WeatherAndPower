@@ -20,7 +20,7 @@ namespace WeatherAndPower.Contracts
 
 		public bool IsVisible { get; set; }
 
-		public bool IsComparable { get; }
+		public bool IsComparable { get; set; }
 
 		public DataFormat Format { get; set; }
 

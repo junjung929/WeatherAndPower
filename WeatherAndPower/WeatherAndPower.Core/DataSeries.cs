@@ -51,7 +51,7 @@ namespace WeatherAndPower.Core
 			}
 		}
 
-		public bool IsComparable { get; private set; } = false;
+		public bool IsComparable { get; set; } = false;
 
 		public DataFormat Format { get; set; }
 
