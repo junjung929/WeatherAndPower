@@ -235,6 +235,7 @@ namespace WeatherAndPower.UI
             UpdatePowerParameters();
             UpdateRealTime();
             UpdateSelectedPowerType();
+            UpdateDateTimeMinMax();
             UpdateIntervals();
 
             UpdatePowerSourceCommand = new RelayCommand(
