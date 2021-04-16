@@ -90,19 +90,19 @@ namespace WeatherAndPower.Contracts
         public static WeatherType AveTempMedian = new WeatherType(12, "TA_PT1H_AVG")
         {
             Description = "Average temperature",
-            //Format = DataFormat.Temperature,
+            Format = DataFormat.AvgTemp,
             ParameterType = ParameterEnum.Median
         };
         public static WeatherType MaxTempMedian = new WeatherType(13, "TA_PT1H_MAX")
         {
             Description = "Max temperature",
-            //Format = DataFormat.Temperature,
+            Format = DataFormat.MaxTemp,
             ParameterType = ParameterEnum.Median
         };
         public static WeatherType MinTempMedian = new WeatherType(14, "TA_PT1H_MIN")
         {
             Description = "Min temperature",
-            //Format = DataFormat.Temperature,
+            Format = DataFormat.MinTemp,
             ParameterType = ParameterEnum.Median
         };
 

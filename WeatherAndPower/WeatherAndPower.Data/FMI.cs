@@ -166,13 +166,15 @@ namespace WeatherAndPower.Data
 					double.TryParse(TimeValuePair.SelectSingleNode(".//wml2:value", mng).InnerText, NumberStyles.Any, CultureInfo.InvariantCulture, out double value);
 
 					if (Double.IsNaN(value))
-					{
+					{	
+						/*
 						if (!already_shown_values)
 						{
 							// This message is shown only once
 							MessageBox.Show("Some of the reuqested values are missing!");
 							already_shown_values = true;
 						}
+						*/
 						continue;
 					}
 

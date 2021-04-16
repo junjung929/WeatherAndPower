@@ -88,18 +88,16 @@ namespace WeatherAndPower.Core
             FMI.Timestep = step;
             if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return; }
 
+            Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
+
             foreach (var timepair in timepairs)
             {
                 FMI.StartTime = TimeHandler.ConvertToLocalTime(timepair.Item1).ToString("yyyy-MM-ddTHH:mm:ssZ");
                 FMI.EndTime = TimeHandler.ConvertToLocalTime(timepair.Item2).ToString("yyyy-MM-ddTHH:mm:ssZ");
-                Console.WriteLine(FMI.StartTime);
-                Console.WriteLine(FMI.EndTime);
                 try
                 {
                     IsTimeValid(startTime, endTime);
                     IsPlotNameValid(graphName);
-
-                    
 
                     FMI.Place = cityName;
                     FMI.Parameters = parameters;                   
@@ -124,8 +122,9 @@ namespace WeatherAndPower.Core
                         var series_list = series_list_task.Result;
                         foreach (var series in series_list)
                         {
-                            series.Name = graphName + " (" + series.Name + ")";
-                            DataPlot.Data.Add(series);
+                            //series.Name = graphName + " (" + series.Name + ")";
+                            //DataPlot.Data.Add(series);
+                            AddToDict(ref combined_graphs, series);
                         }
                     }
                     catch (AggregateException ae)
@@ -140,9 +139,13 @@ namespace WeatherAndPower.Core
                 }
                 catch (Exception e)
                 {
-
                     throw e;
                 }
+            }
+            // plotting here
+            foreach(var graph in combined_graphs)
+            {
+                DataPlot.Data.Add(graph.Value);
             }
         }
 
@@ -177,6 +180,19 @@ namespace WeatherAndPower.Core
         public AddWindowModel(DataPlotModel dataPlot)
         {
             DataPlot = dataPlot;
+        }
+
+        public void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
+        {
+            if (dict.ContainsKey(plot.Name))
+            {
+                var series = dict[plot.Name];
+                series.Series.AddRange(plot.Series);
+            }
+            else
+            {
+                dict.Add(plot.Name, plot);
+            }
         }
     }
 }
