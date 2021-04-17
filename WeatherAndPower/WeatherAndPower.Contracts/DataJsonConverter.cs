@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WeatherAndPower.Contracts
 {
-	public class IDataJsonConverter : JsonConverter<IData>
+	public class DataJsonConverter : JsonConverter<IData>
 	{
 		public override IData Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
