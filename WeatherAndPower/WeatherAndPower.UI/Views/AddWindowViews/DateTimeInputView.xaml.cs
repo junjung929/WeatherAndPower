@@ -28,12 +28,19 @@ namespace WeatherAndPower.UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
             var button = sender as Button;
             var selected = button.Tag as IDateTimeRange;
 
             //((DateTimeViewModel)DataContext).SelectedDateTimeRange = selected;
-            ((DateTimeViewModel)DataContext).UpdateDateTimes(selected);
+            try
+            {
+                ((DateTimeViewModel)DataContext).UpdateDateTimes(selected);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
     }
