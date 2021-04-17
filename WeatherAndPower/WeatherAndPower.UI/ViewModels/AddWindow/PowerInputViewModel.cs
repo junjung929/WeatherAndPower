@@ -184,7 +184,7 @@ namespace WeatherAndPower.UI
             {
                 _MinInterval = minInterval;
                 Intervals = new ObservableCollection<Interval>(Model.GetUpdatedIntervals(minInterval));
-                SelectedInterval = SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
+                SelectedInterval = Intervals.ToList().Find(interval => interval.Value >= minInterval); //SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
             }
         }
 
