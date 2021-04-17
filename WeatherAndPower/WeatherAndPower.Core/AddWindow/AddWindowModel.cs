@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.Data;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace WeatherAndPower.Core
 {
@@ -43,7 +45,7 @@ namespace WeatherAndPower.Core
             {
                 return;
             }
-             var startTime = TimeHandler.ConvertToLocalTime(preference.StartTime);
+            var startTime = TimeHandler.ConvertToLocalTime(preference.StartTime);
             var endTime = TimeHandler.ConvertToLocalTime(preference.EndTime);
 
             try
@@ -76,6 +78,50 @@ namespace WeatherAndPower.Core
             }
         }
 
+
+        public void AddWeatherGraph()
+        {
+            var preference = Preference as IWeatherPreference;
+            if (preference.WeatherTypes.Count < 1
+                && preference.Medians.Count < 1)
+            {
+                throw new Exception("Please choose at least one weather type or one median parameter");
+            }
+            string parameters = String.Join(",", preference.WeatherTypes.Concat(preference.Medians));
+            Console.WriteLine("Params " + parameters);
+            
+            var cityName = preference.CityEnum.ToString();
+            var startTime = preference.StartTime;
+            var endTime = preference.EndTime;
+            var graphName = preference.PlotName;
+            var parameterType = preference.WeatherParameter;
+            if (cityName == null || cityName == "")
+            {
+                throw new Exception("Please give a name of cities in Finland");
+            }
+            Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
+            try
+            {
+                TimeHandler.IsTimeValid(startTime, endTime);
+                IsPlotNameValid(graphName);
+                combined_graphs = FMI.GetAllData(startTime, endTime,
+                    preference.Interval.Value, graphName, cityName, parameters, parameterType);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
+                }
+            }
+            foreach (var graph in combined_graphs)
+            {
+                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
+                DataPlot.Data.Add(graph.Value);
+            }
+        }
         public void AddWeatherGraph(string cityName, string parameters, DateTime startTime, DateTime endTime,
             string graphName, WeatherType.ParameterEnum parameterType, int interval)
         {
@@ -126,7 +172,7 @@ namespace WeatherAndPower.Core
 
         public AddWindowModel(DataPlotModel dataPlot)
         {
-            Preference = new PowerPreference();
+            Preference = new Preference();
             DataPlot = dataPlot;
         }
 
@@ -148,7 +194,11 @@ namespace WeatherAndPower.Core
             return new PowerPreference();
         }
 
-        
+        public IWeatherPreference CreateNewWeatherPreference()
+        {
+            return new WeatherPreference() { DataType = IAddWindowModel.DataTypeEnum.Weather };
+        }
+
     }
 }
 

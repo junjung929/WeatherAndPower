@@ -19,11 +19,13 @@ namespace WeatherAndPower.Contracts
             Turku = 0x20
         }
         IWeatherPreference Preference { get; set; }
-
+        ObservableCollection<ECity> Cities { get; }
+        ObservableCollection<WeatherType.ParameterEnum> WeatherParameters { get; }
         /**
          * Main container for WeatherType
          */
         ObservableCollection<WeatherType> WeatherTypes { get; }
+        ObservableCollection<WeatherType> Mideans { get; }
         List<Interval> Intervals { get; }
 
 

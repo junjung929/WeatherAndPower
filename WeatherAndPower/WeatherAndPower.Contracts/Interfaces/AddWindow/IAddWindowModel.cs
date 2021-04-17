@@ -19,6 +19,7 @@ namespace WeatherAndPower.Contracts
         /**
          * Add weather data ot the graph
          */
+        void AddWeatherGraph();
         void AddWeatherGraph(
             string cityName,
             string parameters,
@@ -30,6 +31,7 @@ namespace WeatherAndPower.Contracts
 
 
         IPowerPreference CreateNewPowerPreference();
+        IWeatherPreference CreateNewWeatherPreference();
 
         /**
          * Create and return new PowerInputModel

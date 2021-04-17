@@ -11,7 +11,8 @@ namespace WeatherAndPower.Contracts
     public interface IWeatherPreference : IPreference
     {
         WeatherType.ParameterEnum WeatherParameter { get; set; }
-        ObservableCollection<WeatherType> WeatherTypes { get; set; }
-        ECity CityName { get; set; }
+        ObservableCollection<WeatherType> WeatherTypes { get; }
+        ObservableCollection<WeatherType> Medians { get; }
+        ECity CityEnum { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace WeatherAndPower.UI
 {
     public class WeatherInputViewModel : InputViewModelBase
     {
+        #region Properties
         private IWeatherInputModel _Model;
         public IWeatherInputModel Model
         {
@@ -25,36 +26,35 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private ECity _SelectedCity { get; set; } = (ECity)0x01;
+        //private ECity _SelectedCity { get; set; } = (ECity)0x01;
         public ECity SelectedCity
         {
-            get { return _SelectedCity; }
-            set { _SelectedCity = value; NotifyPropertyChanged("SelectedCity"); }
+            get { return Model.Preference.CityEnum; }
+            set { Model.Preference.CityEnum = value; NotifyPropertyChanged("SelectedCity"); }
         }
 
-        public ObservableCollection<WeatherType.ParameterEnum> WeatherParameters { get; set; } = new ObservableCollection<WeatherType.ParameterEnum>()
+        public ObservableCollection<WeatherType.ParameterEnum> WeatherParameters
         {
-            WeatherType.ParameterEnum.Observation,
-            WeatherType.ParameterEnum.Forecast
-        };
+            get { return Model.WeatherParameters; }
+        }
 
-        private WeatherType.ParameterEnum _SelectedParameter { get; set; } = WeatherType.ParameterEnum.Observation;
+        //private WeatherType.ParameterEnum _SelectedParameter { get; set; } = WeatherType.ParameterEnum.Observation;
         public WeatherType.ParameterEnum SelectedParameter
         {
-            get { return _SelectedParameter; }
+            get { return Model.Preference.WeatherParameter; }
             set
             {
-                _SelectedParameter = value;
+                Model.Preference.WeatherParameter = value;
                 NotifyPropertyChanged("SelectedParameter");
                 OnUpdateSelectedWeatherParameter();
             }
         }
 
-        private ObservableCollection<WeatherType> _WeatherTypes { get; set; }
+        //private ObservableCollection<WeatherType> _WeatherTypes { get; set; }
         public ObservableCollection<WeatherType> WeatherTypes
         {
-            get { return _WeatherTypes; }
-            set { _WeatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
+            get { return Model.WeatherTypes; }
+            //set { _WeatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
         }
 
         public List<WeatherType> SelectedWeatherTypes { get; set; } = new List<WeatherType>();
@@ -65,20 +65,22 @@ namespace WeatherAndPower.UI
             get { return _MedianVisibility; }
             set { _MedianVisibility = value; NotifyPropertyChanged("MedianVisibility"); }
         }
-        public ObservableCollection<WeatherType> _Medians { get; set; } = new ObservableCollection<WeatherType>();
+        //public ObservableCollection<WeatherType> _Medians { get; set; } = new ObservableCollection<WeatherType>();
 
         public ObservableCollection<WeatherType> Medians
         {
-            get { return _Medians; }
-            set { _Medians = value; NotifyPropertyChanged("Medians"); }
+            get { return Model.Mideans; }
         }
 
         public List<WeatherType> SelectedMedians { get; set; } = new List<WeatherType>();
 
-        public ObservableCollection<ECity> Cities { get; set; } = new ObservableCollection<ECity>(Enum.GetValues(typeof(ECity)).Cast<ECity>());
+        public ObservableCollection<ECity> Cities
+        {
+            get { return Model.Cities; }
+        }
 
 
-        private ObservableCollection<Interval> _Intervals { get; set; }
+        private ObservableCollection<Interval> _Intervals { get; set; } = new ObservableCollection<Interval>();
 
         public ObservableCollection<Interval> Intervals
         {
@@ -92,25 +94,24 @@ namespace WeatherAndPower.UI
             get { return _SelectedInterval; }
             set { _SelectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
         }
-        public void UpdateWeatherTypes()
-        {
-            WeatherTypes = new ObservableCollection<WeatherType>(Model.GetUpdatedWeatherTypes(SelectedParameter));
-        }
+        #endregion
 
         public void UdpateMedians()
         {
+            Model.Preference.Medians.Clear();
+            if (Model.Mideans.Count != 0)
+            {
+                Model.Mideans.Clear();
+            }
             if (SelectedParameter == WeatherType.ParameterEnum.Observation)
             {
-                Medians = new ObservableCollection<WeatherType>(){
-                    WeatherType.AveTempMedian,
-                    WeatherType.MinTempMedian,
-                    WeatherType.MaxTempMedian
-                };
+                Model.Mideans.Add(WeatherType.AveTempMedian);
+                Model.Mideans.Add(WeatherType.MinTempMedian);
+                Model.Mideans.Add(WeatherType.MaxTempMedian);
                 MedianVisibility = Visibility.Visible;
             }
             else
             {
-                Medians.Clear();
                 MedianVisibility = Visibility.Collapsed;
             }
         }
@@ -118,25 +119,8 @@ namespace WeatherAndPower.UI
         {
             Console.WriteLine("WeatherParameter " + SelectedParameter);
             UpdateDateTimeMinMax();
-            UpdateWeatherTypes();
+            Model.UpdateWeatherTypes();
             UdpateMedians();
-        }
-        public void OnUpdateSelectedWeatherType()
-        {
-            Console.WriteLine("WeatherTypes " + SelectedWeatherTypes.Count);
-            SelectedWeatherTypes.ForEach(selected =>
-            {
-                Console.WriteLine(selected.ToString());
-            });
-        }
-
-        public void OnUpdateSelectedMedians()
-        {
-            Console.WriteLine("Medians " + SelectedMedians.Count);
-            SelectedMedians.ForEach(selected =>
-            {
-                Console.WriteLine(selected.ToString());
-            });
         }
 
         public override void UpdateDateTimeMinMax()
@@ -151,6 +135,7 @@ namespace WeatherAndPower.UI
                     DateTimeViewModel.DefaultDateTimeMax);
             }
         }
+
         public override void CreateDateTimeViewModel()
         {
             var dateTimeInputModel = Model.CreateDateTimeInputModel();
@@ -158,16 +143,12 @@ namespace WeatherAndPower.UI
             UpdateDateTimeMinMax();
         }
 
-        public RelayCommand UpdateWeatherParameterCommand => new RelayCommand(() => OnUpdateSelectedWeatherParameter());
-        public RelayCommand UpdateWeatherTypeCommand => new RelayCommand(() => OnUpdateSelectedWeatherType());
-        public RelayCommand UpdateMedianCommand => new RelayCommand(() => OnUpdateSelectedMedians());
-
         public WeatherInputViewModel(IWeatherInputModel model)
         {
             _Model = model;
             Intervals = new ObservableCollection<Interval>(model.Intervals);
             SelectedInterval = Intervals.ToList().Find(interval => interval.Value == 60);
-            UpdateWeatherTypes();
+            Model.UpdateWeatherTypes();
             UdpateMedians();
             CreateDateTimeViewModel();
         }

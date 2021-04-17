@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
+using static WeatherAndPower.Contracts.IWeatherInputModel;
 
 namespace WeatherAndPower.Core
 {
     public class WeatherInputModel : AbstractModel, IWeatherInputModel
     {
-        public List<WeatherType> WeatherTypes { get; } = WeatherType.GetAll<WeatherType>().ToList();
+        private List<WeatherType> _WeatherTypes { get; } = WeatherType.GetAll<WeatherType>().ToList();
+        public ObservableCollection<WeatherType.ParameterEnum> WeatherParameters { get; } = new ObservableCollection<WeatherType.ParameterEnum>()
+        {
+            WeatherType.ParameterEnum.Observation,
+            WeatherType.ParameterEnum.Forecast
+        };
 
         public List<Interval> Intervals { get; } = new List<Interval>()
         {
@@ -35,7 +41,18 @@ namespace WeatherAndPower.Core
             }
         }
 
-        ObservableCollection<WeatherType> IWeatherInputModel.WeatherTypes { get; } = new ObservableCollection<WeatherType>();
+        public ObservableCollection<WeatherType> WeatherTypes { get; }
+            = new ObservableCollection<WeatherType>();
+
+        public ObservableCollection<WeatherType> Mideans { get; }
+            = new ObservableCollection<WeatherType>() {
+                WeatherType.AveTempMedian,
+                WeatherType.MinTempMedian,
+                WeatherType.MaxTempMedian,
+            };
+
+        public ObservableCollection<IWeatherInputModel.ECity> Cities { get; } =
+            new ObservableCollection<ECity>(Enum.GetValues(typeof(ECity)).Cast<ECity>());
 
         public IDateTimeInputModel CreateDateTimeInputModel()
         {
@@ -44,7 +61,7 @@ namespace WeatherAndPower.Core
 
         public List<WeatherType> GetUpdatedWeatherTypes(WeatherType.ParameterEnum weatherParameter)
         {
-            return WeatherTypes.FindAll(weatherType =>
+            return _WeatherTypes.FindAll(weatherType =>
                 weatherType.ParameterType
                 == weatherParameter);
         }
@@ -68,12 +85,22 @@ namespace WeatherAndPower.Core
 
         public void UpdateWeatherTypes()
         {
+            if (WeatherTypes.Count != 0)
+            {
+                WeatherTypes.Clear();
+            }
+            foreach (var item in _WeatherTypes.Where(weatherType =>
+                weatherType.ParameterType == Preference.WeatherParameter))
+            {
+                WeatherTypes.Add(item);
+            }
 
         }
 
         public WeatherInputModel(IWeatherPreference preference)
         {
             Preference = preference;
+            UpdateWeatherTypes();
         }
     }
 }

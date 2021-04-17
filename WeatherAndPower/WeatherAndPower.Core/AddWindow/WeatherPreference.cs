@@ -24,8 +24,8 @@ namespace WeatherAndPower.Core
         }
 
         public ObservableCollection<WeatherType> WeatherTypes { get; set; } = new ObservableCollection<WeatherType>();
-        public ECity _CityName { get; set; }
-        public ECity CityName
+        public ECity _CityName { get; set; } = ECity.Helsinki;
+        public ECity CityEnum
         {
             get { return _CityName; }
             set
@@ -34,5 +34,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("WeatherParameter");
             }
         }
+
+        public ObservableCollection<WeatherType> Medians { get; set; } = new ObservableCollection<WeatherType>();
     }
 }

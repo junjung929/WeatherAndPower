@@ -32,6 +32,15 @@ namespace WeatherAndPower.UI
             if (viewModel != null)
             {
                 viewModel.SelectedWeatherTypes = WeatherTypeListBox.SelectedItems.OfType<WeatherType>().ToList();
+                var selected = WeatherTypeListBox.SelectedItems.OfType<WeatherType>();
+                if (viewModel.Model.Preference.WeatherTypes.Count != 0)
+                {
+                    viewModel.Model.Preference.WeatherTypes.Clear();
+                }
+                selected.ToList().ForEach(e =>
+                {
+                    viewModel.Model.Preference.WeatherTypes.Add(e);
+                });
             }
         }
 
@@ -41,6 +50,15 @@ namespace WeatherAndPower.UI
             if (viewModel != null)
             {
                 viewModel.SelectedMedians = MedianListBox.SelectedItems.OfType<WeatherType>().ToList();
+                var selected = MedianListBox.SelectedItems.OfType<WeatherType>();
+                if (viewModel.Model.Preference.Medians.Count != 0)
+                {
+                    viewModel.Model.Preference.Medians.Clear();
+                }
+                selected.ToList().ForEach(e =>
+                {
+                    viewModel.Model.Preference.Medians.Add(e);
+                });
             }
 
         }

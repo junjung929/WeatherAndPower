@@ -39,15 +39,15 @@ namespace WeatherAndPower.UI
             //    NotifyPropertyChanged("Preference");
             //}
         }
-        private DataTypeEnum _DataType = (DataTypeEnum)0x01;
+        //private DataTypeEnum _DataType = (DataTypeEnum)0x01;
 
         public DataTypeEnum DataType
         {
-            get { return _DataType; }
+            get { return Model.Preference.DataType; }
             set
             {
-                _DataType = value; NotifyPropertyChanged("DataType");
-                Preference.DataType = value;
+                Model.Preference.DataType = value; 
+                NotifyPropertyChanged("DataType");
                 UpdateViewCommand.Execute(DataType);
             }
         }
@@ -88,11 +88,15 @@ namespace WeatherAndPower.UI
         {
             if (dataType == DataTypeEnum.Power)
             {
+                var preference = Model.CreateNewPowerPreference();
+                Model.Preference = preference;
                 var powerModel = Model.CreateNewPowerInputModel(Preference as IPowerPreference);
                 SelectedViewModel = new PowerInputViewModel(powerModel);
             }
             else
             {
+                var preference = Model.CreateNewWeatherPreference();
+                Model.Preference = preference;
                 var weatherModel = Model.CreateNewWeatherInputModel(Preference as IWeatherPreference);
                 SelectedViewModel = new WeatherInputViewModel(weatherModel);
             }
@@ -110,7 +114,6 @@ namespace WeatherAndPower.UI
         {
             if (DataType == DataTypeEnum.Power)
             {
-                var powerViewModel = (PowerInputViewModel)SelectedViewModel;
                 try
                 {
                     Model.AddPowerGraphAction();
@@ -125,24 +128,7 @@ namespace WeatherAndPower.UI
             {
                 try
                 {
-                    var weatherViewModel = (WeatherInputViewModel)SelectedViewModel;
-                    var dateTimeViewModel = weatherViewModel.DateTimeViewModel;
-                    if (weatherViewModel.SelectedWeatherTypes.Count < 1 && weatherViewModel.SelectedMedians.Count < 1)
-                    {
-                        throw new Exception("Please choose at least one weather type or one median parameter");
-                    }
-                    string parameters = String.Join(",", weatherViewModel.SelectedWeatherTypes.Concat(weatherViewModel.SelectedMedians));
-                    Console.WriteLine("Params " + parameters);
-
-
-                    Model.AddWeatherGraph(
-                        weatherViewModel.SelectedCity.ToString(),
-                        parameters,
-                        dateTimeViewModel.StartTime,
-                        dateTimeViewModel.EndTime,
-                        PlotName,
-                        weatherViewModel.SelectedParameter,
-                        weatherViewModel.SelectedInterval.Value);
+                    Model.AddWeatherGraph();
                     AddWindow.Close();
                 }
                 catch (Exception e)
