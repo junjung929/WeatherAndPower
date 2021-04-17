@@ -103,8 +103,9 @@ namespace WeatherAndPower.UI
             // Check if startTime and endtime areout of range between min and max
             // then adjust value
             // This must be done before updating minumum and maximum datetime to avoid error
-            StartTime = AdjustDateTime(StartTime, min, max);
-            EndTime = AdjustDateTime(EndTime, min, max);
+            bool isAdjusted = false;
+            StartTime = AdjustDateTime(StartTime, min, max, ref isAdjusted);
+            EndTime = AdjustDateTime(EndTime, min, max, ref isAdjusted);
 
             // Then update min and max datetime
             DateTimeMin = min;
@@ -114,8 +115,16 @@ namespace WeatherAndPower.UI
         public void UpdateDateTimes(IDateTimeRange dateTimeRange)
         {
             var (startTime, endTime) = GetNewDateTimeRange(dateTimeRange);
-            StartTime = AdjustDateTime(startTime);
-            EndTime = AdjustDateTime(endTime);
+            bool isAdjusted = false;
+            StartTime = AdjustDateTime(startTime, ref isAdjusted);
+            EndTime = AdjustDateTime(endTime, ref isAdjusted);
+            if (isAdjusted)
+            {
+                string format = "ddd dd'/'MM'/'yyyy HH:mm:ss";
+                throw new Exception("Datetimes have been adjusted between "
+                    + DateTimeMin.ToString(format, CultureInfo.CreateSpecificCulture("en-US")) + " and "
+                    + DateTimeMax.ToString(format, CultureInfo.CreateSpecificCulture("en-US")));
+            }
         }
 
         private Tuple<DateTime, DateTime> GetNewDateTimeRange(IDateTimeRange dateTimeRange)
@@ -207,18 +216,20 @@ namespace WeatherAndPower.UI
             return new Tuple<DateTime, DateTime>(startTime, endTime);
         }
 
-        private DateTime AdjustDateTime(DateTime dateTime)
+        private DateTime AdjustDateTime(DateTime dateTime, ref bool isAdjusted)
         {
-            return AdjustDateTime(dateTime, DateTimeMin, DateTimeMax);
+            return AdjustDateTime(dateTime, DateTimeMin, DateTimeMax, ref isAdjusted);
         }
-        private DateTime AdjustDateTime(DateTime dateTime, DateTime min, DateTime max)
+        private DateTime AdjustDateTime(DateTime dateTime, DateTime min, DateTime max, ref bool isAdjusted)
         {
             if (dateTime.CompareTo(min) < 0)
             {
+                isAdjusted = true;
                 return min;
             }
             else if (dateTime.CompareTo(max) > 0)
             {
+                isAdjusted = true;
                 return max;
             }
             return dateTime;
