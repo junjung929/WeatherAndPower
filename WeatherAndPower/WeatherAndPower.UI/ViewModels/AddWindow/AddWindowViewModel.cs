@@ -15,28 +15,28 @@ namespace WeatherAndPower.UI
     {
         public AddWindow AddWindow { get; set; }
 
-        private IAddWindowModel _model;
+        private IAddWindowModel _Model;
         public IAddWindowModel Model
         {
-            get { return _model; }
+            get { return _Model; }
             private set
             {
-                if (_model != value)
+                if (_Model != value)
                 {
-                    _model = value;
+                    _Model = value;
                 }
             }
         }
 
-        private InputViewModelBase _selectedViewModel;
-        private DataTypeEnum _dataType = (DataTypeEnum)0x01;
+        private InputViewModelBase _SelectedViewModel;
+        private DataTypeEnum _DataType = (DataTypeEnum)0x01;
 
         public DataTypeEnum DataType
         {
-            get { return _dataType; }
+            get { return _DataType; }
             set
             {
-                _dataType = value; NotifyPropertyChanged("DataType");
+                _DataType = value; NotifyPropertyChanged("DataType");
                 UpdateViewCommand.Execute(DataType);
             }
         }
@@ -57,10 +57,10 @@ namespace WeatherAndPower.UI
 
         public InputViewModelBase SelectedViewModel
         {
-            get { return _selectedViewModel; }
+            get { return _SelectedViewModel; }
             set
             {
-                _selectedViewModel = value;
+                _SelectedViewModel = value;
                 NotifyPropertyChanged(nameof(SelectedViewModel));
             }
         }
@@ -122,7 +122,7 @@ namespace WeatherAndPower.UI
         public string PlotName { get; set; }
         public AddWindowViewModel(IAddWindowModel model)
         {
-            _model = model;
+            _Model = model;
             UpdateSelectedViewModel(DataType);
         }
     }

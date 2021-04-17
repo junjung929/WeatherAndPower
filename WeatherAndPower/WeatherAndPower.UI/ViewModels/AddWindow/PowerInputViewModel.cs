@@ -8,29 +8,29 @@ namespace WeatherAndPower.UI
 {
     public class PowerInputViewModel : InputViewModelBase
     {
-        private IPowerInputModel _model;
+        private IPowerInputModel _Model;
 
         public IPowerInputModel Model
         {
-            get { return _model; }
+            get { return _Model; }
             private set
             {
-                if (_model != value)
+                if (_Model != value)
                 {
-                    _model = value;
+                    _Model = value;
                 }
             }
         }
 
-        private bool _isRealTime { get; set; } = false;
+        private bool _IsRealTime { get; set; } = false;
         public bool IsRealTime
         {
-            get { return _isRealTime; }
+            get { return _IsRealTime; }
             set
             {
-                if (_isRealTime != value)
+                if (_IsRealTime != value)
                 {
-                    _isRealTime = value;
+                    _IsRealTime = value;
                     NotifyPropertyChanged("IsRealTime");
                 }
             }
@@ -102,35 +102,35 @@ namespace WeatherAndPower.UI
         }
 
         public ObservableCollection<PowerType> PowerTypes { get { return Model.PowerTypes; } }
-        private PowerType selectedPowerType { get; set; }
+        private PowerType SelectedPowerType { get; set; }
         public PowerType SPowerType
         {
-            get { return selectedPowerType; }
+            get { return SelectedPowerType; }
             set
             {
-                selectedPowerType = value;
+                SelectedPowerType = value;
                 NotifyPropertyChanged("SPowerType");
             }
         }
 
-        private ObservableCollection<Interval> _intervals { get; set; } = new ObservableCollection<Interval>();
+        private ObservableCollection<Interval> _Intervals { get; set; } = new ObservableCollection<Interval>();
 
 
         public ObservableCollection<Interval> Intervals
         {
-            get { return _intervals; }
+            get { return _Intervals; }
             set
             {
-                _intervals = value;
+                _Intervals = value;
                 NotifyPropertyChanged("Intervals");
             }
         }
 
-        private Interval _selectedInterval { get; set; }
+        private Interval _SelectedInterval { get; set; }
         public Interval SelectedInterval
         {
-            get { return _selectedInterval; }
-            set { _selectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
+            get { return _SelectedInterval; }
+            set { _SelectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
         }
 
         private void UpdatePowerServices()
@@ -175,14 +175,14 @@ namespace WeatherAndPower.UI
             }
         }
 
-        int _minInterval { get; set; } = 3;
+        int _MinInterval { get; set; } = 3;
         public void UpdateIntervals()
         {
             int minInterval = SPowerType.Interval;
 
-            if (minInterval != _minInterval)
+            if (minInterval != _MinInterval)
             {
-                _minInterval = minInterval;
+                _MinInterval = minInterval;
                 Intervals = new ObservableCollection<Interval>(Model.GetUpdatedIntervals(minInterval));
                 SelectedInterval = SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
             }
@@ -226,7 +226,7 @@ namespace WeatherAndPower.UI
 
         public PowerInputViewModel(IPowerInputModel model)
         {
-            _model = model;
+            _Model = model;
             CreateDateTimeViewModel();
             SelectedPowerSource = PowerType.SourceEnum.All;
         }

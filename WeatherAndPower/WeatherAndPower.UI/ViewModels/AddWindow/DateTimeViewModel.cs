@@ -14,15 +14,15 @@ namespace WeatherAndPower.UI
     public class DateTimeViewModel : ViewModelBase
     {
         #region Properties
-        private IDateTimeInputModel _model;
+        private IDateTimeInputModel _Model;
         public IDateTimeInputModel Model
         {
-            get { return _model; }
+            get { return _Model; }
             private set
             {
-                if (_model != value)
+                if (_Model != value)
                 {
-                    _model = value;
+                    _Model = value;
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace WeatherAndPower.UI
         //    => Model.UpdateDateTimes(SelectedDateTimeRange));
         public DateTimeViewModel(IDateTimeInputModel model)
         {
-            _model = model;
+            _Model = model;
         }
     }
 }

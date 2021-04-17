@@ -12,15 +12,15 @@ namespace WeatherAndPower.UI
 {
     public class WeatherInputViewModel : InputViewModelBase
     {
-        private IWeatherInputModel _model;
+        private IWeatherInputModel _Model;
         public IWeatherInputModel Model
         {
-            get { return _model; }
+            get { return _Model; }
             private set
             {
-                if (_model != value)
+                if (_Model != value)
                 {
-                    _model = value;
+                    _Model = value;
                 }
             }
         }
@@ -38,23 +38,23 @@ namespace WeatherAndPower.UI
             WeatherType.ParameterEnum.Forecast
         };
 
-        private WeatherType.ParameterEnum _selectedParameter { get; set; } = WeatherType.ParameterEnum.Observation;
+        private WeatherType.ParameterEnum _SelectedParameter { get; set; } = WeatherType.ParameterEnum.Observation;
         public WeatherType.ParameterEnum SelectedParameter
         {
-            get { return _selectedParameter; }
+            get { return _SelectedParameter; }
             set
             {
-                _selectedParameter = value;
+                _SelectedParameter = value;
                 NotifyPropertyChanged("SelectedParameter");
                 OnUpdateSelectedWeatherParameter();
             }
         }
 
-        private ObservableCollection<WeatherType> _weatherTypes { get; set; }
+        private ObservableCollection<WeatherType> _WeatherTypes { get; set; }
         public ObservableCollection<WeatherType> WeatherTypes
         {
-            get { return _weatherTypes; }
-            set { _weatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
+            get { return _WeatherTypes; }
+            set { _WeatherTypes = value; NotifyPropertyChanged("WeatherTypes"); }
         }
 
         public List<WeatherType> SelectedWeatherTypes { get; set; } = new List<WeatherType>();
@@ -78,19 +78,19 @@ namespace WeatherAndPower.UI
         public ObservableCollection<ECity> Cities { get; set; } = new ObservableCollection<ECity>(Enum.GetValues(typeof(ECity)).Cast<ECity>());
 
 
-        private ObservableCollection<Interval> _intervals { get; set; }
+        private ObservableCollection<Interval> _Intervals { get; set; }
 
         public ObservableCollection<Interval> Intervals
         {
-            get { return _intervals; }
-            set { _intervals = value; NotifyPropertyChanged("Intervals"); }
+            get { return _Intervals; }
+            set { _Intervals = value; NotifyPropertyChanged("Intervals"); }
         }
 
-        private Interval _selectedInterval { get; set; }
+        private Interval _SelectedInterval { get; set; }
         public Interval SelectedInterval
         {
-            get { return _selectedInterval; }
-            set { _selectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
+            get { return _SelectedInterval; }
+            set { _SelectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
         }
         public void UpdateWeatherTypes()
         {
@@ -164,7 +164,7 @@ namespace WeatherAndPower.UI
 
         public WeatherInputViewModel(IWeatherInputModel model)
         {
-            _model = model;
+            _Model = model;
             Intervals = new ObservableCollection<Interval>(model.Intervals);
             SelectedInterval = Intervals.ToList().Find(interval => interval.Value == 60);
             UpdateWeatherTypes();
