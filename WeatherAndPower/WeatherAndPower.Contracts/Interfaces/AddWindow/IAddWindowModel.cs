@@ -20,15 +20,6 @@ namespace WeatherAndPower.Contracts
          * Add weather data ot the graph
          */
         void AddWeatherGraph();
-        void AddWeatherGraph(
-            string cityName,
-            string parameters,
-            DateTime startTime,
-            DateTime endTime,
-            string graphName,
-            WeatherType.ParameterEnum parameterType,
-            int interval);
-
 
         IPowerPreference CreateNewPowerPreference();
         IWeatherPreference CreateNewWeatherPreference();

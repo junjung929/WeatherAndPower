@@ -122,35 +122,6 @@ namespace WeatherAndPower.Core
                 DataPlot.Data.Add(graph.Value);
             }
         }
-        public void AddWeatherGraph(string cityName, string parameters, DateTime startTime, DateTime endTime,
-            string graphName, WeatherType.ParameterEnum parameterType, int interval)
-        {
-            if (cityName == null || cityName == "")
-            {
-                throw new Exception("Please give a name of cities in Finland");
-            }
-            Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
-            try
-            {
-                TimeHandler.IsTimeValid(startTime, endTime);
-                IsPlotNameValid(graphName);
-                combined_graphs = FMI.GetAllData(startTime, endTime, interval, graphName, cityName, parameters, parameterType);
-            }
-            catch (AggregateException ae)
-            {
-                Console.WriteLine("FMIAction failed:");
-                foreach (var ex in ae.InnerExceptions)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw new Exception(ex.Message);
-                }
-            }
-            foreach (var graph in combined_graphs)
-            {
-                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
-                DataPlot.Data.Add(graph.Value);
-            }
-        }
 
         public IPowerInputModel CreateNewPowerInputModel(IPowerPreference preference)
         {
