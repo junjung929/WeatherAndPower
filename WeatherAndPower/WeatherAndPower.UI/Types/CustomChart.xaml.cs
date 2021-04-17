@@ -32,8 +32,14 @@ namespace WeatherAndPower.UI
 	[TemplatePart(Name = "CursorCanvas", Type = typeof(Grid))]
 	public partial class CustomChart : Chart, ICustomChart, INotifyPropertyChanged
 	{
+		/**
+		 * Bit flag property for tracking what types of data are in the graph
+		 */
 		private DataFormat _Formats = 0;
 
+		/**
+		 * BindableSeries property so we can bind a collection to this in WPF
+		 */
 		public IEnumerable<IDataSeries> BindableSeries
 		{
 			get { return (IEnumerable<IDataSeries>)GetValue(BindableSeriesProperty); }
@@ -191,6 +197,10 @@ namespace WeatherAndPower.UI
 		}
 
 
+		/** 
+		 * This method adds an IDataSeries object to the graph as a plot.
+		 * It is called automatically every time the BindableSeries property is changed
+		 */
 		private void Plot(IDataSeries data) {
 			var series = new CustomLineSeries();
 			series.DataContext = data;
@@ -212,6 +222,11 @@ namespace WeatherAndPower.UI
 			Series.Add(series);
 		}
 
+		/**
+		 * This method listens to changes IsVisible property of each series and updates
+		 * the _Formats property and axis visibilities based on what series are visible.
+		 * Basically this method is responsible for hiding axes that have no visible data
+		 */
 		private void OnSeriesVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
 		{
 			var series = (IDataSeries)((CustomLineSeries)sender).DataContext;
@@ -242,6 +257,12 @@ namespace WeatherAndPower.UI
 			} catch (InvalidOperationException) { }
 		}
 
+		/**
+		 * Callback listens to changes to BindableSeries and updates Chart.Series property accordingly
+		 * This implementation is a workaround because the base Chart.Series property is not a dependencyproperty
+		 * and cannot be bound to. So we create a BindableSeries property which *can* be bound to,
+		 * and then delegate changes to it to the underlying Series property
+		 */
 		private void SeriesChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action == NotifyCollectionChangedAction.Remove ||
@@ -276,6 +297,10 @@ namespace WeatherAndPower.UI
 		}
 
 		#region Cursor Stuff
+		/**
+		 * Cursor implementation is here. The cursor could and probably should be a discrete control,
+		 * but to save time it is implemented here
+		 */
 
 		private Grid VerticalCursor;
 		private Grid CursorCanvas;
@@ -300,6 +325,7 @@ namespace WeatherAndPower.UI
 				cursorPicked.TrySetResult(GetDateAtCursorPosition(e));
 			}
 		}
+
 		private void MouseOverHandler(object sender, MouseEventArgs e)
 		{
 			double pos = e.GetPosition(CursorCanvas).X;
@@ -312,6 +338,11 @@ namespace WeatherAndPower.UI
 			NotifyPropertyChanged("CursorLabel");
 		}
 
+		/** 
+		 * This method grabs the View objects from the template when the template is applied.
+		 * The view objects are needed to move the views along with the mouse. Technically against
+		 * MVVM to hold references to View in ViewModel, but its faster to implement here
+		 */
 		public override void OnApplyTemplate()
 		{
 			base.OnApplyTemplate();

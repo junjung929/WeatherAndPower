@@ -85,7 +85,7 @@
     <Compile Include="Types\Humidity.cs" />
     <Compile Include="Interfaces\Graphing\ICustomChart.cs" />
     <Compile Include="Interfaces\Graphing\IData.cs" />
-    <Compile Include="Interfaces\Graphing\IDataJsonConverter.cs" />
+    <Compile Include="DataJsonConverter.cs" />
     <Compile Include="Interfaces\Graphing\IDataPlotModel.cs" />
     <Compile Include="Interfaces\Graphing\IDataSeriesFactory.cs" />
     <Compile Include="Interfaces\Graphing\IPieModel.cs" />
