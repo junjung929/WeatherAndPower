@@ -51,8 +51,6 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <RadioButton 
-                            Command="{Binding DataContext.UpdateWeatherParameterCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding}"   
                                      IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 

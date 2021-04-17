@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WeatherAndPower.Contracts;
 
 namespace WeatherAndPower.UI
 {
@@ -23,6 +24,24 @@ namespace WeatherAndPower.UI
         public DateTimeInputView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            var button = sender as Button;
+            var selected = button.Tag as IDateTimeRange;
+
+            //((DateTimeViewModel)DataContext).SelectedDateTimeRange = selected;
+            try
+            {
+                ((DateTimeViewModel)DataContext).UpdateDateTimes(selected);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
     }
 }

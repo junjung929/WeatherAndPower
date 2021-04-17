@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,98 +29,13 @@ namespace WeatherAndPower.Core
             DateTimeRanges.Add(new DateTimeRange("This Year", null, "tyear"));
         }
 
-        public List<DateTimeRange> DateTimeRanges { get; set; } = new List<DateTimeRange>();
+        public ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; } = new ObservableCollection<IDateTimeRange>();
 
-        public void EnableDateTimeRange(DateTimeRange dateTimeRange, bool isEnabled)
+        public void EnableDateTimeRange(IDateTimeRange dateTimeRange, bool isEnabled)
         {
             dateTimeRange.IsEnabled = isEnabled;
         }
 
-        public Tuple<DateTime, DateTime> GetNewDateTimeRange(DateTimeRange dateTimeRange)
-        {
-            string dateTimeRangeString = dateTimeRange.Value;
-            DateTime now = DateTime.Now;
-            DateTime today = DateTime.Now.Date;
-            DateTime startTime = now;
-            DateTime endTime = now;
-            if (dateTimeRangeString == "pyear")
-            {
-                startTime = today.AddDays(-365);
-                endTime = today.AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "pmonth")
-            {
-                startTime = today.AddDays(-30);
-                endTime = today.AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "pweek")
-            {
-                startTime = today.AddDays(-7);
-                endTime = today.AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "p24h")
-            {
-                startTime = today.AddHours(now.Hour - 24);
-                endTime = today.AddHours(now.Hour).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "n24h")
-            {
-                startTime = today.AddHours(now.Hour + 1);
-                endTime = startTime.AddHours(24).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "n36h")
-            {
-                startTime = today.AddHours(now.Hour + 1);
-                endTime = startTime.AddHours(36).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "n7d")
-            {
-                startTime = today.AddDays(1);
-                endTime = startTime.AddDays(7).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "n30d")
-            {
-                startTime = today.AddDays(1);
-                endTime = startTime.AddDays(30).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "lyear")
-            {
-                startTime = new DateTime(today.Year - 1, 1, 1);
-                endTime = startTime.AddYears(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "lmonth")
-            {
-                DateTime lastMonth = today.AddMonths(-1);
-                startTime = new DateTime(lastMonth.Year, lastMonth.Month, 1);
-                endTime = startTime.AddMonths(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "yesterday")
-            {
-                startTime = today.AddDays(-1);
-                endTime = startTime.AddDays(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "today")
-            {
-                startTime = today;
-                endTime = startTime.AddDays(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "tomorrow")
-            {
-                startTime = today.AddDays(1);
-                endTime = startTime.AddDays(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "tmonth")
-            {
-                startTime = new DateTime(today.Year, today.Month, 1);
-                endTime = startTime.AddMonths(1).AddTicks(-1);
-            }
-            else if (dateTimeRangeString == "tyear")
-            {
-                startTime = new DateTime(today.Year, 1, 1);
-                endTime = startTime.AddYears(1).AddTicks(-1);
-            }
-
-            return new Tuple<DateTime, DateTime>(startTime, endTime);
-        }
+       
     }
 }

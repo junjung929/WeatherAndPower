@@ -32,7 +32,6 @@
                                      VerticalAlignment="Top"
                                      Value="{Binding StartTime}"
                                      TextAlignment="Left" Padding="5"
-                                     IsEnabled="{Binding IsStartTimePickerEnabled}"
                                      Minimum="{Binding DateTimeMin}"
                                      Maximum="{Binding DateTimeMax}"
                                      Format="Custom"
@@ -50,7 +49,6 @@
                                     VerticalAlignment="Top"
                                     TextAlignment="Left"
                                     Value="{Binding EndTime}" Padding="5"
-                                    IsEnabled="{Binding IsEndTimePickerEnabled}"
                                     Minimum="{Binding DateTimeMin}"
                                     Maximum="{Binding DateTimeMax}"
                                     Format="Custom"
@@ -59,12 +57,11 @@
                                     TimeFormatString="HH:mm:ss"/>
         </Border>
         <Border Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-            <ListBox ItemsSource="{Binding DateTimeRanges}"
-                     SelectedItem="{Binding DateTimeRange}"
-                     BorderBrush="Transparent"
-                     HorizontalContentAlignment="Stretch"
-                     VerticalContentAlignment="Stretch"
-                     >
+            <ListBox 
+                ItemsSource="{Binding DateTimeRanges}"
+                BorderBrush="Transparent"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch">
                 
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -75,80 +72,24 @@
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Margin"  Value="0"/>
                         <Setter Property="Padding"  Value="0"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
                     </Style>
                 </ListBox.Resources>
                
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ToggleButton
+                        <Button
                             IsEnabled="{Binding IsEnabled}"
-                            IsChecked="{Binding IsSelected, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}} }"
                             Padding="5,3"
                             Content="{Binding Name}"
+                            Tag="{Binding}"
                             ToolTip="{Binding Description}"
-                            Command="{Binding DataContext.UpdateDateTimeCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            Click="Button_Click"
                             />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <!--<UniformGrid Rows="2" Columns="7">
-            <UniformGrid.Resources>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Padding" Value="0,3"/>
-                    <Setter Property="Command" Value="{Binding UpdateDateTimeCommand}" />
-                    <Setter Property="CommandParameter" Value="{Binding Path=Name, RelativeSource={RelativeSource Self}}" />
-                </Style>
-            </UniformGrid.Resources>
-            <Button Content="Past Year" 
-                        ToolTip="Past 365 days preceding today" 
-                        Name="pyear"
-                        />
-            <Button Content="Past Month"
-                        ToolTip="Past 30 days preceding today" 
-                        Name="pmonth" />
-            <Button Content="Past Week"
-                        ToolTip="Past 7 days preceding today" 
-                        Name="pweek" />
-            <Button Content="Past 24h"
-                        ToolTip="Past 24 hours from now" 
-                        Name="p24h"
-                        />
-            <Button Content="Next 24h"
-                        ToolTip="Next 24 hours from now" 
-                        Name="n24h" 
-                        />
-            <Button Content="Next 7d"
-                        ToolTip="Next 7 days from now" 
-                        Name="n7d"
-                        />
-            <Button Content="Next 30d"
-                        ToolTip="Next 30 days from now" 
-                        Name="n30d" 
-                        />
-            <Button Content="Last Year"
-                        ToolTip="Previous calendar year" 
-                        Name="lyear" 
-                        />
-            <Button Content="Last Month"
-                        ToolTip="Previous calendar month" 
-                        Name="lmonth" 
-                        />
-            <Button Content="Yesterday"
-                        Name="yesterday"
-                        />
-            <Button Content="Today"
-                        Name="today" />
-            <Button Content="Tomorrow"
-                        Name="tomorrow" 
-                        />
-            <Button Content="This Month"
-                        Name="tmonth" 
-/>
-            <Button Content="This Year"
-                        Name="tyear" />
-        </UniformGrid>-->
     </Grid>
 </UserControl>

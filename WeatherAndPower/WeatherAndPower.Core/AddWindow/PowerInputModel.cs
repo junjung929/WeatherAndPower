@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WeatherAndPower.Contracts;
 
@@ -7,7 +8,7 @@ namespace WeatherAndPower.Core
 {
     public class PowerInputModel : AbstractModel, IPowerInputModel
     {
-        public List<PowerType> PowerTypes { get; } = new List<PowerType>(PowerType.GetAll<PowerType>());
+        public ObservableCollection<PowerType> PowerTypes { get; } = new ObservableCollection<PowerType>(PowerType.GetAll<PowerType>());
 
         public List<Interval> Intervals { get; } = new List<Interval>()
         {
@@ -51,10 +52,7 @@ namespace WeatherAndPower.Core
 
         public List<PowerType.ParameterEnum> GetUpdatedPowerParameters(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService)
         {
-            Console.WriteLine(powerSource.ToString() + powerService.ToString());
             var selectableTypes = PowerTypes.ToList().FindAll(powerType => {
-                Console.WriteLine(powerType.Source.ToString());
-                Console.WriteLine(powerType.Service.ToString());
                 return powerType.Source == powerSource && powerType.Service == powerService;
             }
             );
