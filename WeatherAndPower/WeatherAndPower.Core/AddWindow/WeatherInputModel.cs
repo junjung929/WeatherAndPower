@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,22 @@ namespace WeatherAndPower.Core
             //new Interval(1440*7),
             //new Interval(1440*30)
         };
+        private IWeatherPreference _Preference { get; set; }
+        public IWeatherPreference Preference
+        {
+            get { return _Preference; }
+            set
+            {
+                _Preference = value;
+                NotifyPropertyChanged("Preference");
+            }
+        }
+
+        ObservableCollection<WeatherType> IWeatherInputModel.WeatherTypes { get; } = new ObservableCollection<WeatherType>();
+
         public IDateTimeInputModel CreateDateTimeInputModel()
         {
-            return new DateTimeInputModel();
+            return new DateTimeInputModel(Preference);
         }
 
         public List<WeatherType> GetUpdatedWeatherTypes(WeatherType.ParameterEnum weatherParameter)
@@ -50,6 +64,16 @@ namespace WeatherAndPower.Core
                 }
             });
             return intervals;
+        }
+
+        public void UpdateWeatherTypes()
+        {
+
+        }
+
+        public WeatherInputModel(IWeatherPreference preference)
+        {
+            Preference = preference;
         }
     }
 }

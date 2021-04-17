@@ -9,7 +9,7 @@ namespace WeatherAndPower.Core
 {
     public class PowerPreference : Preference, IPowerPreference
     {
-        private PowerType.SourceEnum _PowerSource { get; set; }
+        private PowerType.SourceEnum _PowerSource { get; set; } = PowerType.Econsum.Source;
         public PowerType.SourceEnum PowerSource
         {
             get { return _PowerSource; }
@@ -19,7 +19,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("PowerSource");
             }
         }
-        private PowerType.ServiceEnum _PowerService { get; set; }
+        private PowerType.ServiceEnum _PowerService { get; set; } = PowerType.Econsum.Service;
         public PowerType.ServiceEnum PowerService
         {
             get { return _PowerService; }
@@ -29,7 +29,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("PowerService");
             }
         }
-        private PowerType.ParameterEnum _PowerParameter { get; set; }
+        private PowerType.ParameterEnum _PowerParameter { get; set; } = PowerType.Econsum.ParameterType;
         public PowerType.ParameterEnum PowerParameter
         {
             get { return _PowerParameter; }
@@ -37,6 +37,17 @@ namespace WeatherAndPower.Core
             {
                 _PowerParameter = value;
                 NotifyPropertyChanged("PowerParameter");
+            }
+        }
+
+        private PowerType _PowerType { get; set; } = PowerType.Econsum;
+        public PowerType PowerType
+        {
+            get { return _PowerType; }
+            set
+            {
+                _PowerType = value;
+                NotifyPropertyChanged("PowerType");
             }
         }
     }

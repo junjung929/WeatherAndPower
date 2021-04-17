@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,13 +18,16 @@ namespace WeatherAndPower.Contracts
             Joensuu = 0x10,
             Turku = 0x20
         }
+        IWeatherPreference Preference { get; set; }
 
         /**
          * Main container for WeatherType
          */
-        List<WeatherType> WeatherTypes { get; }
+        ObservableCollection<WeatherType> WeatherTypes { get; }
         List<Interval> Intervals { get; }
 
+
+        void UpdateWeatherTypes();
         /**
          * Get available WeatherTypes depending on selected weather parameter 
          */

@@ -9,6 +9,7 @@ namespace WeatherAndPower.Contracts
 {
     public interface IDateTimeInputModel
     {
+        IPreference Preference { get; set; }
         /**
          * Main container of predefined datetime range
          */

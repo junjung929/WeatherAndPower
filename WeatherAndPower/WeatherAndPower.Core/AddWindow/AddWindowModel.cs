@@ -21,37 +21,42 @@ namespace WeatherAndPower.Core
             }
         }
 
-
-        public void AddGraphAction(IAddWindowModel.DataTypeEnum dataType)
+        private IPreference _Preference { get; set; }
+        public IPreference Preference
         {
-            throw new NotImplementedException();
+            get { return _Preference; }
+            set
+            {
+                _Preference = value;
+                NotifyPropertyChanged("Preference");
+            }
         }
 
-        public void AddPowerGraphAction(PowerType powerType, DateTime startTime, DateTime endTime, string graphName)
+        public void AddPowerGraphAction()
         {
-
-            if (powerType == null)
+            var preference = Preference as IPowerPreference;
+            if (preference.PowerType == null)
             {
                 throw new Exception("Please choose the category");
             }
-            if (TimeHandler.DataTooBig(startTime, endTime, powerType.Interval))
+            if (TimeHandler.DataTooBig(preference.StartTime, preference.EndTime, preference.Interval.Value))
             {
                 return;
             }
-            startTime = TimeHandler.ConvertToLocalTime(startTime);
-            endTime = TimeHandler.ConvertToLocalTime(endTime);
+             var startTime = TimeHandler.ConvertToLocalTime(preference.StartTime);
+            var endTime = TimeHandler.ConvertToLocalTime(preference.EndTime);
 
             try
             {
                 TimeHandler.IsTimeValid(startTime, endTime);
-                IsPlotNameValid(graphName);
-                var series_task = Task.Run(() => Fingrid.Get(powerType, startTime, endTime));
+                IsPlotNameValid(preference.PlotName);
+                var series_task = Task.Run(() => Fingrid.Get(preference.PowerType, startTime, endTime));
 
                 try
                 {
                     series_task.Wait();
                     var series = series_task.Result;
-                    series.Name = graphName + " (" + powerType.Source + ")";
+                    series.Name = preference.PlotName + " (" + preference.PowerType.Source + ")";
                     DataPlot.Data.Add(series);
                 }
                 catch (AggregateException e)
@@ -69,7 +74,6 @@ namespace WeatherAndPower.Core
 
                 throw e;
             }
-
         }
 
         public void AddWeatherGraph(string cityName, string parameters, DateTime startTime, DateTime endTime,
@@ -102,14 +106,13 @@ namespace WeatherAndPower.Core
             }
         }
 
-        public IPowerInputModel CreateNewPowerInputModel()
+        public IPowerInputModel CreateNewPowerInputModel(IPowerPreference preference)
         {
-            return new PowerInputModel();
+            return new PowerInputModel(preference);
         }
-
-        public IWeatherInputModel CreateNewWeatherInputModel()
+        public IWeatherInputModel CreateNewWeatherInputModel(IWeatherPreference preference)
         {
-            return new WeatherInputModel();
+            return new WeatherInputModel(preference);
         }
 
         private Boolean IsPlotNameValid(string plotName)
@@ -123,6 +126,7 @@ namespace WeatherAndPower.Core
 
         public AddWindowModel(DataPlotModel dataPlot)
         {
+            Preference = new PowerPreference();
             DataPlot = dataPlot;
         }
 
@@ -138,6 +142,13 @@ namespace WeatherAndPower.Core
                 dict.Add(plot.Name, plot);
             }
         }
+
+        public IPowerPreference CreateNewPowerPreference()
+        {
+            return new PowerPreference();
+        }
+
+        
     }
 }
 

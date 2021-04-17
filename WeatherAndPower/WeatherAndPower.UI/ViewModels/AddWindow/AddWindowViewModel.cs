@@ -28,7 +28,17 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private InputViewModelBase _SelectedViewModel;
+
+        //private IPreference _Preference { get; set; }
+        public IPreference Preference
+        {
+            get { return Model.Preference; }
+            //set
+            //{
+            //    _Preference = value;
+            //    NotifyPropertyChanged("Preference");
+            //}
+        }
         private DataTypeEnum _DataType = (DataTypeEnum)0x01;
 
         public DataTypeEnum DataType
@@ -37,7 +47,40 @@ namespace WeatherAndPower.UI
             set
             {
                 _DataType = value; NotifyPropertyChanged("DataType");
+                Preference.DataType = value;
                 UpdateViewCommand.Execute(DataType);
+            }
+        }
+
+
+
+        private InputViewModelBase _SelectedViewModel;
+        public InputViewModelBase SelectedViewModel
+        {
+            get { return _SelectedViewModel; }
+            set
+            {
+                if (_SelectedViewModel != value)
+                {
+                    _SelectedViewModel = value;
+                    NotifyPropertyChanged(nameof(SelectedViewModel));
+                }
+            }
+        }
+        public ObservableCollection<DataTypeEnum> DataTypes { get; }
+           = new ObservableCollection<DataTypeEnum>(
+               Enum.GetValues(typeof(DataTypeEnum))
+               .Cast<DataTypeEnum>());
+        public string PlotName
+        {
+            get
+            {
+                return Model.Preference.PlotName;
+            }
+            set
+            {
+                Model.Preference.PlotName = value;
+                NotifyPropertyChanged("PlotName");
             }
         }
 
@@ -45,30 +88,22 @@ namespace WeatherAndPower.UI
         {
             if (dataType == DataTypeEnum.Power)
             {
-                var powerModel = Model.CreateNewPowerInputModel();
+                var powerModel = Model.CreateNewPowerInputModel(Preference as IPowerPreference);
                 SelectedViewModel = new PowerInputViewModel(powerModel);
             }
             else
             {
-                var weatherModel = Model.CreateNewWeatherInputModel();
+                var weatherModel = Model.CreateNewWeatherInputModel(Preference as IWeatherPreference);
                 SelectedViewModel = new WeatherInputViewModel(weatherModel);
             }
         }
 
-        public InputViewModelBase SelectedViewModel
+        private void InitializeComponent()
         {
-            get { return _SelectedViewModel; }
-            set
-            {
-                _SelectedViewModel = value;
-                NotifyPropertyChanged(nameof(SelectedViewModel));
-            }
+            //Preference =  Model.CreateNewPowerPreference();
+            DataType = Preference.DataType; // this triggers UpdateSelectedViewModel
+            PlotName = Preference.PlotName;
         }
-
-        public ObservableCollection<DataTypeEnum> DataTypes { get; }
-           = new ObservableCollection<DataTypeEnum>(
-               Enum.GetValues(typeof(DataTypeEnum))
-               .Cast<DataTypeEnum>());
 
         public RelayCommand UpdateViewCommand => new RelayCommand(() => UpdateSelectedViewModel(DataType));
         public RelayCommand AddGraphCommand => new RelayCommand(() =>
@@ -76,10 +111,9 @@ namespace WeatherAndPower.UI
             if (DataType == DataTypeEnum.Power)
             {
                 var powerViewModel = (PowerInputViewModel)SelectedViewModel;
-                var dateTimeViewModel = powerViewModel.DateTimeViewModel;
                 try
                 {
-                    Model.AddPowerGraphAction(powerViewModel.SPowerType, dateTimeViewModel.StartTime, dateTimeViewModel.EndTime, PlotName);
+                    Model.AddPowerGraphAction();
                     AddWindow.Close();
                 }
                 catch (Exception e)
@@ -119,11 +153,10 @@ namespace WeatherAndPower.UI
         });
 
 
-        public string PlotName { get; set; }
         public AddWindowViewModel(IAddWindowModel model)
         {
             _Model = model;
-            UpdateSelectedViewModel(DataType);
+            InitializeComponent();
         }
     }
 }

@@ -45,25 +45,22 @@ namespace WeatherAndPower.UI
         public static DateTime DefaultDateTimeMin { get; } = DateTime.Today.AddYears(-2);
         public static DateTime DefaultDateTimeMax { get; } = DateTime.Today.AddMonths(2).AddTicks(-1);
 
-        private DateTime _startTime = DateTime.Now;
         public DateTime StartTime
         {
-            get { return _startTime; }
+            get { return Model.Preference.StartTime; }
             set
             {
-                _startTime = value;
+                Model.Preference.StartTime = value;
                 NotifyPropertyChanged("StartTime");
             }
         }
 
-        private DateTime _endTime = DateTime.Now;
-
         public DateTime EndTime
         {
-            get { return _endTime; }
+            get { return Model.Preference.EndTime; }
             set
             {
-                _endTime = value;
+                Model.Preference.EndTime = value;
                 NotifyPropertyChanged("EndTime");
             }
         }

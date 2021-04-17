@@ -11,8 +11,12 @@ namespace WeatherAndPower.Core
 {
     public class DateTimeInputModel : AbstractModel, IDateTimeInputModel
     {
-        public DateTimeInputModel()
+        public ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; } = new ObservableCollection<IDateTimeRange>();
+        public IPreference Preference { get; set; }
+
+        public DateTimeInputModel(IPreference preference)
         {
+            Preference = preference;
             DateTimeRanges.Add(new DateTimeRange("Past Year", "Past 365 days preceding today", "pyear"));
             DateTimeRanges.Add(new DateTimeRange("Past Month", "Past 30 days preceding today", "pmonth"));
             DateTimeRanges.Add(new DateTimeRange("Past Week", "Past 7 days preceding today", "pweek"));
@@ -28,7 +32,5 @@ namespace WeatherAndPower.Core
             DateTimeRanges.Add(new DateTimeRange("This Month", null, "tmonth"));
             DateTimeRanges.Add(new DateTimeRange("This Year", null, "tyear"));
         }
-
-        public ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; } = new ObservableCollection<IDateTimeRange>();
     }
 }

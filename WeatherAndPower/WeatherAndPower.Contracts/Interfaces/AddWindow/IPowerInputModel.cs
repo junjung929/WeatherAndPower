@@ -9,36 +9,48 @@ namespace WeatherAndPower.Contracts
 {
     public interface IPowerInputModel
     {
+        IPowerPreference Preference { get; set; }
         /**
          * Main container for PowerType
          */
         ObservableCollection<PowerType> PowerTypes { get; }
+        ObservableCollection<PowerType.SourceEnum> PowerSources{ get;  }
+        ObservableCollection<PowerType.ServiceEnum> PowerServices { get;  }
+        ObservableCollection<PowerType.ParameterEnum> PowerParameters{ get;  }
+
         List<Interval> Intervals { get; }
 
+
         /**
-         * Return available power services corresponding to selected power source
+         * Updatee available power sources
          */
-        List<PowerType.ServiceEnum> GetUpdatedPowerServices(PowerType.SourceEnum powerSource);
+        void UpdatePowerSources();
         /**
-         * Return available power parameters corresponding to selected power source and service
+         * Updatee available power services corresponding to selected power source
          */
-        List<PowerType.ParameterEnum> GetUpdatedPowerParameters(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService);
+        void UpdatePowerServices();
         /**
-         * Return the corresponding powerType to selected power source, service and parameter
+         * Updatee available power parameters corresponding to selected power source and service
          */
-        PowerType GetUpdatedPowerType(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService, PowerType.ParameterEnum powerParameter);
+        void UpdatePowerParameters();
+        /**
+         * Updatee the corresponding powerType to selected power source, service and parameter
+         */
+        void UpdatePowerType();
+        /**
+         * Disable intervals that have smaller value than minInterval
+         */
+        List<Interval> GetUpdatedIntervals(int minInterval);
+
         /**
          * Check if the PowerType is real time data
          */
         bool CheckIsRealTimeParameter(PowerType.ParameterEnum powerParameter);
-        /**
-         * Get the intervals that have bigger value than minInterval
-         */
-        List<Interval> GetUpdatedIntervals(int minInterval);
+        
         /**
          * Create and return new DateTimeInputModel
          */
-        IDateTimeInputModel CreateDateTimeInputModel();
+        IDateTimeInputModel CreateDateTimeInputModel(IPreference preference);
 
     }
 }

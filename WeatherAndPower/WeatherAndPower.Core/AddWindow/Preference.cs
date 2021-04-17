@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
+using static WeatherAndPower.Contracts.IAddWindowModel;
 
 namespace WeatherAndPower.Core
 {
     public class Preference : AbstractModel, IPreference
     {
-        private IAddWindowModel.DataTypeEnum _DataType { get; set; }
-        public IAddWindowModel.DataTypeEnum DataType
+        private DataTypeEnum _DataType { get; set; } = DataTypeEnum.Power;
+        public DataTypeEnum DataType
         {
             get { return _DataType; }
             set
@@ -19,7 +20,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("DataType");
             }
         }
-        private DateTime _StartTime { get; set; }
+        private DateTime _StartTime { get; set; } = DateTime.Now;
         public DateTime StartTime
         {
             get { return _StartTime; }
@@ -29,7 +30,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("EndTime");
             }
         }
-        private DateTime _EndTime { get; set; }
+        private DateTime _EndTime { get; set; } = DateTime.Now;
         public DateTime EndTime
         {
             get { return _EndTime; }
@@ -39,7 +40,7 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("EndTime");
             }
         }
-        private string _PlotName { get; set; }
+        private string _PlotName { get; set; } = "";
         public string PlotName
         {
             get { return _PlotName; }
@@ -49,8 +50,8 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("PlotName");
             }
         }
-        private int _Interval { get; set; }
-        public int Interval
+        private Interval _Interval { get; set; } = new Interval(60);
+        public Interval Interval
         {
             get { return _Interval; }
             set
@@ -59,5 +60,11 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("Interval");
             }
         }
+
+
+        public Preference()
+        {
+        }
+
     }
 }

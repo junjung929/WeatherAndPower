@@ -11,5 +11,7 @@ namespace WeatherAndPower.Contracts
         PowerType.SourceEnum PowerSource { get; set; }
         PowerType.ServiceEnum PowerService { get; set; }
         PowerType.ParameterEnum PowerParameter { get; set; }
+
+        PowerType PowerType { get; set; }
     }
 }

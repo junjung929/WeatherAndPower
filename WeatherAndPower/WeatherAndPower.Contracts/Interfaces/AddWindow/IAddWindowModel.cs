@@ -4,6 +4,7 @@ namespace WeatherAndPower.Contracts
 {
     public interface IAddWindowModel
     {
+        IPreference Preference { get; set; }
         enum DataTypeEnum
         {
             Power = 0x01,
@@ -13,11 +14,7 @@ namespace WeatherAndPower.Contracts
         /**
          * Add power data ot the graph
          */
-        void AddPowerGraphAction(
-            PowerType powerType,
-            DateTime startTime,
-            DateTime endTime,
-            string graphName);
+        void AddPowerGraphAction();
 
         /**
          * Add weather data ot the graph
@@ -32,13 +29,15 @@ namespace WeatherAndPower.Contracts
             int interval);
 
 
+        IPowerPreference CreateNewPowerPreference();
+
         /**
          * Create and return new PowerInputModel
          */
-        IPowerInputModel CreateNewPowerInputModel();
+        IPowerInputModel CreateNewPowerInputModel(IPowerPreference preference);
         /**
         * Create and return new WeatherInputModel
         */
-        IWeatherInputModel CreateNewWeatherInputModel();
+        IWeatherInputModel CreateNewWeatherInputModel(IWeatherPreference preference);
     }
 }

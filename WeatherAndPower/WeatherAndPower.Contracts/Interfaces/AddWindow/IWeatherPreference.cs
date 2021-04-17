@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static WeatherAndPower.Contracts.IWeatherInputModel;
 
 namespace WeatherAndPower.Contracts
 {
@@ -11,6 +12,6 @@ namespace WeatherAndPower.Contracts
     {
         WeatherType.ParameterEnum WeatherParameter { get; set; }
         ObservableCollection<WeatherType> WeatherTypes { get; set; }
-        string CityName { get; set; }
+        ECity CityName { get; set; }
     }
 }

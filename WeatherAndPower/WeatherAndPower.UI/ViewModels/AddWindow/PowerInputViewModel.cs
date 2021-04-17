@@ -8,6 +8,7 @@ namespace WeatherAndPower.UI
 {
     public class PowerInputViewModel : InputViewModelBase
     {
+        #region Properties
         private IPowerInputModel _Model;
 
         public IPowerInputModel Model
@@ -36,79 +37,69 @@ namespace WeatherAndPower.UI
             }
         }
 
-        public ObservableCollection<PowerType.SourceEnum> PowerSources { get; set; } 
-            = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
-
-        private PowerType.SourceEnum _SelectedPowerSource { get; set; } 
+        public ObservableCollection<PowerType.SourceEnum> PowerSources
+        {
+            get { return Model.PowerSources; }
+        }
 
         public PowerType.SourceEnum SelectedPowerSource
         {
-            get { return _SelectedPowerSource; }
+            get { return Model.Preference.PowerSource; }
             set
             {
-                if (_SelectedPowerSource != value)
+                if (Model.Preference.PowerSource != value)
                 {
-                    _SelectedPowerSource = value;
+                    Model.Preference.PowerSource = value;
                     NotifyPropertyChanged("SelectedPowerSource");
                     OnUpdateSelectedPowerSource();
                 }
             }
         }
 
-        private ObservableCollection<PowerType.ServiceEnum> _PowerServices { get; set; } = new ObservableCollection<PowerType.ServiceEnum>();
         public ObservableCollection<PowerType.ServiceEnum> PowerServices
         {
-            get { return _PowerServices; }
-            set
-            {
-                _PowerServices = value;
-                NotifyPropertyChanged("PowerServices");
-            }
+            get { return Model.PowerServices; }
         }
 
-        private PowerType.ServiceEnum _SelectedPowerService { get; set; }
         public PowerType.ServiceEnum SelectedPowerService
         {
-            get { return _SelectedPowerService; }
+            get { return Model.Preference.PowerService; }
             set
             {
-                _SelectedPowerService = value;
+                Model.Preference.PowerService = value;
                 NotifyPropertyChanged("SelectedPowerService");
                 OnUpdateSelectedPowerService();
             }
         }
 
-        private ObservableCollection<PowerType.ParameterEnum> _PowerParameters { get; set; } = new ObservableCollection<PowerType.ParameterEnum>();
         public ObservableCollection<PowerType.ParameterEnum> PowerParameters
         {
-            get { return _PowerParameters; }
-            set
-            {
-                _PowerParameters = value;
-                NotifyPropertyChanged("PowerParameters");
-            }
+            get { return Model.PowerParameters; }
         }
 
         private PowerType.ParameterEnum _SelectedPowerParameter { get; set; }
         public PowerType.ParameterEnum SelectedPowerParameter
         {
-            get { return _SelectedPowerParameter; }
+            get { return Model.Preference.PowerParameter; }
             set
             {
-                _SelectedPowerParameter = value;
+                Model.Preference.PowerParameter = value;
                 NotifyPropertyChanged("SelectedPowerParameter");
                 OnUpdateSelectedPowerParameter();
             }
         }
 
-        public ObservableCollection<PowerType> PowerTypes { get { return Model.PowerTypes; } }
-        private PowerType SelectedPowerType { get; set; }
+        public ObservableCollection<PowerType> PowerTypes
+        {
+            get { return Model.PowerTypes; }
+        }
+
         public PowerType SPowerType
         {
-            get { return SelectedPowerType; }
+            get { return Model.Preference.PowerType; }
             set
             {
-                SelectedPowerType = value;
+                Model.Preference.PowerType = value;
                 NotifyPropertyChanged("SPowerType");
             }
         }
@@ -130,31 +121,15 @@ namespace WeatherAndPower.UI
         public Interval SelectedInterval
         {
             get { return _SelectedInterval; }
-            set { _SelectedInterval = value; NotifyPropertyChanged("SelectedInterval"); }
+            set
+            {
+                _SelectedInterval = value;
+                Model.Preference.Interval = value;
+                NotifyPropertyChanged("SelectedInterval");
+            }
         }
+        #endregion
 
-        private void UpdatePowerServices()
-        {
-            PowerServices = new ObservableCollection<PowerType.ServiceEnum>(Model.GetUpdatedPowerServices(SelectedPowerSource));
-            SelectedPowerService = PowerServices.First();
-        }
-
-        private void UpdatePowerParameters()
-        {
-            PowerParameters = new ObservableCollection<PowerType.ParameterEnum>(Model.GetUpdatedPowerParameters(SelectedPowerSource, SelectedPowerService));
-            SelectedPowerParameter = PowerParameters.First();
-        }
-
-        public override void OnDateTimeUpdated(string dateTime)
-        {
-        }
-
-        public void UpdateSelectedPowerType()
-        {
-
-            SPowerType = Model.GetUpdatedPowerType(SelectedPowerSource, SelectedPowerService, SelectedPowerParameter);
-            Console.WriteLine(SPowerType);
-        }
         public void UpdateRealTime()
         {
             IsRealTime = Model.CheckIsRealTimeParameter(SelectedPowerParameter);
@@ -183,8 +158,9 @@ namespace WeatherAndPower.UI
             if (minInterval != _MinInterval)
             {
                 _MinInterval = minInterval;
-                Intervals = new ObservableCollection<Interval>(Model.GetUpdatedIntervals(minInterval));
-                SelectedInterval = Intervals.ToList().Find(interval => interval.Value >= minInterval); //SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
+                // only grab one available option
+                Intervals = new ObservableCollection<Interval>() { Model.GetUpdatedIntervals(minInterval).Where(e => e.IsEnabled).First() };
+                SelectedInterval = Intervals.First(); //SelectedInterval.Value < minInterval ? Intervals.ToList().Find(interval => interval.Value >= minInterval) : SelectedInterval;
             }
         }
 
@@ -193,30 +169,46 @@ namespace WeatherAndPower.UI
         public void OnUpdateSelectedPowerSource()
         {
             Console.WriteLine("Power source " + SelectedPowerSource);
-            UpdatePowerServices();
+            Model.UpdatePowerServices();
+            NotifyPropertyChanged("SelectedPowerService");
+            OnUpdateSelectedPowerService();
         }
 
         public void OnUpdateSelectedPowerService()
         {
             Console.WriteLine("Power service " + SelectedPowerSource);
-            UpdatePowerParameters();
+            Model.UpdatePowerParameters();
+            NotifyPropertyChanged("SelectedPowerParameter");
+            OnUpdateSelectedPowerParameter();
         }
 
         public void OnUpdateSelectedPowerParameter()
         {
             Console.WriteLine("Power parameter " + SelectedPowerParameter);
             UpdateRealTime();
-            UpdateSelectedPowerType();
+            Model.UpdatePowerType();
+            NotifyPropertyChanged("SPowerType");
+
             UpdateDateTimeMinMax();
             UpdateIntervals();
         }
 
         public override void CreateDateTimeViewModel()
         {
-            var dateTimeInputModel = Model.CreateDateTimeInputModel();
+            var dateTimeInputModel = Model.CreateDateTimeInputModel(Model.Preference);
             DateTimeViewModel = new DateTimeViewModel(dateTimeInputModel);
         }
 
+        private void InitializeComponent()
+        {
+            CreateDateTimeViewModel();
+            Model.UpdatePowerServices();
+            Model.UpdatePowerParameters();
+            Model.UpdatePowerType();
+            UpdateDateTimeMinMax();
+            UpdateIntervals();
+
+        }
         public RelayCommand UpdatePowerSourceCommand => new RelayCommand(
                 () => OnUpdateSelectedPowerSource());
         public RelayCommand UpdatePowerServiceCommand => new RelayCommand(
@@ -227,8 +219,7 @@ namespace WeatherAndPower.UI
         public PowerInputViewModel(IPowerInputModel model)
         {
             _Model = model;
-            CreateDateTimeViewModel();
-            SelectedPowerSource = PowerType.SourceEnum.All;
+            InitializeComponent();
         }
 
     }

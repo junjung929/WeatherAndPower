@@ -10,7 +10,7 @@ namespace WeatherAndPower.Core
     {
         public ObservableCollection<PowerType> PowerTypes { get; } = new ObservableCollection<PowerType>(PowerType.GetAll<PowerType>());
 
-        public List<Interval> Intervals { get; } = new List<Interval>()
+        public List<Interval> Intervals { get; set; } = new List<Interval>()
         {
             new Interval(3),
             //new Interval(30),
@@ -21,6 +21,22 @@ namespace WeatherAndPower.Core
             //new Interval(1440*7),
             //new Interval(1440*30)
         };
+        private IPowerPreference _Preference { get; set; }
+        public IPowerPreference Preference
+        {
+            get { return _Preference; }
+            set
+            {
+                _Preference = value;
+                NotifyPropertyChanged("Preference");
+            }
+        }
+
+        public ObservableCollection<PowerType.SourceEnum> PowerSources { get; } = new ObservableCollection<PowerType.SourceEnum>();
+        public ObservableCollection<PowerType.ServiceEnum> PowerServices { get; } = new ObservableCollection<PowerType.ServiceEnum>();
+
+
+        public ObservableCollection<PowerType.ParameterEnum> PowerParameters { get; } = new ObservableCollection<PowerType.ParameterEnum>();
 
         public bool CheckIsRealTimeParameter(PowerType.ParameterEnum powerParameter)
         {
@@ -28,15 +44,15 @@ namespace WeatherAndPower.Core
             return false;
         }
 
-        public IDateTimeInputModel CreateDateTimeInputModel()
+        public IDateTimeInputModel CreateDateTimeInputModel(IPreference preference)
         {
-            return new DateTimeInputModel();
+            return new DateTimeInputModel(preference);
         }
 
         public List<Interval> GetUpdatedIntervals(int minInterval)
         {
             var intervals = new List<Interval>();
-            Intervals.ForEach(interval =>
+            Intervals.ToList().ForEach(interval =>
             {
                 if (interval.Value < minInterval)
                 {
@@ -50,29 +66,64 @@ namespace WeatherAndPower.Core
             return intervals;
         }
 
-        public List<PowerType.ParameterEnum> GetUpdatedPowerParameters(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService)
+        public void UpdatePowerSources()
         {
-            var selectableTypes = PowerTypes.ToList().FindAll(powerType => {
-                return powerType.Source == powerSource && powerType.Service == powerService;
+            if (PowerSources.Count != 0)
+            {
+                PowerSources.Clear();
             }
-            );
-            var selectableParameters = selectableTypes.Select(selectableType => selectableType.ParameterType).Distinct();
-            return new List<PowerType.ParameterEnum>(selectableParameters);
+            PowerTypes.Select(e => e.Source).Distinct().ToList().ForEach(e =>
+            {
+                PowerSources.Add(e);
+            });
         }
 
-        public List<PowerType.ServiceEnum> GetUpdatedPowerServices(PowerType.SourceEnum powerSource)
+        public void UpdatePowerServices()
         {
-            var selectableTypes = PowerTypes.ToList().FindAll(powerType => powerType.Source == powerSource);
-            var selectableServices = selectableTypes.Select(selectableType => selectableType.Service).Distinct();
-            return new List<PowerType.ServiceEnum>(selectableServices);
+            if (PowerServices.Count != 0)
+            {
+                PowerServices.Clear();
+
+            }
+            // Search correponding power services to selected power source
+            PowerTypes.Where(e => e.Source == Preference.PowerSource)
+                .Select(e => e.Service).Distinct().ToList().ForEach(e =>
+              {
+                  PowerServices.Add(e);
+              });
+            Preference.PowerService = PowerServices.First();
         }
 
-        public PowerType GetUpdatedPowerType(PowerType.SourceEnum powerSource, PowerType.ServiceEnum powerService, PowerType.ParameterEnum powerParameter)
+        public void UpdatePowerParameters()
         {
-            return PowerTypes.ToList().Find(powerType =>
-                powerType.Source == powerSource
-                && powerType.Service == powerService
-                && powerType.ParameterType == powerParameter);
+            if (PowerParameters.Count != 0)
+            {
+                PowerParameters.Clear();
+
+            }
+            // Search correponding power parameters to selected power source and service
+            PowerTypes.Where(e => e.Source == Preference.PowerSource
+                               && e.Service == Preference.PowerService)
+                .Select(e => e.ParameterType).Distinct().ToList().ForEach(e =>
+                {
+                    PowerParameters.Add(e);
+                });
+            Preference.PowerParameter = PowerParameters.First();
+        }
+
+        public void UpdatePowerType()
+        {
+            // Search correponding power parameters to selected power source and service and parameter
+            Preference.PowerType = PowerTypes.Where(e => e.Source == Preference.PowerSource
+                               && e.Service == Preference.PowerService
+                               && e.ParameterType == Preference.PowerParameter).First();
+            Console.WriteLine("Selected Power type " + Preference.PowerType);
+        }
+
+        public PowerInputModel(IPowerPreference preference)
+        {
+            Preference = preference;
+            UpdatePowerSources();
         }
     }
 }

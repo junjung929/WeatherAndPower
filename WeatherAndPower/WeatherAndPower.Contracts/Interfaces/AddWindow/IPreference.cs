@@ -15,6 +15,6 @@ namespace WeatherAndPower.Contracts
         DateTime StartTime { get; set; }
         DateTime EndTime { get; set; }
         string PlotName { get; set; }
-        int Interval { get; set; }
+        Interval Interval { get; set; }
     }
 }
