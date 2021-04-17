@@ -113,6 +113,7 @@
 												  Path=ShowPrecipitationAxis,
 												  Converter={StaticResource BoolToVisibilityConverter}}"
 							 Tag="{x:Static contracts:DataFormat.Precipitation}"
+							 Minimum="0"
 							 Title="Rain (mm)"/>
 
 		<charting:LinearAxis Name="HumidityAxis"
