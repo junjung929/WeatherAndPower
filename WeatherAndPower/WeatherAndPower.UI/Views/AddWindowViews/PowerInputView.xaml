@@ -49,8 +49,6 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <RadioButton 
-                            Command="{Binding DataContext.UpdatePowerSourceCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding}"   
                                      IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
@@ -75,8 +73,6 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <RadioButton 
-                            Command="{Binding DataContext.UpdatePowerServiceCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding}"   
                                      IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
@@ -100,8 +96,6 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <RadioButton 
-                            Command="{Binding DataContext.UpdatePowerParameterCommand, 
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                             Content="{Binding}"   
                                      IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, 
                             AncestorType={x:Type ListBoxItem}}, 
