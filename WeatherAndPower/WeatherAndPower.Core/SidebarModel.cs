@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,8 @@ namespace WeatherAndPower.Core
 				.Select(d => d.GetDataPoint(point));
 
             if (data.Count() > 0) {
-				var model = new PieModel("Power production comparison at " + point.ToString());
+                string format = "HH:mm:ss on ddd dd'/'MM'/'yyyy";
+				var model = new PieModel("Power production comparison at " + point.ToString(format, CultureInfo.CreateSpecificCulture("en-US")));
 				foreach (var d in data) {
 					model.Data.Add(d);
 				}
