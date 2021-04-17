@@ -93,7 +93,15 @@ namespace WeatherAndPower.Data
             split_times.Add(timepair);
         }
 
-
+        public static bool IsTimeValid(DateTime startTime, DateTime endTime)
+        {
+            if (startTime.Equals(endTime)
+                    || DateTime.Compare(startTime, endTime) > 0)
+            {
+                throw new Exception("Please choose valid time range");
+            }
+            return true;
+        }
     }
 }
 

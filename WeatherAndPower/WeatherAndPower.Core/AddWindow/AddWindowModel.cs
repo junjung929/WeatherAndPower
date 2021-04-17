@@ -43,7 +43,7 @@ namespace WeatherAndPower.Core
 
             try
             {
-                IsTimeValid(startTime, endTime);
+                TimeHandler.IsTimeValid(startTime, endTime);
                 IsPlotNameValid(graphName);
                 var series_task = Task.Run(() => Fingrid.Get(powerType, startTime, endTime));
 
@@ -82,7 +82,7 @@ namespace WeatherAndPower.Core
             Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
             try
             {
-                IsTimeValid(startTime, endTime);
+                TimeHandler.IsTimeValid(startTime, endTime);
                 IsPlotNameValid(graphName);
                 combined_graphs = FMI.GetAllData(startTime, endTime, interval, graphName, cityName, parameters, parameterType);
             }
@@ -112,15 +112,6 @@ namespace WeatherAndPower.Core
             return new WeatherInputModel();
         }
 
-        private Boolean IsTimeValid(DateTime startTime, DateTime endTime)
-        {
-            if (startTime.Equals(endTime)
-                    || DateTime.Compare(startTime, endTime) > 0)
-            {
-                throw new Exception("Please choose valid time range");
-            }
-            return true;
-        }
         private Boolean IsPlotNameValid(string plotName)
         {
             if (plotName == null || plotName == "")
