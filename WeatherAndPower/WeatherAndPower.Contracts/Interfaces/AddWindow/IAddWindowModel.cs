@@ -10,13 +10,18 @@ namespace WeatherAndPower.Contracts
             Weather = 0x02
         }
 
-
+        /**
+         * Add power data ot the graph
+         */
         void AddPowerGraphAction(
             PowerType powerType,
             DateTime startTime,
             DateTime endTime,
             string graphName);
 
+        /**
+         * Add weather data ot the graph
+         */
         void AddWeatherGraph(
             string cityName,
             string parameters,
@@ -26,7 +31,14 @@ namespace WeatherAndPower.Contracts
             WeatherType.ParameterEnum parameterType,
             int interval);
 
+
+        /**
+         * Create and return new PowerInputModel
+         */
         IPowerInputModel CreateNewPowerInputModel();
+        /**
+        * Create and return new WeatherInputModel
+        */
         IWeatherInputModel CreateNewWeatherInputModel();
     }
 }

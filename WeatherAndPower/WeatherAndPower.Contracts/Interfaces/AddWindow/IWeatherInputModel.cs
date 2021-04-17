@@ -18,12 +18,24 @@ namespace WeatherAndPower.Contracts
             Turku = 0x20
         }
 
+        /**
+         * Main container for WeatherType
+         */
         List<WeatherType> WeatherTypes { get; }
         List<Interval> Intervals { get; }
 
+        /**
+         * Get available WeatherTypes depending on selected weather parameter 
+         */
         List<WeatherType> GetUpdatedWeatherTypes(WeatherType.ParameterEnum weatherParameter);
+        /*
+         * Return available intervals that have bigger value than minInterval
+         */
         List<Interval> GetUpdatedIntervals(int minInterval);
 
+        /**
+         * Create and return new DateTimeInputModel
+         */
         IDateTimeInputModel CreateDateTimeInputModel();
     }
 }

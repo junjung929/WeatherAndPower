@@ -9,14 +9,9 @@ namespace WeatherAndPower.Contracts
 {
     public interface IDateTimeInputModel
     {
-        enum EDateTimeFormat
-        {
-            StartTime = 0x01,
-            EndTime = 0x02
-        }
-
+        /**
+         * Main container of predefined datetime range
+         */
         ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; }
-        
-        void EnableDateTimeRange(IDateTimeRange dateTimeRange, bool isEnabled);
     }
 }

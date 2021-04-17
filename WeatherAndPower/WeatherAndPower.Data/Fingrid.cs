@@ -27,10 +27,9 @@ namespace WeatherAndPower.Data
         };
 
 
-        /// <summary>
-        /// Get Fingrid api key from environment variables
-        /// </summary>
-        /// <returns>Fingrid api key</returns>
+        /**
+         * Get Fingrid api key from environment variables
+         */
         private static string GetApiKey()
         {
             string apikey = Environment.GetEnvironmentVariable("fingrid_api");
@@ -41,6 +40,9 @@ namespace WeatherAndPower.Data
             return apikey;
         }
 
+        /**
+         * Get a single and latest data point from Fingrid API
+         */
         public static async Task<IData> Get(PowerType powerType, string format = null)
         {
             if (format == null)
@@ -81,14 +83,9 @@ namespace WeatherAndPower.Data
 
         }
 
-        /// <summary>
-        /// Get request to retrieve power information with the given id and parameters
-        /// </summary>
-        /// <param name="powerType">ID of power information type</param>
-        /// <param name="startTime">Beginning of date time range</param>
-        /// <param name="endTime">Ending of date time range</param>
-        /// <param name="format">Return data format csv | json | xml</param>
-        /// // TODO: return value to Contracts
+        /**
+         * Get request to retrieve power information with the given PowerType and parameters
+         */
         public static async Task<IDataSeries> Get(PowerType powerType, DateTime startTime, DateTime endTime, string format = null)
         {
             if (format == null)
@@ -132,48 +129,35 @@ namespace WeatherAndPower.Data
 
         }
 
-        /// <summary>
-        /// Set Api key and content type into headers.
-        /// </summary>
-        /// <param name="httpRequestMessage"></param>
-        /// <param name="format"></param>
+        /*
+         * Set Api key and content type into headers.
+         */
         private static void SetHeaders(HttpRequestMessage httpRequestMessage, string format)
         {
             httpRequestMessage.Headers.Add("x-api-key", FINGRID_API);
             httpRequestMessage.Headers.Add("Accept", contentTypes[format]);
         }
 
-        /// <summary>
-        /// Generate request URI based on the given parameters
-        /// </summary>
-        /// <param name="variableId">ID of information to be retrieved </param>
-        /// <param name="query"></param>
-        /// <param name="format">format for return data csv | json | xml</param>
-        /// <returns>Request URI</returns>
+        /*
+         * Generate request URI based on the given parameters
+         */
         private static string ParseRequestUri(int variableId, string query, string format)
         {
             string request = $"{SERVER_URL}/{variableId}/events/{format}?{query}";
             return request;
         }
 
-        /// <summary>
-        /// Parse the given datetime to fit the format for the API parameter
-        /// </summary>
-        /// <param name="dateTime">DateTime parameter to parse</param>
-        /// <returns>
-        /// Correctly formatted datetime variable
-        /// </returns>
+        /*
+         * Parse the given datetime to fit the format for the API parameter
+         */
         private static string ParseDateTimeFormat(DateTime dateTime)
         {
             return dateTime.ToString(DATETIME_FORMAT);
         }
 
-        /// <summary>
-        /// Parse parameters to HTTP query string
-        /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <returns>query string</returns>
+        /*
+         * Parse parameters to HTTP query string
+         */
         private static string ParseParamsToQuery(DateTime startTime, DateTime endTime)
         {
             Dictionary<string, string> requestParams = new Dictionary<string, string>();
@@ -185,6 +169,9 @@ namespace WeatherAndPower.Data
             ));
         }
 
+        /*
+         * Parse XML string to a single data
+         */
         private static IData ParseXMLToSingleData(int variableId, string XMLString)
         {
             var doc = new XmlDocument();
@@ -194,16 +181,13 @@ namespace WeatherAndPower.Data
             string val = evt.SelectSingleNode("value").InnerText;
             string start_time = evt.SelectSingleNode("start_time").InnerText;
             string end_time = evt.SelectSingleNode("end_time").InnerText;
-            //IData power = new Power(variableId, Double.Parse(val), DateTime.Parse(start_time).ToLocalTime(), DateTime.Parse(end_time).ToLocalTime());
             IData power = new Power(Double.Parse(val));
             return power;
         }
 
-        /// <summary>
-        /// Parse XML string to object
-        /// </summary>
-        /// <param name="XMLString"></param>
-        /// <returns>DataSeries with power type and series of information</returns>
+        /*
+         * Parse XML string to DataSeries
+         */
         private static IDataSeries ParseXMLToDataSeries(int variableId, string XMLString)
         {
             List<Tuple<DateTime, IData>> powerSeries = new List<Tuple<DateTime, IData>>();
