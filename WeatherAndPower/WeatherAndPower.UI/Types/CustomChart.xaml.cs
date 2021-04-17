@@ -26,6 +26,7 @@ namespace WeatherAndPower.UI
 {
 	/// <summary>
 	/// Interaction logic for CustomChart.xaml
+	/// This class doubles as a sort of viewmodel for our chart.
 	/// </summary>
 	[TemplatePart(Name = "VerticalCursor", Type = typeof(Grid))]
 	[TemplatePart(Name = "CursorCanvas", Type = typeof(Grid))]
@@ -61,6 +62,11 @@ namespace WeatherAndPower.UI
 		}
 
 		public event MouseButtonEventHandler SeriesClicked;
+
+		/**
+		 * This class already derives from Chart, so we cannot derive from AbstractViewModel
+		 * Therefore we implement INotifyPropertyChanged here separately
+		 */
 		public event PropertyChangedEventHandler PropertyChanged;
 		public void NotifyPropertyChanged(string propName)
 		{
@@ -77,6 +83,11 @@ namespace WeatherAndPower.UI
 				});
 		}
 
+		/**
+		 * Helper method for refreshing all axes visibilities. _Format value is changed multiple times
+		 * when new lines are added to the plot, so it does not make sense to refresh axis visibilities
+		 * in the _Format setter. This function can be run once all pending data modifications are finished
+		 */
 		private void RefreshAxisVisibilities()
 		{
 			NotifyPropertyChanged("ShowTemperatureAxis");
@@ -87,6 +98,10 @@ namespace WeatherAndPower.UI
 			NotifyPropertyChanged("ShowPrecipitationAxis");
 		}
 
+		/**
+		 * These methods define whether an axis should be visible or not.
+		 * By default, axes with no data should be invisible to reduce clutter
+		 */
 		public bool ShowTemperatureAxis
 		{
 			get { return (_Formats & DataFormat.Temperature) != 0; }
@@ -120,6 +135,9 @@ namespace WeatherAndPower.UI
 
 		#region Saving
 
+		/**
+		 * Saves the graph as an image in a jpeg file at the provided path
+		 */
 		public bool Save(string fileName)
 		{
 			RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
@@ -151,6 +169,10 @@ namespace WeatherAndPower.UI
 
 		#endregion
 
+		/**
+		 * This method enables "pick mode" for the chart. Pick mode comes with a custom vertical
+		 * cursor and allows the user to pick a specific time point in the graph.
+		 */
 		public async Task<DateTime> Pick()
 		{
 			cursorPicked = new TaskCompletionSource<DateTime>();
@@ -163,36 +185,8 @@ namespace WeatherAndPower.UI
 			return cursorPicked.Task.Result;
 		}
 
-		private Shape _CreateTestShape()
-		{
-			return new Ellipse()
-			{
-				Height = 200,
-				Width = 200,
-				StrokeThickness = 4,
-				Stroke = new SolidColorBrush() { Color = Colors.Blue },
-				Fill = new SolidColorBrush() { Color = Colors.Red }
-			};
-		}
-
-		public List<Tuple<int, int>> Line { get; set; } = new List<Tuple<int, int>>();
-
-
-
-
 		public CustomChart()
 		{
-			//Axes.Add(X);
-			//Axes.Add(TemperatureAxis);
-			//Axes.Add(PowerAxis);
-			//Axes.Add(CloudinessAxis);
-			//Axes.Add(WindAxis);
-
-			Line.Add(new Tuple<int, int>(1, 2));
-			Line.Add(new Tuple<int, int>(2, 3));
-
-			//ShowLegend = false;
-
 			InitializeComponent();
 		}
 

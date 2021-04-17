@@ -47,7 +47,18 @@ namespace WeatherAndPower.UI
 					}
                 }
         });
-        public RelayCommand SaveDataImageCommand => new RelayCommand(() => Model.SaveDataImage("test.png"));
+        public RelayCommand SaveDataImageCommand => new RelayCommand(() =>
+        {
+            var saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "JPEG (*.jpg)|*.jpg";
+            if (saveDialog.ShowDialog() == true) {
+                try {
+                    Model.SaveDataImage(saveDialog.FileName);
+				} catch (Exception e) {
+                    MessageBox.Show(e.Message);
+				}
+			}
+        });
         public RelayCommand AddDataCommand => new RelayCommand(() => Model.AddData());
         public RelayCommand CompareDataCommand => new RelayCommand(() =>
         {

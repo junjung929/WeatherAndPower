@@ -60,13 +60,26 @@
 			<ColumnDefinition Width="1*"/>
 			<ColumnDefinition Width="1*"/>
 			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
 		</Grid.ColumnDefinitions>
 
 		<Button Command="{ Binding ClearGraphCommand }" Content="Clear" Grid.Row="0" Grid.Column="0"/>
 		<Button Command="{ Binding OpenDataCommand }" Content="Open" Grid.Row="0" Grid.Column="1"/>
 		<Button Command="{ Binding SaveDataCommand }" Content="Save" Grid.Row="0" Grid.Column="2"/>
+		<Button Command="{ Binding SaveDataImageCommand }" Grid.Row="0" Grid.Column="3">
+			<Button.Content>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="1*"/>
+						<RowDefinition Height="1*"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="Save" HorizontalAlignment="Center" Grid.Row="0"/>
+					<TextBlock Text="Image" HorizontalAlignment="Center" Grid.Row="1"/>
+				</Grid>
+			</Button.Content>
+		</Button>
 
-		<ListView ItemsSource="{ Binding Data }" SelectedItem="{Binding SelectedSeries, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+		<ListView ItemsSource="{ Binding Data }" SelectedItem="{Binding SelectedSeries, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
 			<ListView.Resources>
 				<Style TargetType="{x:Type ListViewItem}">
 					<Setter Property="IsSelected" Value="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.IsSelected, Mode=TwoWay}"/>
@@ -89,8 +102,16 @@
 			</ListView.ItemTemplate>
 		</ListView>
 
-		<Button Command="{ Binding AddDataCommand }" Content="Add" Grid.Row="2" Grid.Column="0"/>
-		<Button Command="{ Binding CompareDataCommand }" Content="Pie" Grid.Row="2" Grid.Column="1"/>
-		<Button Command="{ Binding RemoveDataCommand }" Content="Remove" Grid.Row="2" Grid.Column="2"/>
+		<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<Button Command="{ Binding AddDataCommand }" Content="Add" Grid.Column="0"/>
+			<Button Command="{ Binding CompareDataCommand }" Content="Compare" Grid.Column="1"/>
+			<Button Command="{ Binding RemoveDataCommand }" Content="Remove" Grid.Column="2"/>
+			
+		</Grid>
 	</Grid>
 </UserControl>
