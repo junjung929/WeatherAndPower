@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WeatherAndPower.Contracts;
 using WeatherAndPower.Data;
+using System.Collections.Generic;
 
 namespace WeatherAndPower.Core
 {
@@ -51,7 +52,6 @@ namespace WeatherAndPower.Core
                     series_task.Wait();
                     var series = series_task.Result;
                     series.Name = graphName + " (" + powerType.Source + ")";
-                    series.IsComparable = powerType.Source != PowerType.SourceEnum.All;
                     DataPlot.Data.Add(series);
                 }
                 catch (AggregateException e)
@@ -79,61 +79,26 @@ namespace WeatherAndPower.Core
             {
                 throw new Exception("Please give a name of cities in Finland");
             }
-
+            Dictionary<string, IDataSeries> combined_graphs = new Dictionary<string, IDataSeries>();
             try
             {
                 IsTimeValid(startTime, endTime);
                 IsPlotNameValid(graphName);
-                if (TimeHandler.ForecastTooFar(startTime)) { return; }
-
-
-                FMI.Place = cityName;
-                FMI.Parameters = parameters;
-                //FMI.StartTime = startTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                //FMI.EndTime = endTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                FMI.StartTime = TimeHandler.ConvertToLocalTime(startTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
-                FMI.EndTime = TimeHandler.ConvertToLocalTime(endTime).ToString("yyyy-MM-ddTHH:mm:ssZ");
-                string step = interval.ToString();
-                FMI.Timestep = step;
-                if (TimeHandler.DataTooBig(startTime, endTime, interval)) { return; }
-                string query;
-                if (parameterType == WeatherType.ParameterEnum.Forecast)
+                combined_graphs = FMI.GetAllData(startTime, endTime, interval, graphName, cityName, parameters, parameterType);
+            }
+            catch (AggregateException ae)
+            {
+                Console.WriteLine("FMIAction failed:");
+                foreach (var ex in ae.InnerExceptions)
                 {
-                    query = FMI.BuildQuery("forecast::hirlam::surface::point");
-                }
-                else
-                {
-                    query = FMI.BuildQuery("observations::weather");
-                }
-
-                string request = FMI.BuildRequest(query);
-                Console.WriteLine(request);
-
-                var series_list_task = Task.Run(() => FMI.GetData(request));
-                try
-                {
-                    series_list_task.Wait();
-                    var series_list = series_list_task.Result;
-                    foreach (var series in series_list)
-                    {
-                        series.Name = graphName + " (" + series.Name + ")";
-                        DataPlot.Data.Add(series);
-                    }
-                }
-                catch (AggregateException ae)
-                {
-                    Console.WriteLine("FMIAction failed:");
-                    foreach (var ex in ae.InnerExceptions)
-                    {
-                        Console.WriteLine(ex.Message);
-                        throw new Exception(ex.Message);
-                    }
+                    Console.WriteLine(ex.Message);
+                    throw new Exception(ex.Message);
                 }
             }
-            catch (Exception e)
+            foreach (var graph in combined_graphs)
             {
-
-                throw e;
+                graph.Value.Name = graphName + " (" + graph.Value.Name + ")";
+                DataPlot.Data.Add(graph.Value);
             }
         }
 
@@ -169,5 +134,19 @@ namespace WeatherAndPower.Core
         {
             DataPlot = dataPlot;
         }
+
+        public void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
+        {
+            if (dict.ContainsKey(plot.Name))
+            {
+                var series = dict[plot.Name];
+                series.Series.AddRange(plot.Series);
+            }
+            else
+            {
+                dict.Add(plot.Name, plot);
+            }
+        }
     }
 }
+
