@@ -97,7 +97,7 @@
 												  Path=ShowCloudinessAxis,
 												  Converter={StaticResource BoolToVisibilityConverter}}"
 							 Tag="{x:Static contracts:DataFormat.Cloudiness}"
-							 Title="Cloudiness (1-8)"/>
+							 Title="Cloudiness (%)"/>
 
 		<charting:LinearAxis Name="WindAxis"
 							 Orientation="Y"
