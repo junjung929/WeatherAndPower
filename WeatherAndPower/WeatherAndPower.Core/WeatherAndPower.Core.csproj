@@ -76,10 +76,10 @@
     <Compile Include="AddWindow\DateTimeInputModel.cs" />
     <Compile Include="AddWindow\PowerInputModel.cs" />
     <Compile Include="AddWindow\WeatherInputModel.cs" />
-    <Compile Include="DataPlotModel.cs" />
-    <Compile Include="DataSeries.cs" />
-    <Compile Include="DataSeriesFactory.cs" />
-    <Compile Include="PieModel.cs" />
+    <Compile Include="Graphing\DataPlotModel.cs" />
+    <Compile Include="Graphing\DataSeries.cs" />
+    <Compile Include="Graphing\DataSeriesFactory.cs" />
+    <Compile Include="Graphing\PieModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SidebarModel.cs" />
   </ItemGroup>

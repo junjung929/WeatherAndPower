@@ -71,33 +71,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddWindow\IAddWindowModel.cs" />
-    <Compile Include="AddWindow\IDateTimeInputModel.cs" />
-    <Compile Include="AddWindow\IPowerInputModel.cs" />
-    <Compile Include="AddWindow\IWeatherInputModel.cs" />
+    <Compile Include="Interfaces\AddWindow\IAddWindowModel.cs" />
+    <Compile Include="Interfaces\AddWindow\IDateTimeInputModel.cs" />
+    <Compile Include="Interfaces\AddWindow\IPowerInputModel.cs" />
+    <Compile Include="Interfaces\AddWindow\IWeatherInputModel.cs" />
     <Compile Include="ByteColorJsonConverter.cs" />
-    <Compile Include="Cloudiness.cs" />
-    <Compile Include="DataPoint.cs" />
-    <Compile Include="IDataSeries.cs" />
+    <Compile Include="Types\Cloudiness.cs" />
+    <Compile Include="Types\DataPoint.cs" />
+    <Compile Include="Interfaces\Graphing\IDataSeries.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Globals.cs" />
-    <Compile Include="Humidity.cs" />
-    <Compile Include="ICustomChart.cs" />
-    <Compile Include="IData.cs" />
-    <Compile Include="IDataJsonConverter.cs" />
-    <Compile Include="IDataPlotModel.cs" />
-    <Compile Include="IDataSeriesFactory.cs" />
-    <Compile Include="IPieModel.cs" />
-    <Compile Include="IPlaceholderModel.cs" />
-    <Compile Include="ISidebarModel.cs" />
-    <Compile Include="IWindowFactory.cs" />
-    <Compile Include="Power.cs" />
-    <Compile Include="PowerType.cs" />
-    <Compile Include="Precipitation.cs" />
+    <Compile Include="Types\Humidity.cs" />
+    <Compile Include="Interfaces\Graphing\ICustomChart.cs" />
+    <Compile Include="Interfaces\Graphing\IData.cs" />
+    <Compile Include="Interfaces\Graphing\IDataJsonConverter.cs" />
+    <Compile Include="Interfaces\Graphing\IDataPlotModel.cs" />
+    <Compile Include="Interfaces\Graphing\IDataSeriesFactory.cs" />
+    <Compile Include="Interfaces\Graphing\IPieModel.cs" />
+    <Compile Include="Interfaces\ISidebarModel.cs" />
+    <Compile Include="Interfaces\IWindowFactory.cs" />
+    <Compile Include="Types\Power.cs" />
+    <Compile Include="Types\PowerType.cs" />
+    <Compile Include="Types\Precipitation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Temperature.cs" />
-    <Compile Include="WeatherType.cs" />
-    <Compile Include="Wind.cs" />
+    <Compile Include="Types\Temperature.cs" />
+    <Compile Include="Types\WeatherType.cs" />
+    <Compile Include="Types\Wind.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
