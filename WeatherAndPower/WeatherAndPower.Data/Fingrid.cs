@@ -121,6 +121,7 @@ namespace WeatherAndPower.Data
             if (format == "xml")
             {
                 IDataSeries dataseries = ParseXMLToDataSeries(powerType.Id, body);
+                dataseries.IsComparable = powerType.Source != PowerType.SourceEnum.All;
                 return dataseries;
             }
             else
