@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace WeatherAndPower.UI
 {
     public class DateTimeViewModel : ViewModelBase
     {
+        #region Properties
         private IDateTimeInputModel _model;
         public IDateTimeInputModel Model
         {
@@ -24,39 +26,26 @@ namespace WeatherAndPower.UI
                 }
             }
         }
-        public List<DateTimeRange> DateTimeRanges { get; set; }
-        private DateTimeRange _dateTimeRange { get; set; }
-        public DateTimeRange DateTimeRange
+        public ObservableCollection<IDateTimeRange> DateTimeRanges
         {
-            get { return _dateTimeRange; }
-            set { _dateTimeRange = value;
-                NotifyPropertyChanged("DateTimeRange"); }
+            get { return Model.DateTimeRanges; }
         }
 
-        private bool _isStartTimePickerEnabled = true;
-        private bool _isEndTimePickerEnabled = true;
-        public bool IsStartTimePickerEnabled
+        private IDateTimeRange _SelectedDateTimeRange { get; set; }
+        public IDateTimeRange SelectedDateTimeRange
         {
-            get { return _isStartTimePickerEnabled; }
+            get { return _SelectedDateTimeRange; }
             set
             {
-                _isStartTimePickerEnabled = value;
-                NotifyPropertyChanged(nameof(IsStartTimePickerEnabled));
+                _SelectedDateTimeRange = value;
+                NotifyPropertyChanged("SelectedDateTimeRange");
             }
         }
-        public bool IsEndTimePickerEnabled
-        {
-            get { return _isEndTimePickerEnabled; }
-            set
-            {
-                _isEndTimePickerEnabled = value;
-                NotifyPropertyChanged(nameof(IsEndTimePickerEnabled));
-            }
-        }
+
+        public static DateTime DefaultDateTimeMin { get; } = DateTime.Today.AddYears(-2);
+        public static DateTime DefaultDateTimeMax { get; } = DateTime.Today.AddMonths(2).AddTicks(-1);
 
         private DateTime _startTime = DateTime.Now;
-        private DateTime _endTime = DateTime.Now;
-
         public DateTime StartTime
         {
             get { return _startTime; }
@@ -67,6 +56,8 @@ namespace WeatherAndPower.UI
             }
         }
 
+        private DateTime _endTime = DateTime.Now;
+
         public DateTime EndTime
         {
             get { return _endTime; }
@@ -76,117 +67,179 @@ namespace WeatherAndPower.UI
                 NotifyPropertyChanged("EndTime");
             }
         }
-        public DateTime DefaultDateTimeMin { get; private set; } = DateTime.Today.AddYears(-2);
-        public DateTime DefaultDateTimeMax { get; private set; } = DateTime.Today.AddMonths(2).AddTicks(-1);
 
-        private DateTime _dateTimeMin;
-        private DateTime _dateTimeMax;
+        private DateTime _DateTimeMin { get; set; } = DefaultDateTimeMin;
         public DateTime DateTimeMin
         {
-            get { return _dateTimeMin; }
-            set { _dateTimeMin = value; NotifyPropertyChanged("DateTimeMin"); }
-        }
-        public DateTime DateTimeMax
-        {
-            get { return _dateTimeMax; }
-            set { _dateTimeMax = value; NotifyPropertyChanged("DateTimeMax"); }
+            get { return _DateTimeMin; }
+            set
+            {
+                _DateTimeMin = value;
+                NotifyPropertyChanged("DateTimeMin");
+            }
         }
 
-        public void SetDateTimeMinMaxToDefault()
+        private DateTime _DateTimeMax { get; set; } = DefaultDateTimeMax;
+        public DateTime DateTimeMax
+        {
+            get { return _DateTimeMax; }
+            set
+            {
+                _DateTimeMax = value;
+                NotifyPropertyChanged("DateTimeMax");
+            }
+        }
+
+        #endregion
+
+        public void UpdateDateTimeMinMaxToDefault()
         {
             DateTimeMin = DefaultDateTimeMin;
             DateTimeMax = DefaultDateTimeMax;
         }
 
-
-        /// <summary>
-        /// Check whether datetime is valid
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns>
-        /// Returns -1 if datetime is smaller than minimum range
-        /// Returns 0 if datetime is valid
-        /// Returns 1 if datetime is bigger than minimum range
-        /// </returns>
-        public int CheckDateTimeValid(DateTime dateTime)
-        {
-            if (DateTime.Compare(dateTime, DateTimeMin) < 0)
-            {
-                System.Windows.MessageBox.Show("The minimum range of date time is "
-                    + DateTimeMin.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
-                return -1;
-            }
-            else if (DateTime.Compare(dateTime, DateTimeMax) > 0)
-            {
-                System.Windows.MessageBox.Show("The maximum range of date time is "
-                    + DateTimeMax.ToString("ddd dd'/'MM'/'yyyy HH:mm:ss", new CultureInfo("en-US")));
-                return 1;
-            }
-            return 0;
-        }
-
         public void UpdateDateTimeMinMax(DateTime min, DateTime max)
         {
-            var startTime = StartTime;
-            if (DateTime.Compare(startTime, min) < 0)
-            {
-                startTime = min;
-            }
-            else if (DateTime.Compare(startTime, max) > 0)
-            {
-                startTime = max;
-            }
-            StartTime = startTime;
+            // Check if startTime and endtime areout of range between min and max
+            // then adjust value
+            // This must be done before updating minumum and maximum datetime to avoid error
+            bool isAdjusted = false;
+            StartTime = AdjustDateTime(StartTime, min, max, ref isAdjusted);
+            EndTime = AdjustDateTime(EndTime, min, max, ref isAdjusted);
 
-            var endTime = EndTime;
-            if (DateTime.Compare(endTime, min) < 0)
-            {
-                endTime = min;
-            }
-            else if (DateTime.Compare(endTime, max) > 0)
-            {
-                endTime = max;
-            }
-            EndTime = endTime;
-            if (min != DateTimeMin) DateTimeMin = min;
-            if (max != DateTimeMax) DateTimeMax = max;
+            // Then update min and max datetime
+            DateTimeMin = min;
+            DateTimeMax = max;
         }
 
-        public RelayCommand UpdateDateTimeCommand => new RelayCommand(() =>
+        public void UpdateDateTimes(IDateTimeRange dateTimeRange)
         {
-            var (startTime, endTime) = Model.GetNewDateTimeRange(DateTimeRange);
-            if (IsStartTimePickerEnabled)
+            var (startTime, endTime) = GetNewDateTimeRange(dateTimeRange);
+            bool isAdjusted = false;
+            StartTime = AdjustDateTime(startTime, ref isAdjusted);
+            EndTime = AdjustDateTime(endTime, ref isAdjusted);
+            if (isAdjusted)
             {
-                var isValid = CheckDateTimeValid(startTime);
-                if (isValid < 0)
-                {
-                    startTime = DateTimeMin;
-                }
-                else if (isValid > 0)
-                {
-                    startTime = DateTimeMax;
-                }
-                StartTime = startTime;
+                string format = "ddd dd'/'MM'/'yyyy HH:mm:ss";
+                throw new Exception("Datetimes have been adjusted between "
+                    + DateTimeMin.ToString(format, CultureInfo.CreateSpecificCulture("en-US")) + " and "
+                    + DateTimeMax.ToString(format, CultureInfo.CreateSpecificCulture("en-US")));
             }
-            if (IsEndTimePickerEnabled)
+        }
+
+        private Tuple<DateTime, DateTime> GetNewDateTimeRange(IDateTimeRange dateTimeRange)
+        {
+            string dateTimeRangeId = dateTimeRange.Id;
+
+            DateTime now = DateTime.Now;
+            DateTime today = DateTime.Now.Date;
+            DateTime startTime = now;
+            DateTime endTime = now;
+
+            if (dateTimeRangeId == "pyear")
             {
-                var isValid = CheckDateTimeValid(endTime);
-                if (isValid < 0)
-                {
-                    endTime = DateTimeMin;
-                }
-                else if (isValid > 0)
-                {
-                    endTime = DateTimeMax;
-                }
-                EndTime = endTime;
+                startTime = today.AddDays(-365);
+                endTime = today.AddTicks(-1);
             }
-        });
+            else if (dateTimeRangeId == "pmonth")
+            {
+                startTime = today.AddDays(-30);
+                endTime = today.AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "pweek")
+            {
+                startTime = today.AddDays(-7);
+                endTime = today.AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "p24h")
+            {
+                startTime = today.AddHours(now.Hour - 24);
+                endTime = today.AddHours(now.Hour).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "n24h")
+            {
+                startTime = today.AddHours(now.Hour + 1);
+                endTime = startTime.AddHours(24).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "n36h")
+            {
+                startTime = today.AddHours(now.Hour + 1);
+                endTime = startTime.AddHours(36).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "n7d")
+            {
+                startTime = today.AddDays(1);
+                endTime = startTime.AddDays(7).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "n30d")
+            {
+                startTime = today.AddDays(1);
+                endTime = startTime.AddDays(30).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "lyear")
+            {
+                startTime = new DateTime(today.Year - 1, 1, 1);
+                endTime = startTime.AddYears(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "lmonth")
+            {
+                DateTime lastMonth = today.AddMonths(-1);
+                startTime = new DateTime(lastMonth.Year, lastMonth.Month, 1);
+                endTime = startTime.AddMonths(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "yesterday")
+            {
+                startTime = today.AddDays(-1);
+                endTime = startTime.AddDays(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "today")
+            {
+                startTime = today;
+                endTime = startTime.AddDays(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "tomorrow")
+            {
+                startTime = today.AddDays(1);
+                endTime = startTime.AddDays(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "tmonth")
+            {
+                startTime = new DateTime(today.Year, today.Month, 1);
+                endTime = startTime.AddMonths(1).AddTicks(-1);
+            }
+            else if (dateTimeRangeId == "tyear")
+            {
+                startTime = new DateTime(today.Year, 1, 1);
+                endTime = startTime.AddYears(1).AddTicks(-1);
+            }
+
+            return new Tuple<DateTime, DateTime>(startTime, endTime);
+        }
+
+        private DateTime AdjustDateTime(DateTime dateTime, ref bool isAdjusted)
+        {
+            return AdjustDateTime(dateTime, DateTimeMin, DateTimeMax, ref isAdjusted);
+        }
+        private DateTime AdjustDateTime(DateTime dateTime, DateTime min, DateTime max, ref bool isAdjusted)
+        {
+            if (dateTime.CompareTo(min) < 0)
+            {
+                isAdjusted = true;
+                return min;
+            }
+            else if (dateTime.CompareTo(max) > 0)
+            {
+                isAdjusted = true;
+                return max;
+            }
+            return dateTime;
+        }
+
+        //public RelayCommand UpdateDateTimeCommand => new RelayCommand(()
+        //    => Model.UpdateDateTimes(SelectedDateTimeRange));
         public DateTimeViewModel(IDateTimeInputModel model)
         {
             _model = model;
-            DateTimeRanges = _model.DateTimeRanges;
-            SetDateTimeMinMaxToDefault();
         }
     }
 }

@@ -36,9 +36,10 @@ namespace WeatherAndPower.UI
             }
         }
 
-        public ObservableCollection<PowerType.SourceEnum> PowerSources { get; set; }
+        public ObservableCollection<PowerType.SourceEnum> PowerSources { get; set; } 
+            = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
 
-        private PowerType.SourceEnum _SelectedPowerSource { get; set; }
+        private PowerType.SourceEnum _SelectedPowerSource { get; set; } 
 
         public PowerType.SourceEnum SelectedPowerSource
         {
@@ -54,7 +55,7 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private ObservableCollection<PowerType.ServiceEnum> _PowerServices { get; set; }
+        private ObservableCollection<PowerType.ServiceEnum> _PowerServices { get; set; } = new ObservableCollection<PowerType.ServiceEnum>();
         public ObservableCollection<PowerType.ServiceEnum> PowerServices
         {
             get { return _PowerServices; }
@@ -77,7 +78,7 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private ObservableCollection<PowerType.ParameterEnum> _PowerParameters { get; set; }
+        private ObservableCollection<PowerType.ParameterEnum> _PowerParameters { get; set; } = new ObservableCollection<PowerType.ParameterEnum>();
         public ObservableCollection<PowerType.ParameterEnum> PowerParameters
         {
             get { return _PowerParameters; }
@@ -100,7 +101,7 @@ namespace WeatherAndPower.UI
             }
         }
 
-        public ObservableCollection<PowerType> PowerTypes { get; set; }
+        public ObservableCollection<PowerType> PowerTypes { get { return Model.PowerTypes; } }
         private PowerType selectedPowerType { get; set; }
         public PowerType SPowerType
         {
@@ -112,7 +113,7 @@ namespace WeatherAndPower.UI
             }
         }
 
-        private ObservableCollection<Interval> _intervals { get; set; }
+        private ObservableCollection<Interval> _intervals { get; set; } = new ObservableCollection<Interval>();
 
 
         public ObservableCollection<Interval> Intervals
@@ -193,21 +194,12 @@ namespace WeatherAndPower.UI
         {
             Console.WriteLine("Power source " + SelectedPowerSource);
             UpdatePowerServices();
-            UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
         }
 
         public void OnUpdateSelectedPowerService()
         {
             Console.WriteLine("Power service " + SelectedPowerSource);
             UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
         }
 
         public void OnUpdateSelectedPowerParameter()
@@ -223,33 +215,20 @@ namespace WeatherAndPower.UI
         {
             var dateTimeInputModel = Model.CreateDateTimeInputModel();
             DateTimeViewModel = new DateTimeViewModel(dateTimeInputModel);
-            UpdateDateTimeMinMax();
         }
 
-        public ICommand UpdatePowerSourceCommand { get; set; }
-        public ICommand UpdatePowerServiceCommand { get; set; }
-        public ICommand UpdatePowerParameterCommand { get; set; }
+        public RelayCommand UpdatePowerSourceCommand => new RelayCommand(
+                () => OnUpdateSelectedPowerSource());
+        public RelayCommand UpdatePowerServiceCommand => new RelayCommand(
+                () => OnUpdateSelectedPowerService());
+        public RelayCommand UpdatePowerParameterCommand => new RelayCommand(
+                () => OnUpdateSelectedPowerParameter());
 
         public PowerInputViewModel(IPowerInputModel model)
         {
             _model = model;
             CreateDateTimeViewModel();
-            PowerTypes = new ObservableCollection<PowerType>(model.PowerTypes);
-            PowerSources = new ObservableCollection<PowerType.SourceEnum>(Enum.GetValues(typeof(PowerType.SourceEnum)).Cast<PowerType.SourceEnum>());
             SelectedPowerSource = PowerType.SourceEnum.All;
-            UpdatePowerServices();
-            UpdatePowerParameters();
-            UpdateRealTime();
-            UpdateSelectedPowerType();
-            UpdateDateTimeMinMax();
-            UpdateIntervals();
-
-            UpdatePowerSourceCommand = new RelayCommand(
-                () => OnUpdateSelectedPowerSource());
-            UpdatePowerServiceCommand = new RelayCommand(
-                () => OnUpdateSelectedPowerService());
-            UpdatePowerParameterCommand = new RelayCommand(
-                () => OnUpdateSelectedPowerParameter());
         }
 
     }

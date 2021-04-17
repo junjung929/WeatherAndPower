@@ -74,6 +74,7 @@
     <Compile Include="AbstractModel.cs" />
     <Compile Include="AddWindow\AddWindowModel.cs" />
     <Compile Include="AddWindow\DateTimeInputModel.cs" />
+    <Compile Include="AddWindow\DateTimeRange.cs" />
     <Compile Include="AddWindow\PowerInputModel.cs" />
     <Compile Include="AddWindow\WeatherInputModel.cs" />
     <Compile Include="Graphing\DataPlotModel.cs" />
