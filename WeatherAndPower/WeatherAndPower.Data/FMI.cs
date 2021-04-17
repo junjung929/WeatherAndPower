@@ -39,7 +39,7 @@ namespace WeatherAndPower.Data
 			{ "TA_PT1H_MAX", "Max temperature"},
 			{ "TA_PT1H_MIN","Min temperature" }
 		};
-
+		// Pairing parameters and TypeFormat structs
 		public static readonly Dictionary<string, TypeFormat> FORMAT_PARAMS = new Dictionary<string, TypeFormat>()
 		{
 			{"t2m", TempStruct},
@@ -90,7 +90,13 @@ namespace WeatherAndPower.Data
 			  x.Key + "=" + x.Value));
 			return request;
 		}
-
+		/*
+		 * This is the function responsible for sending the request to the API. 
+		 * The url that other functions have created is taken as an argument. 
+		 * Boolean flag is just for warning display. 
+		 * This function is called multiple times if the time period is longer than a week. 
+		 * Returns a list of plots. 
+		 */
 		public static async Task<List<IDataSeries>> GetSingleData(string url, bool is_first_chunk = false)
 		{
 			var httpResponse = await _client.GetAsync(url);
@@ -195,7 +201,11 @@ namespace WeatherAndPower.Data
 
 			return plots;
 		}
-
+		/*
+		 * Splits the FMI request, if it's too long and calls GetSingleData n times, where n
+		 * is number of splits. Combines all fetched graphs based on parameter
+		 * Returns a dictionary of combined graphs sorted by parameter. 
+		 */
 		public static Dictionary<string, IDataSeries> GetAllData(DateTime startTime, DateTime endTime, int interval,
 			string graphName, string cityName, string parameters, WeatherType.ParameterEnum parameterType)
         {
@@ -247,7 +257,11 @@ namespace WeatherAndPower.Data
 			return combined_graphs;
 
 		}
-
+		/*
+		 * Helper function defines custom behavior for GetAllData. 
+		 * If the key is already present in the dict, combines its value
+		 * to the incoming series
+		 */
 		private static void AddToDict(ref Dictionary<string, IDataSeries> dict, IDataSeries plot)
 		{
 			if (dict.ContainsKey(plot.Name))
@@ -261,6 +275,10 @@ namespace WeatherAndPower.Data
 			}
 		}
 
+
+		/*	
+		 *	Creates an XML manager for parsing 
+		 */
 		private static XmlNamespaceManager CreateManager(XmlDocument doc)
 		{
 			var mng = new XmlNamespaceManager(doc.NameTable);
@@ -272,10 +290,10 @@ namespace WeatherAndPower.Data
 
 			return mng;
 		}
-		/// <summary>
-		/// Returns the format - type struct based on parameter
-		/// </summary>
-		/// <returns> Struct relevant to the parameter</returns>
+
+		/* Creates and returns type-format pair (TypeFormat) based 
+		 * on the provided format
+		 */
 		private static TypeFormat GetTypeFormat(XmlNode node, XmlNamespaceManager mng)
 		{
 			string parameter = GetParameter(node, mng);
@@ -283,6 +301,9 @@ namespace WeatherAndPower.Data
 			return typeformat;
 		}
 
+		/*
+		 * Parses the XML node for parameter and returns it 
+		 */
 		private static string GetParameter(XmlNode node, XmlNamespaceManager mng)
         {
 			var param_id = node.SelectSingleNode(".//wml2:MeasurementTimeseries", mng);
@@ -290,12 +311,17 @@ namespace WeatherAndPower.Data
 			string parameter = attribute.Split('-').Last();
 			return parameter;
 		}
-
+		/*
+		 * Returns the format of TypeFormat
+		 */
 		private static DataFormat GetFormat(TypeFormat typeformat)
 		{
 			return typeformat.Format;
 		}
-
+		/*
+		 * Dynamically creates an instance with a value of "value" of the correct type
+		 * based on the TypeFormat. 
+		 */
 		private static dynamic GetType(TypeFormat typeformat, double value)
 		{
 			var type = typeformat.Datatype;
@@ -317,7 +343,9 @@ namespace WeatherAndPower.Data
 			MessageBox.Show($"Requested {miss_graphs} data is missing for this area. {disp_graphs}");
 		}
 
-		// Makes missing graphs message more readable
+		/*
+		 * Makes missing graphs warning message more readable
+	 	 */
 		private static string AddDivs(List<string> graphs)
 		{
 			string listed_graphs = "";

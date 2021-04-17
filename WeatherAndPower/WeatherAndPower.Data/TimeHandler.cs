@@ -9,12 +9,19 @@ namespace WeatherAndPower.Data
 {
     public static class TimeHandler
     {
-
+        /*
+         * APIs handle time in UTC
+         */
         public static DateTime ConvertToLocalTime(DateTime time)
         {
             return TimeZoneInfo.ConvertTimeToUtc(time);
         }
 
+        /*
+         * Checks the number of datapoints based on provided start and end times is larger that BIGDATA
+         * Shows a warning and asks if user wants to proceed anyway. Based on user response 
+         * execution either continues or stops. 
+         */
         public static bool DataTooBig(DateTime start, DateTime end, double timestep)
         {
 
@@ -37,6 +44,10 @@ namespace WeatherAndPower.Data
             return false;
         }
 
+        /*
+         * If the starttime of forecast is too far in the future and is not handled by the api,
+         * shows a warning, otherwise continues execution. 
+         */
         public static bool ForecastTooFar(DateTime startTime)
         {
             // 2 days 1 hour and 10 minutes from CURRENT TIME there is no forecast data available
@@ -52,7 +63,11 @@ namespace WeatherAndPower.Data
                 return false;
             }
         }
-
+        /*
+         * 
+         * Splits a large FMI request into smaller parts 
+         * and returns week-long chunks of time that api can handle. 
+         */
         public static List<Tuple<DateTime, DateTime>> SplitFMIRequest(DateTime start, DateTime end)
         {
 
@@ -86,13 +101,18 @@ namespace WeatherAndPower.Data
             return split_times;
 
         }
-
+        /*
+         * Helper func for SplitFMI
+         */
         private static void AddTimePair(ref List<Tuple<DateTime, DateTime>> split_times, DateTime start, DateTime end)
         {
             Tuple<DateTime, DateTime> timepair = new Tuple<DateTime, DateTime>(start, end);
             split_times.Add(timepair);
         }
 
+        /*
+         * Checks if the selected time interval is valid. Shows a warning or continues
+         */
         public static bool IsTimeValid(DateTime startTime, DateTime endTime)
         {
             if (startTime.Equals(endTime)
