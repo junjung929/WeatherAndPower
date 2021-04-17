@@ -77,7 +77,9 @@
     <Compile Include="AddWindow\DateTimeRange.cs" />
     <Compile Include="AddWindow\PowerInputModel.cs" />
     <Compile Include="AddWindow\PowerPreference.cs" />
+    <Compile Include="AddWindow\Preference.cs" />
     <Compile Include="AddWindow\WeatherInputModel.cs" />
+    <Compile Include="AddWindow\WeatherPreference.cs" />
     <Compile Include="Graphing\DataPlotModel.cs" />
     <Compile Include="Graphing\DataSeries.cs" />
     <Compile Include="Graphing\DataSeriesFactory.cs" />

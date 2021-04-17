@@ -79,6 +79,7 @@
     <Compile Include="Interfaces\AddWindow\IPowerInputModel.cs" />
     <Compile Include="Interfaces\AddWindow\IWeatherInputModel.cs" />
     <Compile Include="ByteColorJsonConverter.cs" />
+    <Compile Include="Interfaces\AddWindow\IWeatherPreference.cs" />
     <Compile Include="Types\Cloudiness.cs" />
     <Compile Include="Types\DataPoint.cs" />
     <Compile Include="Interfaces\Graphing\IDataSeries.cs" />
