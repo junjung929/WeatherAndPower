@@ -27,7 +27,8 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+[Bb]in/[Dd]ebug
+[Bb]in/[Rr]elease/*.xml
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
