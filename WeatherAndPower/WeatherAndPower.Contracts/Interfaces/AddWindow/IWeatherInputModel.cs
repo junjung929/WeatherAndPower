@@ -11,7 +11,11 @@ namespace WeatherAndPower.Contracts
         enum ECity
         {
             Helsinki = 0x01,
-            Tampere = 0x02
+            Tampere = 0x02,
+            Oulu = 0x04,
+            Rovaniemi = 0x08,
+            Joensuu = 0x10,
+            Turku = 0x20
         }
 
         List<WeatherType> WeatherTypes { get; }
