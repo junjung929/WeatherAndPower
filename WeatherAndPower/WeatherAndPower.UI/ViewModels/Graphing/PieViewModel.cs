@@ -12,6 +12,14 @@ namespace WeatherAndPower.UI
 	{
 		private IPieModel Model { get; set; }
 
+		public string Name
+		{
+			get {
+				return Model.Name;
+			}
+		}
+
+
 		public ObservableCollection<DataPoint> Data
 		{
 			get { return Model.Data; }

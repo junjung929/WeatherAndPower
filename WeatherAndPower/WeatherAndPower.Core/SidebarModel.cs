@@ -49,7 +49,7 @@ namespace WeatherAndPower.Core
 				.Select(d => d.GetDataPoint(point));
 
             if (data.Count() > 0) {
-				var model = new PieModel();
+				var model = new PieModel("Power production comparison at " + point.ToString());
 				foreach (var d in data) {
 					model.Data.Add(d);
 				}

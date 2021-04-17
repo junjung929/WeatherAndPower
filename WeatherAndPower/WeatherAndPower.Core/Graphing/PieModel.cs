@@ -13,9 +13,9 @@ namespace WeatherAndPower.Core
 		public string Name { get; set; }
 		public ObservableCollection<DataPoint> Data { get; } = new ObservableCollection<DataPoint>();
 
-		public PieModel()
+		public PieModel(string name)
 		{
-			Name = "Test";
+			Name = name;
 		}
 	}
 }

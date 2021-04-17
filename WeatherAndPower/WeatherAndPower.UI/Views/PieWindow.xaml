@@ -8,10 +8,9 @@
         mc:Ignorable="d"
         Title="PieWindow" Height="450" Width="800">
     <Grid>
-		<charting:Chart>
+		<charting:Chart Title="{Binding Name}">
 			<charting:Chart.Series>
 				<charting:PieSeries ItemsSource="{Binding Data}"
-									Title="Comparison"
 									IndependentValueBinding="{Binding Name}"
 									DependentValueBinding="{Binding Data.Item2.Value}"/>
 			</charting:Chart.Series>
