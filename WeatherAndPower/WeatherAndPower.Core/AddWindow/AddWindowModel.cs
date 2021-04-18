@@ -179,7 +179,7 @@ namespace WeatherAndPower.Core
             options.Converters.Add(new DataJsonConverter());
             var data = JsonSerializer.Deserialize<PowerPreference>(jsonString, options: options);
 
-            Preference = data as PowerPreference;
+            Preference = data ;
         }
 
         public void SavePreference(string path)
@@ -191,7 +191,7 @@ namespace WeatherAndPower.Core
                     WriteIndented = true
                 };
                 options.Converters.Add(new DataJsonConverter());
-                File.WriteAllText(path, JsonSerializer.Serialize(Preference as IPowerPreference, options: options));
+                File.WriteAllText(path, JsonSerializer.Serialize(Preference, Preference.GetType(), options: options));
             }
             catch (IOException e)
             {
