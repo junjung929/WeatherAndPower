@@ -30,12 +30,5 @@ namespace WeatherAndPower.Core
         }
 
         public ObservableCollection<IDateTimeRange> DateTimeRanges { get; set; } = new ObservableCollection<IDateTimeRange>();
-
-        public void EnableDateTimeRange(IDateTimeRange dateTimeRange, bool isEnabled)
-        {
-            dateTimeRange.IsEnabled = isEnabled;
-        }
-
-       
     }
 }
