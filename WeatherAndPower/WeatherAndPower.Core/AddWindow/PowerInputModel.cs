@@ -91,7 +91,10 @@ namespace WeatherAndPower.Core
               {
                   PowerServices.Add(e);
               });
-            Preference.PowerService = PowerServices.First();
+            if (!PowerServices.Contains(Preference.PowerService))
+            {
+                Preference.PowerService = PowerServices.First();
+            }
         }
 
         public void UpdatePowerParameters()
@@ -104,11 +107,14 @@ namespace WeatherAndPower.Core
             // Search correponding power parameters to selected power source and service
             PowerTypes.Where(e => e.Source == Preference.PowerSource
                                && e.Service == Preference.PowerService)
-                .Select(e => e.ParameterType).Distinct().ToList().ForEach(e =>
-                {
-                    PowerParameters.Add(e);
-                });
-            Preference.PowerParameter = PowerParameters.First();
+                .Select(e => e.ParameterType).Distinct().OrderBy(e => (int)e).ToList().ForEach(e =>
+                  {
+                      PowerParameters.Add(e);
+                  });
+            if (!PowerParameters.Contains(Preference.PowerParameter))
+            {
+                Preference.PowerParameter = PowerParameters.First();
+            }
         }
 
         public void UpdatePowerType()

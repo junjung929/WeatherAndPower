@@ -140,7 +140,8 @@ namespace WeatherAndPower.UI
             if (SelectedPowerParameter == PowerType.ParameterEnum.RealTime ||
                 SelectedPowerParameter == PowerType.ParameterEnum.Observation)
             {
-                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, DateTime.Now);
+                DateTimeViewModel.UpdateDateTimeMinMax(DateTimeViewModel.DefaultDateTimeMin, 
+                    DateTime.Today.AddHours(DateTime.Now.Hour + 1).AddTicks(-1));
 
             }
             else
