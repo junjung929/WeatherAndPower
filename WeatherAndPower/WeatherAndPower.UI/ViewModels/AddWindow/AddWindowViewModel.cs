@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WeatherAndPower.Contracts;
 using static WeatherAndPower.Contracts.IAddWindowModel;
@@ -46,7 +48,7 @@ namespace WeatherAndPower.UI
             get { return Model.Preference.DataType; }
             set
             {
-                Model.Preference.DataType = value; 
+                Model.Preference.DataType = value;
                 NotifyPropertyChanged("DataType");
                 UpdateViewCommand.Execute(DataType);
             }
@@ -104,9 +106,10 @@ namespace WeatherAndPower.UI
 
         private void InitializeComponent()
         {
-            //Preference =  Model.CreateNewPowerPreference();
-            DataType = Preference.DataType; // this triggers UpdateSelectedViewModel
-            PlotName = Preference.PlotName;
+            //Preference = Model.CreateNewPowerPreference();
+            UpdateSelectedViewModel(Model.Preference.DataType);
+            //DataType = Preference.DataType; 
+            //PlotName = Preference.PlotName;
         }
 
         public RelayCommand UpdateViewCommand => new RelayCommand(() => UpdateSelectedViewModel(DataType));
@@ -134,6 +137,42 @@ namespace WeatherAndPower.UI
                 catch (Exception e)
                 {
                     System.Windows.MessageBox.Show(e.Message);
+                }
+            }
+        });
+
+        public RelayCommand OpenPreferenceCommand => new RelayCommand(() =>
+        {
+            var openDialog = new OpenFileDialog();
+            openDialog.Filter = "JavaScript Object Notation (*.json)|*.json";
+            if (openDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    Model.OpenPreference(openDialog.FileName);
+                    NotifyPropertyChanged("DataType");
+                    var powerModel = Model.CreateNewPowerInputModel(Model.Preference as IPowerPreference);
+                    SelectedViewModel = new PowerInputViewModel(powerModel);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+        });
+        public RelayCommand SavePreferenceCommand => new RelayCommand(() =>
+        {
+            var saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "JavaScript Object Notation (*.json)|*.json";
+            if (saveDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    Model.SavePreference(saveDialog.FileName);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
                 }
             }
         });

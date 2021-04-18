@@ -5,6 +5,8 @@ using WeatherAndPower.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.IO;
+using System.Text.Json;
 
 namespace WeatherAndPower.Core
 {
@@ -170,6 +172,32 @@ namespace WeatherAndPower.Core
             return new WeatherPreference() { DataType = IAddWindowModel.DataTypeEnum.Weather };
         }
 
+        public void OpenPreference(string path)
+        {
+            var jsonString = File.ReadAllText(path);
+            var options = new JsonSerializerOptions();
+            options.Converters.Add(new DataJsonConverter());
+            var data = JsonSerializer.Deserialize<PowerPreference>(jsonString, options: options);
+
+            Preference = data as PowerPreference;
+        }
+
+        public void SavePreference(string path)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions()
+                {
+                    WriteIndented = true
+                };
+                options.Converters.Add(new DataJsonConverter());
+                File.WriteAllText(path, JsonSerializer.Serialize(Preference as IPowerPreference, options: options));
+            }
+            catch (IOException e)
+            {
+                throw e;
+            }
+        }
     }
 }
 

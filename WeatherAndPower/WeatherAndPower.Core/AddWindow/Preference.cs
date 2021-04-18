@@ -60,11 +60,5 @@ namespace WeatherAndPower.Core
                 NotifyPropertyChanged("Interval");
             }
         }
-
-
-        public Preference()
-        {
-        }
-
     }
 }

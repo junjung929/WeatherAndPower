@@ -21,6 +21,9 @@ namespace WeatherAndPower.Contracts
          */
         void AddWeatherGraph();
 
+        void OpenPreference(string path);
+        void SavePreference(string path);
+
         IPowerPreference CreateNewPowerPreference();
         IWeatherPreference CreateNewWeatherPreference();
 
